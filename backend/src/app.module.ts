@@ -1,21 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-
+import { PrismaModule } from './prisma/prisma.module';
+import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { PostModule } from './post/post.module';
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'flex_it',
-      synchronize: true,
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development.local', '.env.development'],
+      ignoreEnvFile: true,
+      isGlobal: true,
     }),
     UserModule,
+    PrismaModule,
+    AuthModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],
