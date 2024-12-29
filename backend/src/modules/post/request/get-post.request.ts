@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RemovePostRequest {
+export class GetPostRequest {
   @ApiProperty()
   id: number;
-
-  @ApiProperty()
-  userId: number;
 }

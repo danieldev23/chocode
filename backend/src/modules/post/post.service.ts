@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PostCreateRequest } from './request/create-post.request';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdatePostRequest } from './request/update-post.request copy';
-import { RemovePostRequest } from './request/remove-post.request';
+import { PostUpdateRequest } from './request/update-post.request copy';
+import { PostDeleteRequest } from './request/remove-post.request';
 import { PostDeleteResponse } from './response/post-delete.response';
+import { PostCommentRequest } from './request/comment-post.request';
 
 @Injectable()
 export class PostService {
@@ -15,7 +16,7 @@ export class PostService {
       data: {
         title,
         content,
-        slug: `${generatedSlug}-${Date.now()}`,
+        slug: `${generatedSlug}-${this.generateRandomString()}`,
         user: {
           connect: {
             id: userId,
@@ -31,18 +32,42 @@ export class PostService {
     };
   }
 
-  findAll() {
-    return `This action returns all post`;
+  async findAll() {
+    return await this.prisma.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            avatar: true,
+          },
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async commentPost(postCommentRequest: PostCommentRequest) {
+    return this.prisma.comment.create({
+      data: {
+        postId: postCommentRequest.postId,
+        userId: postCommentRequest.userId,
+        comment: postCommentRequest.comment,
+      },
+    });
+  }
+  async findOne(id: number) {
+    return await this.prisma.post.findFirst({
+      where: { id: id },
+    });
   }
 
   async update(
-    updatePostRequest: UpdatePostRequest,
+    PostUpdateRequest: PostUpdateRequest,
   ): Promise<{ success: boolean; message: string; data?: any }> {
-    const { id, title, content, userId } = updatePostRequest;
+    const { id, title, content, userId } = PostUpdateRequest;
 
     const post = await this.prisma.post.findFirst({
       where: { id },
@@ -80,9 +105,9 @@ export class PostService {
   }
 
   async remove(
-    removePostRequest: RemovePostRequest,
+    PostDeleteRequest: PostDeleteRequest,
   ): Promise<PostDeleteResponse> {
-    const { id, userId } = removePostRequest;
+    const { id, userId } = PostDeleteRequest;
     const data = await this.prisma.post.findFirst({
       where: {
         id: id,
@@ -118,5 +143,17 @@ export class PostService {
       .replace(/[^a-z0-9\s-]/g, '')
       .trim()
       .replace(/\s+/g, '-');
+  }
+
+  generateRandomString(length = 24) {
+    const characters =
+      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length),
+      );
+    }
+    return result.toLocaleLowerCase();
   }
 }

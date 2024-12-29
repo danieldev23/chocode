@@ -12,11 +12,13 @@ import {
 import { PostService } from './post.service';
 import { PostCreateRequest } from './request/create-post.request';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
 import { PostCreateResponse } from './response/post-create.response';
-import { RemovePostRequest } from './request/remove-post.request';
-import { UpdatePostRequest } from './request/update-post.request copy';
+import { PostDeleteRequest } from './request/remove-post.request';
+import { PostUpdateRequest } from './request/update-post.request copy';
 import { PostDeleteResponse } from './response/post-delete.response';
+import { PostUpdateResponse } from './response/post-update.response';
+import { PostCommentRequest } from './request/comment-post.request';
 
 @Controller('post')
 export class PostController {
@@ -35,7 +37,7 @@ export class PostController {
         };
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.postService.findAll();
   }
@@ -47,24 +49,30 @@ export class PostController {
 
   @Patch('update')
   @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: PostCreateResponse })
+  @ApiOkResponse({ type: PostUpdateResponse })
   @ApiBearerAuth()
-  update(@Body() updatePostRequest: UpdatePostRequest, @Request() req: any) {
-    return updatePostRequest.userId === req.user.id
-      ? this.postService.update(updatePostRequest)
+  update(@Body() PostUpdateRequest: PostUpdateRequest, @Request() req: any) {
+    return PostUpdateRequest.userId === req.user.id
+      ? this.postService.update(PostUpdateRequest)
       : {
           success: false,
           message: 'You do not have permission to update this post',
         };
   }
 
+  @Post('comment')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  comment(@Body() postCommentRequest: PostCommentRequest) {
+    return this.postService.commentPost(postCommentRequest);
+  }
   @Delete('delete')
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: PostDeleteResponse })
   @ApiBearerAuth()
-  remove(@Body() removePostRequest: RemovePostRequest, @Request() req: any) {
-    return removePostRequest.userId === req.user.id
-      ? this.postService.remove(removePostRequest)
+  remove(@Body() PostDeleteRequest: PostDeleteRequest, @Request() req: any) {
+    return PostDeleteRequest.userId === req.user.id
+      ? this.postService.remove(PostDeleteRequest)
       : {
           success: false,
           message: 'You do not have permission to delete this post',
