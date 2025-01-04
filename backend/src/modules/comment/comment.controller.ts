@@ -16,7 +16,7 @@ import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
 import { CommentCreateResponse } from './response/create-comment.response';
 import { CommentUpdateResponse } from './response/update-comment.response';
 import { CommentAllResponse } from './response/all-comment.response';
-// import { ApiTags } from '@nestjs/swagger';
+import { CommentDeleteRequest } from './request/delete-comment.request';
 
 @Controller('comment')
 export class CommentController {
@@ -50,9 +50,11 @@ export class CommentController {
     return this.commentService.update(CommentUpdateRequest);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Delete('delete')
+  delete(@Body() commentDeleteRequest: CommentDeleteRequest) {
+    return this.commentService.delete(commentDeleteRequest);
   }
 }
 

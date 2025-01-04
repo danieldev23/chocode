@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CommentCreateRequest } from './request/create-comment.request';
 import { CommentUpdateRequest } from './request/update-comment.request';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CommentDeleteRequest } from './request/delete-comment.request';
 
 @Injectable()
 export class CommentService {
@@ -83,7 +84,34 @@ export class CommentService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async delete(commentDeleteRequest: CommentDeleteRequest) {
+    const data = await this.prisma.comment.findFirst({
+      where: { id: commentDeleteRequest.id },
+    });
+    if (!data) {
+      return {
+        success: false,
+        message: 'Comment not found',
+      };
+    }
+    if (data.userId === commentDeleteRequest.userId) {
+      const data = await this.prisma.comment.delete({
+        where: {
+          id: commentDeleteRequest.id,
+        },
+      });
+      if (data) {
+        return {
+          success: true,
+          message: 'Comment deleted successfully',
+          data,
+        };
+      } else {
+        return {
+          success: false,
+          message: 'You do not have permission to delete this comment',
+        };
+      }
+    }
   }
 }
