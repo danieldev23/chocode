@@ -58,6 +58,7 @@ export class UserService {
           bio: true,
           avatar: true,
           roleId: true,
+          created_at: true,
         },
       });
       return data !== null ? data : `username ${username} not found`;

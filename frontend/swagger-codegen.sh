@@ -1,1 +1,1 @@
-swagger-codegen generate -i http://localhost:3000/swagger/json -l typescript-axios -o ./auto_api 
+swagger-codegen generate -i http://localhost:3001/swagger/json -l typescript-axios -o ./auto_api 

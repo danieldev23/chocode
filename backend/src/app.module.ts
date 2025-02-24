@@ -7,6 +7,10 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostModule } from './modules/post/post.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { CategoryService } from './modules/category/category.service';
+import { CategoryModule } from './modules/category/category.module';
+import { UploadModule } from './modules/upload/upload.module';
+import { UserGateway } from './gateways/user.gateway';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,8 +23,10 @@ import { CommentModule } from './modules/comment/comment.module';
     AuthModule,
     PostModule,
     CommentModule,
+    CategoryModule,
+    UploadModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CategoryService, UserGateway],
 })
 export class AppModule {}

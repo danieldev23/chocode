@@ -104,3 +104,11 @@ model TagsOnPosts {
   @@id([postId, tagId])
   @@map("tags_on_posts")
 }
+
+model Category {
+  id Int @id @default(autoincrement())
+  title String 
+  slug String
+  icon String
+  @@map("categories")
+}

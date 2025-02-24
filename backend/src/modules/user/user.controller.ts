@@ -35,8 +35,8 @@ export class UserController {
     return this.userService.unBlockUser(id);
   }
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }

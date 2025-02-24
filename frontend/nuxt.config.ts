@@ -1,9 +1,63 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // ssr: true,
   compatibilityDate: "2024-11-01",
   css: ["~/assets/css/main.css"],
-  modules: ["@element-plus/nuxt"],
-  // devtools: { enabled: true },
+  image: {
+    dir: 'assets/images'
+  },
+  modules: [
+    "@element-plus/nuxt",
+    "@sidebase/nuxt-auth",
+    "@nuxt/image",
+  ],
+  devtools: { enabled: false },
+  auth: {
+    isEnabled: true,
+    disableServerSideAuth: false,
+    originEnvKey: "AUTH_ORIGIN",
+    baseURL: "http://localhost:3001/api/auth",
+    provider: {
+      type: "local",
+      endpoints: {
+        signIn: { path: "/login", method: "post" },
+        signOut: false,
+        signUp: { path: "/register", method: "post" },
+        getSession: {
+          path: "me",
+          method: "get",
+        },
+      },
+      pages: {
+        login: "/",
+      },
+
+      token: {
+        maxAgeInSeconds: 30 * 24 * 60 * 60,
+        type: "Bearer",
+        headerName: "Authorization",
+        signInResponseTokenPointer: "/accessToken",
+      },
+      session: {
+        dataResponsePointer: "/",
+        dataType: {
+          id: "number",
+          username: "string",
+          fullName: "string",
+          role: "string",
+          active: "string",
+          email: "string",
+          avatar: "string",
+          bio: "string",
+        },
+      },
+    },
+    globalAppMiddleware: false,
+    sessionRefresh: {
+      enablePeriodically: false,
+      enableOnWindowFocus: false,
+    },
+  },
   postcss: {
     plugins: {
       tailwindcss: {},

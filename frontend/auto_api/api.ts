@@ -11,6 +11,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */export * from './apis/auth-api';
+export * from './apis/category-api';
 export * from './apis/comment-api';
 export * from './apis/post-api';
 export * from './apis/user-api';

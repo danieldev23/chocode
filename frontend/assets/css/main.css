@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  background: #f9fafb;
+  background: rgba(237, 239, 246, 1);
   background-repeat: no-repeat;
   font-family: "Be Vietnam Pro";
 }
@@ -11,16 +11,11 @@ html {
 .mg-24rem {
   margin-top: -24rem;
 }
-.ads-banner {
-  width: 67.666667%;
+ .story {
+  width: 79rem;
+  max-width: 79rem;
 }
 
 .marquee-tag {
-  width: 53.6rem;
 }
 
-@media (max-width: 1536px) {
-  .ads-banner {
-    width: 76.666667%;
-  }
-}

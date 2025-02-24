@@ -11,13 +11,18 @@
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.1.1",
+    "@nuxt/image": "^1.9.0",
     "element-plus": "^2.9.2",
     "lucide-vue-next": "^0.469.0",
     "nuxt": "^3.15.0",
+    "socket.io-client": "^4.8.1",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-marquee-slider": "^1.0.6",
+    "vue-router": "latest",
+    "vue3-marquee": "^4.2.2"
   },
   "devDependencies": {
+    "@sidebase/nuxt-auth": "^0.10.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17"

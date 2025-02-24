@@ -3,6 +3,8 @@ export * from './auth-login-request';
 export * from './auth-login-response';
 export * from './auth-register-request';
 export * from './auth-register-response';
+export * from './category-all-response';
+export * from './category-create-request';
 export * from './comment-all-response';
 export * from './comment-create-request';
 export * from './comment-create-response';

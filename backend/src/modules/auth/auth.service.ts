@@ -48,6 +48,17 @@ export class AuthService {
     return data;
   }
 
+  async getSession(user: any) {
+    return {
+      id: user.id,
+      username: user.username,
+      fullName: user.fullName,
+      role: user.role,
+      email: user.email,
+      avatar: user.avatar,
+      bio: user.bio,
+    };
+  }
   async create(
     AuthRegisterRequest: AuthRegisterRequest,
   ): Promise<AuthRegisterResponse> {
