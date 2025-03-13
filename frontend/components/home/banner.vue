@@ -11,7 +11,6 @@
         playsinline
       ></video>
       
-      <!-- Gradient Overlay -->
       <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-black/50"></div>
       
       <!-- Text Content -->
@@ -33,86 +32,6 @@
       </div>
     </div>
 
-    <!-- CSS Marquee Section -->
-    <div class="marquee-container">
-      <div class="marquee-content">
-        <!-- First set of items -->
-        <div class="flex space-x-4">
-          <NuxtLink 
-           
-            class="group cursor-pointer flex-shrink-0 relative overflow-hidden rounded-lg"
-          >
-            <img
-              src="~/assets/images/home/marketplace.jpeg"
-              alt="banner.alt"
-              class="h-[8rem] w-auto object-cover transform transition-all duration-300 group-hover:scale-105"
-            />
-            <!-- Hover Overlay -->
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="text-white font-medium text-sm">{{ 2323 }}</span>
-            </div>
-          </NuxtLink>
-          <NuxtLink 
-           
-           class="group cursor-pointer flex-shrink-0 relative overflow-hidden rounded-lg"
-         >
-           <img
-             src="~/assets/images/home/marketplace.jpeg"
-             alt="banner.alt"
-             class="h-[8rem] w-auto object-cover transform transition-all duration-300 group-hover:scale-105"
-           />
-           <!-- Hover Overlay -->
-           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-             <span class="text-white font-medium text-sm">{{ 2323 }}</span>
-           </div>
-         </NuxtLink>
-         <NuxtLink 
-           
-           class="group cursor-pointer flex-shrink-0 relative overflow-hidden rounded-lg"
-         >
-           <img
-             src="~/assets/images/home/marketplace.jpeg"
-             alt="banner.alt"
-             class="h-[8rem] w-auto object-cover transform transition-all duration-300 group-hover:scale-105"
-           />
-           <!-- Hover Overlay -->
-           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-             <span class="text-white font-medium text-sm">{{ 2323 }}</span>
-           </div>
-         </NuxtLink>
-         <NuxtLink 
-           
-           class="group cursor-pointer flex-shrink-0 relative overflow-hidden rounded-lg"
-         >
-           <img
-             src="~/assets/images/home/marketplace.jpeg"
-             alt="banner.alt"
-             class="h-[8rem] w-auto object-cover transform transition-all duration-300 group-hover:scale-105"
-           />
-           <!-- Hover Overlay -->
-           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-             <span class="text-white font-medium text-sm">{{ 2323 }}</span>
-           </div>
-         </NuxtLink>
-         <NuxtLink 
-           
-           class="group cursor-pointer flex-shrink-0 relative overflow-hidden rounded-lg"
-         >
-           <img
-             src="~/assets/images/home/marketplace.jpeg"
-             alt="banner.alt"
-             class="h-[8rem] w-auto object-cover transform transition-all duration-300 group-hover:scale-105"
-           />
-           <!-- Hover Overlay -->
-           <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-             <span class="text-white font-medium text-sm">{{ 2323 }}</span>
-           </div>
-         </NuxtLink>
-        </div>
-
-  
-      </div>
-    </div>
 
 
   </div>

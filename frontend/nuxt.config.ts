@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   },
   modules: [
     "@element-plus/nuxt",
+    '@pinia/nuxt',
     "@sidebase/nuxt-auth",
     "@nuxt/image",
   ],

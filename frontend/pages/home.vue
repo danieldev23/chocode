@@ -1,33 +1,18 @@
 <template>
-  <div v-if="showHotNews" class="mb-3 rounded-lg bg-white p-4 shadow-sm">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center">
-        <div class="flex flex-row">
-          <span class="mr-2 text-primary">🔥</span>
-          <span class="font-medium mr-4 text-nowrap">Tin hot:</span>
-        </div>
-        <marquee class="marquee-tag mx-auto cursor-pointer hover:text-primary"
-          >[HOT] Thử nghiệm ra mắt tính năng Chat mới trên
-          <span class="text-primary">CodeMarket.com</span>, mang đến trải nghiệm
-          giao tiếp trực tiếp giữa freelancer và khách hàng, giúp kết nối nhanh
-          chóng và hiệu quả hơn.</marquee
-        >
-      </div>
-      <button
-        @click="showHotNews = false"
-        class="text-gray-400 hover:text-gray-600 rounded-full"
-      >
-        ✕
-      </button>
-    </div>
-  </div>
 
-  <HomeBanner />
-  <HomeWidget />
-  <HomePost :jobs="jobs" />
+  <HomeJobs />
+
+  <!-- <HomeBanner /> -->
 </template>
 <script setup lang="ts">
-import { MessageSquare, Store, BriefcaseBusiness, User } from "lucide-vue-next";
+import {
+  MessageSquare,
+  Store,
+  BriefcaseBusiness,
+  User,
+  CircleCheckBig,
+  ShieldCheck
+} from "lucide-vue-next";
 import { ArrowDown } from "@element-plus/icons-vue";
 
 const currentUser = ref(false);

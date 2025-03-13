@@ -2,7 +2,7 @@
   <div class="max-w-5xl mx-auto mt-8">
     <div class="text-center mb-10">
       <div
-        class="text-3xl font-bold text-gray-900 mb-3 flex items-center justify-center text-nowrap "
+        class="text-3xl font-bold text-gray-900 mb-3 flex items-center justify-center text-nowrap"
       >
         Các công việc mới nhất
         <img class="h-6" src="~/assets/images/post/new.gif" alt="New" />
@@ -84,7 +84,7 @@
               :class="[
                 'px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200',
                 index === 0
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary-gradient text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
               ]"
             >

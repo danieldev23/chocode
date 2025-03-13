@@ -3,7 +3,7 @@
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-white shadow-sm z-50">
       <div
-        class="relative h-full flex items-center mx-auto max-w-[1326px] justify-between px-6"
+        class="relative h-full flex items-center max-w-[1326px] justify-between mx-4 md:mx-16 lg:mx-32 xl:mx-[19.6rem]"
       >
         <!-- Logo -->
         <NuxtLink
@@ -50,97 +50,7 @@
             </NuxtLink>
 
             <!-- Notification Popover -->
-            <el-popover
-              :visible="visible"
-              trigger="click"
-              placement="bottom"
-              :width="380"
-              @show="handleShow"
-              @hide="visible = false"
-              popper-class="!p-0"
-            >
-              <div class="max-h-[calc(100vh-200px)] overflow-y-auto">
-                <!-- Header -->
-                <div
-                  class="flex items-center justify-between px-4 py-2 border-b"
-                >
-                  <h3 class="text-xl font-bold">Thông báo</h3>
-                  <el-dropdown trigger="click" @command="handleMarkAsRead">
-                    <el-button type="text" class="text-gray-600">
-                      <el-icon></el-icon>
-                    </el-button>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item command="all"
-                          >Đánh dấu tất cả là đã đọc</el-dropdown-item
-                        >
-                        <el-dropdown-item command="settings"
-                          >Cài đặt thông báo</el-dropdown-item
-                        >
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
-                </div>
-
-                <!-- Filter Tabs -->
-                <div class="px-2 py-1 border-b">
-                  <el-radio-group v-model="currentTab" size="small">
-                    <el-radio-button label="all">Tất cả</el-radio-button>
-                    <el-radio-button label="unread">Chưa đọc</el-radio-button>
-                  </el-radio-group>
-                </div>
-
-                <!-- Notifications List -->
-                <div v-if="notifications.length" class="py-2">
-                  <NuxtLink
-                    v-for="notification in filteredNotifications"
-                    :key="notification.id"
-                    :to="notification.link"
-                    class="group block px-4 py-2 hover:bg-gray-50 cursor-pointer transition-colors"
-                    :class="{ 'bg-blue-50': !notification.read }"
-                  >
-                    <div class="flex gap-3">
-                      <div class="relative">
-                        <el-avatar :size="45" :src="notification.avatar" />
-                        <div
-                          class="absolute -right-1 -bottom-1 w-5 h-5 rounded-full flex items-center justify-center"
-                          :class="getNotificationTypeClass(notification.type)"
-                        >
-                          <component
-                            :is="getNotificationIcon(notification.type)"
-                            class="w-3 h-3 text-white"
-                          />
-                        </div>
-                      </div>
-                      <div class="flex-1">
-                        <div class="text-[14px] leading-tight">
-                          <span class="font-semibold">{{
-                            notification.sender
-                          }}</span>
-                          {{ notification.content }}
-                        </div>
-                        <div
-                          class="mt-1 text-xs text-gray-500 flex items-center gap-1"
-                        >
-                          {{ formatTime(notification.time) }}
-                          <span
-                            v-if="!notification.read"
-                            class="w-2 h-2 rounded-full bg-primary"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                  </NuxtLink>
-                </div>
-
-                <!-- Empty State -->
-                <div v-else class="py-8 text-center text-gray-500">
-                  <Bell class="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                  <p>Không có thông báo nào</p>
-                </div>
-              </div>
-            </el-popover>
-          </div>
+               </div>
 
           <!-- User Menu -->
           <div v-if="currentUser" class="relative ml-2">
@@ -156,7 +66,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item class="!flex !items-center p-0 m-0">
                     <NuxtLink
-                    class="flex"
+                      class="flex"
                       :to="{
                         name: 'profile',
                         params: { username: currentUser?.username },
@@ -488,14 +398,13 @@ const logout = async () => {
     confirmButtonText: "Đăng xuất",
     cancelButtonText: "Hủy",
     type: "warning",
-  })
-    .then(async () => {
-      token.value = null;
-      ElNotification({
-        type: "success",
-        message: "Đăng xuất thành công",
-      });
-    })
+  }).then(async () => {
+    token.value = null;
+    ElNotification({
+      type: "success",
+      message: "Đăng xuất thành công",
+    });
+  });
 };
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event);
@@ -511,11 +420,11 @@ const navItems = [
   { label: "Thảo luận", icon: MessageSquare, to: "/thao-luan" },
 ];
 
-import { ref } from 'vue';
-import { useNuxtApp } from '#app';
+import { ref } from "vue";
+import { useNuxtApp } from "#app";
 
 const { $socket } = useNuxtApp();
-const userIdToCheck = ref('');
+const userIdToCheck = ref("");
 const isUserOnline = ref(null);
 
 // $socket.emit('message', 'Xin chao');
@@ -569,7 +478,7 @@ const filteredNotifications = computed(() => {
 const getNotificationTypeClass = (type: string) => {
   const classes: { [key in "like" | "comment" | "share"]: string } = {
     like: "bg-red-500",
-    comment: "bg-primary",
+    comment: "bg-primary-gradient",
     share: "bg-green-500",
   };
   return "bg-gray-500";

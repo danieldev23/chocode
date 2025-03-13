@@ -1,5 +1,4 @@
 <template>
-  <!-- Sidebar -->
   <aside class="hidden lg:block w-64 shrink-0">
     <div class="px-4 rounded-lg">
       <div class="mb-6 rounded-lg bg-blue-50 p-2">
@@ -15,9 +14,8 @@
       <div class="bg-white rounded-lg">
         <nav class="space-y-2 bg-white mb-2">
           <NuxtLink
-            v-for="(item, id) in menuItems"
+            v-for="(item, id) in categories"
             :key="id"
-            
             class="flex items-center p-2 text-gray-600 hover:text-primary hover:bg-blue-50 transition-colors"
           >
             <img
@@ -36,15 +34,14 @@
 </template>
 
 <script lang="ts" setup>
-import type { CategoryAllResponse } from "~/auto_api";
-import { categoryService } from "~/utils/api.utils";
-const menuItems = ref();
-onMounted(async () => {
-  try {
-    const { data } = await categoryService.categoryControllerFindAll();
-    menuItems.value = data;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-  }
+import { useCategoryStore } from "~/store/category";
+import { storeToRefs } from "pinia";
+import { useAsyncData } from "#app";
+
+const categoryStore = useCategoryStore();
+await useAsyncData("categories", async () => {
+  await categoryStore.fetchCategories();
 });
+
+const { categories } = storeToRefs(categoryStore);
 </script>

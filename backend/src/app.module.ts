@@ -10,7 +10,6 @@ import { CommentModule } from './modules/comment/comment.module';
 import { CategoryService } from './modules/category/category.service';
 import { CategoryModule } from './modules/category/category.module';
 import { UploadModule } from './modules/upload/upload.module';
-import { UserGateway } from './gateways/user.gateway';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,6 +26,6 @@ import { UserGateway } from './gateways/user.gateway';
     UploadModule,
   ],
   controllers: [AppController],
-  providers: [AppService, CategoryService, UserGateway],
+  providers: [AppService, CategoryService],
 })
 export class AppModule {}

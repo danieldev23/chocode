@@ -104,7 +104,7 @@
             <!-- Action Buttons -->
             <div class="flex items-center gap-2 sm:gap-3">
               <button
-                class="px-3 sm:px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors"
+                class="px-3 sm:px-4 py-2 bg-primary-gradient text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <Icon name="ph:user-plus" class="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
@@ -211,7 +211,7 @@
               {{ tab }}
               <div
                 v-if="activeTab === index"
-                class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-gradient"
               ></div>
             </button>
           </div>
@@ -257,7 +257,9 @@
               <span class="font-medium">450/1000 XP</span>
             </div>
             <div class="h-1.5 sm:h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div class="h-full w-[45%] bg-primary rounded-full"></div>
+              <div
+                class="h-full w-[45%] bg-primary-gradient rounded-full"
+              ></div>
             </div>
           </div>
         </div>
@@ -309,7 +311,7 @@ interface User {
   created_at: string;
 }
 definePageMeta({
-  ssr: true
+  ssr: true,
 });
 defineProps({
   avatar: {
@@ -354,7 +356,7 @@ const stats = [
   },
   {
     icon: "ph:thumbs-up-fill",
-    iconColor: "text-blue-500",
+    iconColor: "text-primary",
     label: "Lượt thích",
     value: "2",
   },

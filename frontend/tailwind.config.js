@@ -13,6 +13,10 @@ module.exports = {
       colors: {
         "main-bg": "#F9FAFB",
         primary: "#409EFF",
+        "gray-custom": "#6F7882"
+      },
+      backgroundImage: {
+        "primary-gradient": "linear-gradient(to right, #0072ff, #00c6ff)",
       },
     },
   },

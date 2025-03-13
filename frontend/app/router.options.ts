@@ -42,6 +42,25 @@ export default <RouterConfig>{
           layout: "user",
         },
       },
+      {
+        name: "code-market",
+        path: "/mua-ban-source",
+        alias: ["/code-market"],
+        component: () =>
+          import("~/pages/code.vue").then((r) => r.default || r),
+        meta: {
+          layout: "market-place",
+        },
+      },
+      {
+        name: "post-job-detail",
+        path: "/viec-freelance",
+        alias: ["/post-job-detail"],
+        component: () => import("~/pages/detail-post.vue").then((r) => r.default || r),
+        meta: {
+          layout: "post-job"
+        }
+      }
     ];
   },
 };
