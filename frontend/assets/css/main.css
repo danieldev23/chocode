@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  background: rgba(237, 239, 246, 1);
+  background: #f9fafb;
   background-repeat: no-repeat;
   font-family: "Be Vietnam Pro";
 }

@@ -35,4 +35,28 @@ export interface PostCreateRequest {
      * @memberof PostCreateRequest
      */
     userId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateRequest
+     */
+    topic: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateRequest
+     */
+    level: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateRequest
+     */
+    image: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostCreateRequest
+     */
+    category: Array<string>;
 }

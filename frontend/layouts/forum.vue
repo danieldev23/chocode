@@ -1,160 +1,129 @@
 <template>
   <MoleculesHeader />
   <main>
-    <div class="">
-      <!-- Main Content -->
-      <main class="pt-16 min-h-screen bg-gray-50">
-        <!-- Story -->
-        <div class="story flex mx-auto py-4 overflow-auto mb-6 bg-white">
-          <!-- Story items -->
-          <div
-            v-for="(story, index) in stories"
-            :key="index"
-            class="flex-shrink-0 overflow-auto"
-          >
-            <div class="flex flex-col items-center space-y-1">
-              <div
-                class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 to-fuchsia-600 p-0.5 cursor-pointer hover:scale-105 transition-transform"
+    <div class="min-h-screen mt-20 mb-6">
+      <div
+        class="mx-4 md:mx-16 lg:mx-32 xl:mx-48 mt-4 md:mt-8 flex flex-col md:flex-row gap-6"
+      >
+        <!-- Sidebar -->
+        <ForumSideBar :categories="categories" />
+        <slot />
+
+        <!-- Right Sidebar -->
+        <div class="w-full md:w-80 shrink-0 space-y-6">
+          <!-- App Download -->
+          <div class="bg-white rounded-lg shadow-sm p-4">
+            <div class="flex items-center mb-3">
+              <div class="bg-blue-500 text-white p-2 rounded-lg mr-3">
+                <span class="font-bold">FQA</span>
+              </div>
+              <div>
+                <div class="font-bold">Tải APP ChoCode</div>
+                <div class="text-gray-600 text-sm">Hỏi & đáp IT</div>
+              </div>
+            </div>
+            <div class="flex space-x-2">
+              <img
+                src="https://randomuser.me/api/portraits/men/62.jpg"
+                alt="App Store"
+                class="h-10"
+              />
+              <img
+                src="https://randomuser.me/api/portraits/men/62.jpg"
+                alt="Google Play"
+                class="h-10"
+              />
+            </div>
+          </div>
+
+          <!-- Top Contributors -->
+          <div class="bg-white rounded-lg shadow-sm p-4">
+            <h3 class="font-bold text-lg mb-3">Thành viên hăng hái</h3>
+            <div class="mb-3">
+              <el-select
+                v-model="timeFilter"
+                placeholder="Thời gian"
+                class="w-full"
               >
-                <div class="w-full h-full rounded-full p-0.5 bg-white">
-                  <img
-                    :src="story.avatar"
-                    :alt="story.username"
-                    class="w-full h-full rounded-full object-cover"
-                  />
+                <el-option label="Trong tuần" value="week"></el-option>
+                <el-option label="Trong tháng" value="month"></el-option>
+                <el-option label="Tất cả" value="all"></el-option>
+              </el-select>
+            </div>
+
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <img
+                  src="https://randomuser.me/api/portraits/men/62.jpg"
+                  alt="User"
+                  class="w-10 h-10 rounded-full"
+                />
+                <div class="ml-3 flex-1">
+                  <div class="font-medium">Hermione</div>
+                  <div class="text-gray-600 text-sm">11,930 Điểm</div>
                 </div>
               </div>
-              <span
-                class="text-xs text-gray-600 truncate w-20 text-center px-2"
-                >{{ story.username }}</span
-              >
-            </div>
-          </div>
-        </div>
-        <!--  Story  -->
-
-        <div class="flex gap-6 mx-auto w-[1326px] px-4">
-          <!-- Sidebar -->
-          <MoleculesSidebar />
-
-          <!-- Content -->
-          <div class="flex-1">
-            <div class="flex items-center mb-6">
-              <div class="relative flex-1">
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  placeholder="Tìm kiếm..."
-                  class="w-full h-11 rounded-lg border border-gray-200 pl-4 pr-10 focus:outline-none focus:border-primary"
+              <div class="flex items-center">
+                <img
+                  src="https://randomuser.me/api/portraits/men/62.jpg"
+                  alt="User"
+                  class="w-10 h-10 rounded-full"
                 />
-                <span class="absolute right-3 top-2.5 text-gray-400">🔍</span>
+                <div class="ml-3 flex-1">
+                  <div class="font-medium">朱志鑫🌟ZZX_1911💛</div>
+                  <div class="text-gray-600 text-sm">4,610 Điểm</div>
+                </div>
               </div>
-              <button
-                class="ml-4 h-11 px-8 rounded-lg bg-primary-gradient text-white hover:bg-primary-gradient/90 transition-colors"
-              >
-                Tìm kiếm
-              </button>
+              <div class="flex items-center">
+                <img
+                  src="https://randomuser.me/api/portraits/men/62.jpg"
+                  alt="User"
+                  class="w-10 h-10 rounded-full"
+                />
+                <div class="ml-3 flex-1">
+                  <div class="font-medium">Nguyễn Lê Thủy Dương</div>
+                  <div class="text-gray-600 text-sm">2,310 Điểm</div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <img
+                  src="https://randomuser.me/api/portraits/men/62.jpg"
+                  alt="User"
+                  class="w-10 h-10 rounded-full"
+                />
+                <div class="ml-3 flex-1">
+                  <div class="font-medium">🔥8A_k11🔥</div>
+                  <div class="text-gray-600 text-sm">2,160 Điểm</div>
+                </div>
+              </div>
             </div>
-            <slot />
+          </div>
+
+          <!-- Advertisement -->
+          <div class="rounded-md p-2 bg-orange-200 text-center">
+            <img
+              src="~/assets/images/sidebar/sidebar-banner.gif"
+              alt="Advertisement"
+              class="w-full rounded-lg"
+            />
           </div>
         </div>
-      </main>
+      </div>
     </div>
   </main>
-  <MoleculesFooter />
+  <div class="bg-white">
+    <MoleculesFooter />
+  </div>
 </template>
 <script setup lang="ts">
-import { Plus } from "lucide-vue-next";
-const searchQuery = ref("");
+import { useCategoryStore } from "~/store/category";
+const categoryStore = useCategoryStore();
+await useAsyncData("categories", async () => {
+  await categoryStore.fetchCategories();
+});
 
-interface Story {
-  username: string;
-  avatar: string;
-}
-
-// Mock data với random user avatars
-const stories = ref<Story[]>([
-  {
-    username: "hoangduong-l...",
-    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
-  },
-  {
-    username: "nutaro_2007",
-    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
-  },
-  {
-    username: "Cuong Nb",
-    avatar: "https://randomuser.me/api/portraits/men/3.jpg",
-  },
-  {
-    username: "Bảo Sài Gòn",
-    avatar: "https://randomuser.me/api/portraits/women/4.jpg",
-  },
-  {
-    username: "Vũ Minh Kiên",
-    avatar: "https://randomuser.me/api/portraits/men/5.jpg",
-  },
-  {
-    username: "Lee Chau",
-    avatar: "https://randomuser.me/api/portraits/women/6.jpg",
-  },
-  {
-    username: "Jimmii Nam",
-    avatar: "https://randomuser.me/api/portraits/men/7.jpg",
-  },
-  {
-    username: "Cuong Nb",
-    avatar: "https://randomuser.me/api/portraits/women/8.jpg",
-  },
-  {
-    username: "T.NC",
-    avatar: "https://randomuser.me/api/portraits/men/9.jpg",
-  },
-  {
-    username: "Alex Johnson",
-    avatar: "https://randomuser.me/api/portraits/men/10.jpg",
-  },
-  {
-    username: "Sophie Tran",
-    avatar: "https://randomuser.me/api/portraits/women/11.jpg",
-  },
-  {
-    username: "Mike_London",
-    avatar: "https://randomuser.me/api/portraits/men/12.jpg",
-  },
-  {
-    username: "Amy_LuvsCode",
-    avatar: "https://randomuser.me/api/portraits/women/13.jpg",
-  },
-  {
-    username: "Tommy Nguyen",
-    avatar: "https://randomuser.me/api/portraits/men/14.jpg",
-  },
-  {
-    username: "Lily Thao",
-    avatar: "https://randomuser.me/api/portraits/women/15.jpg",
-  },
-  {
-    username: "DevGuy123",
-    avatar: "https://randomuser.me/api/portraits/men/16.jpg",
-  },
-  {
-    username: "Ella Pham",
-    avatar: "https://randomuser.me/api/portraits/women/17.jpg",
-  },
-  {
-    username: "John_DevOps",
-    avatar: "https://randomuser.me/api/portraits/men/18.jpg",
-  },
-  {
-    username: "Mila-Coder",
-    avatar: "https://randomuser.me/api/portraits/women/19.jpg",
-  },
-  {
-    username: "Kevin Smith",
-    avatar: "https://randomuser.me/api/portraits/men/20.jpg",
-  },
-]);
+const { categories } = storeToRefs(categoryStore);
+const timeFilter = ref("week");
 </script>
 <style>
 .scrollbar-hide {

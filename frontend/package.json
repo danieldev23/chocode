@@ -17,8 +17,8 @@
     "lucide-vue-next": "^0.469.0",
     "nuxt": "^3.15.0",
     "pinia": "^3.0.1",
-    "socket.io-client": "^4.8.1",
-    "vue": "latest",
+    "swiper": "^11.2.6",
+    "vue": "^3.5.13",
     "vue-marquee-slider": "^1.0.6",
     "vue-router": "latest",
     "vue3-marquee": "^4.2.2"

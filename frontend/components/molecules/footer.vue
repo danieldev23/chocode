@@ -1,6 +1,6 @@
 <!-- pages/index.vue -->
 <template>
-  <div class="mx-4 md:mx-16 lg:mx-32 xl:mx-[19.6rem] flex flex-col">
+  <div class="mx-4 md:mx-16 lg:mx-32 xl:mx-[12rem] mt-4 md:mt-8 flex flex-col">
     <main class="flex-grow">
       <div class="container mx-auto py-8">
         <!-- Main section with all categories -->
@@ -12,41 +12,39 @@
             </div>
             <ul class="space-y-3">
               <li>
-                <NuxtLink to="/about" class="text-gray-700 hover:text-primary"
-                  >Về chúng tôi</NuxtLink
-                >
+                <NuxtLink to="/ve-chung-toi" class="text-gray-700 hover:text-primary text-sm">
+                  Về chúng tôi
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/participate"
-                  class="text-gray-700 hover:text-primary"
-                  >Tham gia vào đội của chúng tôi</NuxtLink
-                >
+                <NuxtLink to="/tham-gia" class="text-gray-700 hover:text-primary text-sm">
+                  Tham gia vào đội của chúng tôi
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/contact" class="text-gray-700 hover:text-primary"
-                  >Liên hệ với chúng tôi</NuxtLink
-                >
+                <NuxtLink to="/lien-he" class="text-gray-700 hover:text-primary text-sm">
+                  Liên hệ với chúng tôi
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/blog" class="text-gray-700 hover:text-primary"
-                  >Blog</NuxtLink
-                >
+                <NuxtLink to="/blog" class="text-gray-700 hover:text-primary text-sm">
+                  Blog
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/privacy" class="text-gray-700 hover:text-primary"
-                  >Chính sách bảo mật</NuxtLink
-                >
+                <NuxtLink to="/chinh-sach-bao-mat" class="text-gray-700 hover:text-primary text-sm">
+                  Chính sách bảo mật
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/terms" class="text-gray-700 hover:text-primary"
-                  >Điều khoản dịch vụ</NuxtLink
-                >
+                <NuxtLink to="/dieu-khoan" class="text-gray-700 hover:text-primary text-sm">
+                  Điều khoản dịch vụ
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/cookies" class="text-gray-700 hover:text-primary"
-                  >Cài đặt Cookie</NuxtLink
-                >
+                <NuxtLink to="/cookie" class="text-gray-700 hover:text-primary text-sm">
+                  Cài đặt Cookie
+                </NuxtLink>
               </li>
             </ul>
           </div>
@@ -58,109 +56,87 @@
             </div>
             <ul class="space-y-3">
               <li>
-                <NuxtLink to="/support" class="text-gray-700 hover:text-primary"
-                  >Trung tâm trợ giúp</NuxtLink
-                >
+                <NuxtLink to="/tro-giup" class="text-gray-700 hover:text-primary text-sm">
+                  Trung tâm trợ giúp
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/how-it-works"
-                  class="text-gray-700 hover:text-primary"
-                  >Cách hoạt động</NuxtLink
-                >
+                <NuxtLink to="/cach-hoat-dong" class="text-gray-700 hover:text-primary text-sm">
+                  Cách hoạt động
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/development-plan"
-                  class="text-gray-700 hover:text-primary"
-                  >Kế hoạch thành viên</NuxtLink
-                >
+                <NuxtLink to="/ke-hoach-thanh-vien" class="text-gray-700 hover:text-primary text-sm">
+                  Kế hoạch thành viên
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/reviews" class="text-gray-700 hover:text-primary"
-                  >Điểm nhấn</NuxtLink
-                >
+                <NuxtLink to="/diem-nhan" class="text-gray-700 hover:text-primary text-sm">
+                  Điểm nhấn
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/sitemap" class="text-gray-700 hover:text-primary"
-                  >Sitemap</NuxtLink
-                >
+                <NuxtLink to="/sitemap" class="text-gray-700 hover:text-primary text-sm">
+                  Sitemap
+                </NuxtLink>
               </li>
             </ul>
           </div>
 
-          <!-- Third Column - Split in two sections -->
+          <!-- Third Column - Freelance Jobs Section -->
           <div class="space-y-6">
-            <!-- Freelance Jobs Section -->
             <div>
               <div class="border-b pb-2 mb-4">
-                <h2 class="text-xl font-bold text-primary t">
+                <h2 class="text-xl font-bold text-primary">
                   Tìm job freelance
                 </h2>
               </div>
               <ul class="space-y-3">
                 <li>
-                  <NuxtLink
-                    to="/jobs/python"
-                    class="text-gray-700 hover:text-primary"
-                    >Python</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/python" class="text-gray-700 hover:text-primary text-sm">
+                    Python
+                  </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink
-                    to="/jobs/csharp"
-                    class="text-gray-700 hover:text-primary"
-                    >C#</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/csharp" class="text-gray-700 hover:text-primary text-sm">
+                    C#
+                  </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink
-                    to="/jobs/nodejs-mongodb"
-                    class="text-gray-700 hover:text-primary"
-                    >Nodejs, MongoDB</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/nodejs-mongodb" class="text-gray-700 hover:text-primary text-sm">
+                    Nodejs, MongoDB
+                  </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink
-                    to="/jobs/php-laravel"
-                    class="text-gray-700 hover:text-primary"
-                    >Php, Laravel</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/php-laravel" class="text-gray-700 hover:text-primary text-sm">
+                    Php, Laravel
+                  </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink
-                    to="/jobs/web-development"
-                    class="text-gray-700 hover:text-primary"
-                    >Web Development</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/web" class="text-gray-700 hover:text-primary text-sm">
+                    Web Development
+                  </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink
-                    to="/jobs/mobile-apps"
-                    class="text-gray-700 hover:text-primary"
-                    >Ứng dụng di động</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/mobile" class="text-gray-700 hover:text-primary text-sm">
+                    Ứng dụng di động
+                  </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink
-                    to="/jobs/reactjs-vuejs"
-                    class="text-gray-700 hover:text-primary"
-                    >ReactJs, VueJS</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/react-vue" class="text-gray-700 hover:text-primary text-sm">
+                    ReactJs, VueJS
+                  </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink
-                    to="/jobs/html-css-javascript"
-                    class="text-gray-700 hover:text-primary"
-                    >HTML, CSS, Javascript</NuxtLink
-                  >
+                  <NuxtLink to="/freelance/html-css-js" class="text-gray-700 hover:text-primary text-sm">
+                    HTML, CSS, Javascript
+                  </NuxtLink>
                 </li>
               </ul>
             </div>
-
-            <!-- Find Developer Section -->
           </div>
 
+          <!-- Fourth Column - Find Developer Section -->
           <div>
             <div class="border-b pb-2 mb-4">
               <h2 class="text-xl font-bold text-primary">
@@ -169,67 +145,52 @@
             </div>
             <ul class="space-y-3">
               <li>
-                <NuxtLink
-                  to="/find/nodejs-developer"
-                  class="text-gray-700 hover:text-primary"
-                  >Nodejs Developer</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/nodejs" class="text-gray-700 hover:text-primary text-sm">
+                  Nodejs Developer
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/find/csharp-developer"
-                  class="text-gray-700 hover:text-primary"
-                  >C# Developer</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/csharp" class="text-gray-700 hover:text-primary text-sm">
+                  C# Developer
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/find/web-developer"
-                  class="text-gray-700 hover:text-primary"
-                  >Web Developer</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/web" class="text-gray-700 hover:text-primary text-sm">
+                  Web Developer
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/find/mobile-app-developer"
-                  class="text-gray-700 hover:text-primary"
-                  >Mobile App Developer</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/mobile" class="text-gray-700 hover:text-primary text-sm">
+                  Mobile App Developer
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/find/desktop-app-developer"
-                  class="text-gray-700 hover:text-primary"
-                  >Desktop App Developer</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/desktop" class="text-gray-700 hover:text-primary text-sm">
+                  Desktop App Developer
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/find/tools-mmo"
-                  class="text-gray-700 hover:text-primary"
-                  >Tools MMO</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/tools-mmo" class="text-gray-700 hover:text-primary text-sm">
+                  Tools MMO
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/find/reactjs-developer"
-                  class="text-gray-700 hover:text-primary"
-                  >ReactJs Developer</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/react" class="text-gray-700 hover:text-primary text-sm">
+                  ReactJs Developer
+                </NuxtLink>
               </li>
               <li>
-                <NuxtLink
-                  to="/find/laravel-developer"
-                  class="text-gray-700 hover:text-primary"
-                  >Laravel Developer</NuxtLink
-                >
+                <NuxtLink to="/tim-dev/laravel" class="text-gray-700 hover:text-primary text-sm">
+                  Laravel Developer
+                </NuxtLink>
               </li>
             </ul>
           </div>
         </div>
       </div>
+
       <p class="text-center text-sm text-gray-custom">
-        © 2025 - <a class="text-primary" href="/">CodeMarket.Com </a> Co, Ltd.
+        © 2025 - <NuxtLink class="text-primary" to="/">CodeMarket.Com</NuxtLink> Co, Ltd.
         All Rights Reserved.
       </p>
     </main>
@@ -243,19 +204,10 @@
         <div class="flex justify-between items-center mb-6">
           <img src="~/assets/images/header/logo.svg" class="h-8" />
           <button @click="mobileMenuOpen = false" class="text-gray-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>

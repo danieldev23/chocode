@@ -10,6 +10,7 @@ import { CommentModule } from './modules/comment/comment.module';
 import { CategoryService } from './modules/category/category.service';
 import { CategoryModule } from './modules/category/category.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { JobPostModule } from './modules/job-post/job-post.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +25,7 @@ import { UploadModule } from './modules/upload/upload.module';
     CommentModule,
     CategoryModule,
     UploadModule,
+    JobPostModule,
   ],
   controllers: [AppController],
   providers: [AppService, CategoryService],

@@ -13,6 +13,8 @@
  */export * from './apis/auth-api';
 export * from './apis/category-api';
 export * from './apis/comment-api';
+export * from './apis/job-posting-api';
 export * from './apis/post-api';
+export * from './apis/upload-api';
 export * from './apis/user-api';
 

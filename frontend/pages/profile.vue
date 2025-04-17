@@ -1,385 +1,626 @@
 <template>
   <!-- Main Content Area -->
-  <div class="mx-auto w-full">
-    <!-- Hero Section -->
-    <div class="relative bg-white">
-      <!-- Cover Image -->
-      <div
-        class="h-[200px] sm:h-[240px] md:h-[260px] lg:h-[280px] w-full bg-gradient-to-r from-blue-500 to-purple-600 relative overflow-hidden"
-      >
-        <div
-          class="absolute inset-0 bg-[url('/images/profile/cover1.avif')] bg-cover bg-center opacity-40"
-        ></div>
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"
-        ></div>
-
-        <!-- Profile Quick Stats -->
-        <div
-          class="absolute bottom-4 right-4 sm:right-6 lg:right-8 flex gap-2 sm:gap-4 lg:gap-6"
-        >
-          <div
-            class="px-2 sm:px-3 lg:px-4 py-2 bg-black/30 backdrop-blur-lg rounded-lg text-white"
-          >
-            <div class="text-lg sm:text-xl lg:text-2xl font-bold">1,220</div>
-            <div class="text-xs sm:text-sm opacity-80">Điểm số</div>
-          </div>
-          <div
-            class="px-2 sm:px-3 lg:px-4 py-2 bg-black/30 backdrop-blur-lg rounded-lg text-white"
-          >
-            <div class="text-lg sm:text-xl lg:text-2xl font-bold">15</div>
-            <div class="text-xs sm:text-sm opacity-80">Đã giúp đỡ</div>
-          </div>
-          <div
-            class="px-2 sm:px-3 lg:px-4 py-2 bg-black/30 backdrop-blur-lg rounded-lg text-white"
-          >
-            <div class="text-lg sm:text-xl lg:text-2xl font-bold">3</div>
-            <div class="text-xs sm:text-sm opacity-80">Đánh giá</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Profile Header -->
-      <div
-        class="px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-18 lg:-mt-20 pb-4 sm:pb-5 lg:pb-6 flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-6 lg:gap-8"
-      >
-        <!-- Avatar -->
-        <div class="relative">
-          <div
-            class="w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-2xl overflow-hidden ring-4 ring-white shadow-xl"
-          >
-            <NuxtImg
-              :src="user?.avatar || '/header/default-avatar.png'"
-              alt="Profile"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="absolute -bottom-3 left-1/2 -translate-x-1/2">
-            <div
-              class="px-2 sm:px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs sm:text-sm font-medium rounded-full shadow-lg"
-            >
-              Online
-            </div>
-          </div>
-        </div>
-
-        <!-- Profile Info -->
-        <div class="flex-1 pb-2 sm:pb-3 lg:pb-4">
-          <div
-            class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-0"
-          >
-            <div>
-              <div class="flex items-center gap-2 sm:gap-3 mb-2">
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-900">
-                  {{ user?.fullName }}
-                </h1>
-                <span
-                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
-                >
-                  Admin
-                </span>
-              </div>
-              <div
-                class="flex flex-wrap items-center gap-3 sm:gap-6 text-gray-500 text-xs sm:text-sm"
-              >
-                <span class="flex items-center gap-1">
-                  <IdCard class="w-4 h-4" />
-                  ID: {{ user?.username }}
-                </span>
-                <span class="flex items-center gap-1">
-                  <Contact class="w-4 h-4" />
-                  {{ profile.friendCount }}
-                </span>
-                <span class="flex items-center gap-1">
-                  <Clock class="w-4 h-4" />
-                  {{
-                    user?.created_at
-                      ? new Date(user.created_at).toLocaleDateString("vi-VN")
-                      : "Chưa có dữ liệu"
-                  }}
-                </span>
+  <div class="w-full mx-auto bg-gray-50 min-h-screen mt-14">
+    <!-- Loading State -->
+    <div v-if="loading" class="flex justify-center items-center py-20">
+      <el-skeleton style="width: 100%" animated>
+        <template #template>
+          <div class="flex flex-col gap-4">
+            <el-skeleton-item variant="p" style="height: 240px" />
+            <div class="flex gap-4">
+              <el-skeleton-item variant="image" style="width: 120px; height: 120px" />
+              <div class="flex-1">
+                <el-skeleton-item variant="h3" style="width: 50%" />
+                <el-skeleton-item variant="text" style="margin-top: 16px; width: 80%" />
               </div>
             </div>
-
-            <!-- Action Buttons -->
-            <div class="flex items-center gap-2 sm:gap-3">
-              <button
-                class="px-3 sm:px-4 py-2 bg-primary-gradient text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <Icon name="ph:user-plus" class="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-              <button
-                class="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-              >
-                <Icon
-                  name="ph:chat-circle-text"
-                  class="w-4 h-4 sm:w-5 sm:h-5"
-                />
-              </button>
-              <button
-                class="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-              >
-                •••
-              </button>
-            </div>
           </div>
-        </div>
-      </div>
+        </template>
+      </el-skeleton>
     </div>
 
-    <!-- Content Grid -->
-    <div
-      class="px-4 sm:px-6 lg:px-8 py-4 sm:py-5 lg:py-6 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-5 lg:gap-6"
-    >
-      <!-- Left Sidebar -->
-      <div class="md:col-span-3 space-y-4 sm:space-y-5 lg:space-y-6">
-        <!-- About Card -->
-        <div class="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm">
-          <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
-            Thông tin
-          </h3>
-          <div class="space-y-3 sm:space-y-4">
-            <div
-              class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-gray-600"
-            >
-              <MapPinHouse class="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>Hà Nội, Việt Nam</span>
-            </div>
-            <div
-              class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-gray-600"
-            >
-              <School class="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>Đại học FPT</span>
-            </div>
-            <div
-              class="flex items-center gap-2 sm:gap-3 text-sm sm:text-base text-gray-600"
-            >
-              <BriefcaseBusiness class="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>Software Engineer</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Stats Card -->
-        <div class="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm">
-          <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
-            Thống kê
-          </h3>
-          <div class="space-y-3 sm:space-y-4">
-            <div
-              v-for="stat in stats"
-              :key="stat.label"
-              class="flex items-center justify-between"
-            >
-              <div class="flex items-center gap-2 sm:gap-3">
-                <div
-                  :class="[
-                    stat.iconColor,
-                    'p-1.5 sm:p-2 rounded-lg bg-gray-50',
-                  ]"
-                >
-                  <ListStartIcon class="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <span class="text-sm sm:text-base text-gray-600">{{
-                  stat.label
-                }}</span>
-              </div>
-              <span class="text-sm sm:text-base font-semibold">{{
-                stat.value
-              }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Content Area -->
-      <div class="md:col-span-6">
-        <!-- Navigation Tabs -->
-        <div class="bg-white rounded-xl mb-4 sm:mb-5 lg:mb-6 shadow-sm">
-          <div class="flex">
-            <button
-              v-for="(tab, index) in tabs"
-              :key="index"
-              class="flex-1 py-3 sm:py-4 text-sm sm:text-base text-center font-medium relative"
-              :class="[
-                activeTab === index
-                  ? 'text-primary'
-                  : 'text-gray-500 hover:text-gray-900',
-              ]"
-              @click="activeTab = index"
-            >
-              {{ tab }}
-              <div
-                v-if="activeTab === index"
-                class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-gradient"
-              ></div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Content Area -->
+    <template v-else>
+      <!-- Hero Section -->
+      <div class="relative bg-white shadow-sm rounded-md">
+        <!-- Cover Image -->
         <div
-          class="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm min-h-[400px] sm:min-h-[450px] lg:min-h-[500px]"
+          class="h-[180px] sm:h-[220px] md:h-[260px] lg:h-[300px] w-full relative overflow-hidden rounded-t-md"
         >
-          <div v-if="activeTab === 0">
-            <div class="text-center text-gray-500 py-8 sm:py-10 lg:py-12">
-              Chưa có bài viết nào
-            </div>
-          </div>
-          <div v-else-if="activeTab === 1">
-            <div class="text-center text-gray-500 py-8 sm:py-10 lg:py-12">
-              Chưa có bạn bè
-            </div>
-          </div>
-          <div v-else>
-            <div class="text-center text-gray-500 py-8 sm:py-10 lg:py-12">
-              Chưa có hoạt động nào
-            </div>
-          </div>
-        </div>
-      </div>
+          <div
+            class="absolute inset-0 bg-[url('/images/header/banner.gif')] bg-cover bg-center"
+          ></div>
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"
+          ></div>
 
-      <!-- Right Sidebar -->
-      <div class="md:col-span-3 space-y-4 sm:space-y-5 lg:space-y-6">
-        <!-- Level Card -->
-        <div class="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm">
-          <div class="flex items-center justify-between mb-3 sm:mb-4">
-            <h3 class="text-base sm:text-lg font-semibold">Cấp độ</h3>
-            <span
-              class="px-2 sm:px-2.5 py-0.5 sm:py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-medium"
-            >
-              {{ profile.rank }}
-            </span>
-          </div>
-          <div class="space-y-2 sm:space-y-3">
-            <div class="flex justify-between text-xs sm:text-sm">
-              <span class="text-gray-600">Tiến độ</span>
-              <span class="font-medium">450/1000 XP</span>
-            </div>
-            <div class="h-1.5 sm:h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                class="h-full w-[45%] bg-primary-gradient rounded-full"
-              ></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Achievements Card -->
-        <div class="bg-white rounded-xl p-4 sm:p-5 lg:p-6 shadow-sm">
-          <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
-            Thành tích
-          </h3>
-          <div class="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
+          <!-- Profile Quick Stats -->
+          <div class="absolute bottom-6 right-6 flex flex-wrap gap-3">
             <div
-              v-for="i in 6"
-              :key="i"
-              class="aspect-square rounded-xl bg-gray-100 flex items-center justify-center"
+              class="px-3 py-2 bg-black/30 backdrop-blur-lg rounded-md text-white"
             >
-              <Icon
-                name="ph:lock-simple"
-                class="w-5 h-5 sm:w-6 sm:h-6 text-gray-400"
+              <div class="text-lg sm:text-xl font-bold">{{ userData?.score || 0 }}</div>
+              <div class="text-xs opacity-80">Điểm số</div>
+            </div>
+            <div
+              class="px-3 py-2 bg-black/30 backdrop-blur-lg rounded-md text-white"
+            >
+              <div class="text-lg sm:text-xl font-bold">
+                {{ userData?.jobPostings?.length || 0 }}
+              </div>
+              <div class="text-xs opacity-80">Dự án</div>
+            </div>
+            <div
+              class="px-3 py-2 bg-black/30 backdrop-blur-lg rounded-md text-white"
+            >
+              <div class="text-lg sm:text-xl font-bold">
+                {{ userData?.feelings?.length || 0 }}
+              </div>
+              <div class="text-xs opacity-80">Đánh giá</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Header -->
+        <div
+          class="px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 pb-6 flex flex-col sm:flex-row sm:items-end gap-6"
+        >
+          <!-- Avatar -->
+          <div class="relative flex justify-center sm:justify-start">
+            <div
+              class="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 rounded-md overflow-hidden ring-4 ring-white shadow-lg"
+            >
+              <img
+                :src="userData?.avatar || DefaultAvatar"
+                alt="Profile"
+                class="w-full h-full object-cover"
               />
             </div>
+            <div class="absolute -bottom-3 left-1/2 -translate-x-1/2">
+              <div
+                class="px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-sm font-medium rounded-full shadow-md"
+              >
+                {{ userData?.active ? "Online" : "Offline" }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Info -->
+          <div class="flex-1 text-center sm:text-left mt-4 sm:mt-0">
+            <div
+              class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
+            >
+              <div>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
+                  <h1 class="text-2xl font-bold text-gray-900">
+                    {{ userData?.fullName }}
+                  </h1>
+                  <span
+                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mx-auto sm:mx-0"
+                    :class="
+                      userData?.roleId === 1
+                        ? 'bg-blue-100 text-primary'
+                        : 'bg-green-100 text-green-800'
+                    "
+                  >
+                    {{ userData?.roleId === 1 ? "User" : "Dev" }}
+                  </span>
+                </div>
+                <div
+                  class="flex flex-wrap justify-center sm:justify-start items-center gap-4 text-gray-500 text-sm"
+                >
+                  <span class="flex items-center gap-1">
+                    <IdCard class="w-4 h-4" />
+                    ID: {{ userData?.username }}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <Users class="w-4 h-4" />
+                    {{ userData?.connections || 0 }} kết nối
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <Calendar class="w-4 h-4" />
+                    {{ formatDate(userData?.created_at) }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center justify-center sm:justify-end gap-2 sm:gap-3 mt-4 sm:mt-0">
+                <el-button type="primary" class="flex items-center gap-1" size="small" :size="isMobile ? 'small' : 'default'">
+                  <UserPlus class="w-4 h-4" />
+                  <span>Kết nối</span>
+                </el-button>
+                <el-button class="flex items-center gap-1" size="small" :size="isMobile ? 'small' : 'default'">
+                  <MessageCircle class="w-4 h-4" />
+                  <span>Nhắn tin</span>
+                </el-button>
+                <el-dropdown trigger="click">
+                  <el-button size="small" :size="isMobile ? 'small' : 'default'">
+                    <MoreHorizontal class="w-4 h-4" />
+                  </el-button>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item>Báo cáo</el-dropdown-item>
+                      <el-dropdown-item>Chặn</el-dropdown-item>
+                      <el-dropdown-item>Chia sẻ</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Content Grid -->
+      <div class="py-6 px-4 sm:px-0 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Sidebar -->
+        <div class="lg:col-span-3 space-y-6">
+          <!-- About Card -->
+          <div class="bg-white rounded-md p-5 shadow-sm">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <UserCircle class="w-5 h-5 text-blue-500" />
+              Thông tin
+            </h3>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3 text-gray-600">
+                <MapPin class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                <span>{{ userData?.address || "Chưa cập nhật địa chỉ" }}</span>
+              </div>
+              <div class="flex items-start gap-3 text-gray-600">
+                <Briefcase class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                <span>{{ userData?.job || "Chưa cập nhật công việc" }}</span>
+              </div>
+              <div class="flex items-start gap-3 text-gray-600">
+                <GraduationCap class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                <span>{{ userData?.level || "Chưa cập nhật học vấn" }}</span>
+              </div>
+              <div class="flex items-start gap-3 text-gray-600">
+                <Info class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                <span>{{ userData?.bio || "Chưa có giới thiệu" }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Card -->
+          <div class="bg-white rounded-md p-5 shadow-sm">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <BarChart3 class="w-5 h-5 text-blue-500" />
+              Thống kê
+            </h3>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-md bg-blue-50 text-blue-500">
+                    <Trophy class="w-5 h-5" />
+                  </div>
+                  <span class="text-gray-600">Điểm số</span>
+                </div>
+                <span class="font-semibold">{{ userData?.score || 0 }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-md bg-green-50 text-green-500">
+                    <Briefcase class="w-5 h-5" />
+                  </div>
+                  <span class="text-gray-600">Dự án</span>
+                </div>
+                <span class="font-semibold">{{
+                  userData?.jobPostings?.length || 0
+                }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-md bg-yellow-50 text-yellow-500">
+                    <Star class="w-5 h-5" />
+                  </div>
+                  <span class="text-gray-600">Đánh giá</span>
+                </div>
+                <span class="font-semibold">{{
+                  userData?.feelings?.length || 0
+                }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-md bg-rose-50 text-rose-500">
+                    <Heart class="w-5 h-5" />
+                  </div>
+                  <span class="text-gray-600">Đã giúp đỡ</span>
+                </div>
+                <span class="font-semibold">0</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 rounded-md bg-purple-50 text-purple-500">
+                    <Shield class="w-5 h-5" />
+                  </div>
+                  <span class="text-gray-600">Độ uy tín</span>
+                </div>
+                <span class="font-semibold">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="lg:col-span-6">
+          <el-tabs v-model="activeTab" class="bg-white rounded-md shadow-sm p-4 sm:p-5">
+            <el-tab-pane label="Dự án" name="projects">
+              <div
+                v-if="userData?.jobPostings && userData.jobPostings.length > 0"
+                class="space-y-6"
+              >
+                <div
+                  v-for="job in userData.jobPostings"
+                  :key="job.id"
+                  class="border border-gray-200 rounded-md p-4 sm:p-5 hover:shadow-md transition-shadow"
+                >
+                  <div class="flex flex-col sm:flex-row items-start gap-4">
+                    <div
+                      v-if="job.image"
+                      class="w-full sm:w-20 h-40 sm:h-20 rounded-md overflow-hidden flex-shrink-0"
+                    >
+                      <img
+                        :src="job.image"
+                        alt="Job image"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div
+                      v-else
+                      class="w-full sm:w-20 h-40 sm:h-20 rounded-md overflow-hidden bg-gray-200 flex items-center justify-center flex-shrink-0"
+                    >
+                      <img
+                        class="w-20 h-20 text-gray-400 object-cover"
+                        src="~/assets/images/header/logo.png"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <NuxtLink
+                        :to="`/viec-freelance/${job.slug}`"
+                        class="text-lg font-semibold mb-2 hover:text-primary hover:underline"
+                        >{{ job.title }}</NuxtLink
+                      >
+                      <div class="flex flex-wrap gap-2 mb-3">
+                        <span
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-primary"
+                        >
+                          <MapPin class="w-3 h-3 mr-1" />
+                          {{ job.location }}
+                        </span>
+                        <span
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800"
+                        >
+                          <Banknote class="w-3 h-3 mr-1" />
+                          {{ job.salaryMin }}-{{ job.salaryMax }} triệu
+                        </span>
+                        <span
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-800"
+                        >
+                          <Clock class="w-3 h-3 mr-1" />
+                          Hạn: {{ formatDate(job.deadline) }}
+                        </span>
+                      </div>
+                      <div
+                        class="text-sm text-gray-600"
+                        v-html="truncateHTML(job.jobDescription, 100)"
+                      ></div>
+                      <div class="flex justify-end mt-3">
+                        <NuxtLink
+                          :to="`/viec-freelance/${job.slug}`"
+                          class="bg-primary-gradient px-3 py-2 text-[12px] text-white rounded-[4px]"
+                          >Xem chi tiết</NuxtLink
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="py-10 text-center text-gray-500">
+                <Briefcase class="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p>Chưa có dự án nào</p>
+              </div>
+            </el-tab-pane>
+
+            <el-tab-pane label="Bài viết" name="posts">
+              <div
+                v-if="userData?.posts && userData.posts.length > 0"
+                class="space-y-6"
+              >
+                <div
+                  v-for="post in userData.posts"
+                  :key="post.id"
+                  class="border border-gray-200 rounded-md p-4 sm:p-5 hover:shadow-md transition-shadow"
+                >
+                  <div class="flex flex-col sm:flex-row items-start gap-4">
+                    <div
+                      v-if="post.image"
+                      class="w-full sm:w-20 h-40 sm:h-20 rounded-md overflow-hidden flex-shrink-0"
+                    >
+                      <img
+                        :src="post.image"
+                        alt="Post image"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div
+                      v-else
+                      class="w-full sm:w-20 h-40 sm:h-20 rounded-md overflow-hidden bg-gray-200 flex items-center justify-center flex-shrink-0"
+                    >
+                      <img
+                        class="w-20 h-20 text-gray-400 object-cover"
+                        src="~/assets/images/header/logo.png"
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <NuxtLink
+                        :to="`/bai-viet/${post.slug}`"
+                        class="text-lg font-semibold mb-2 hover:text-primary hover:underline"
+                        >{{ post.title }}</NuxtLink
+                      >
+                      <div class="flex flex-wrap gap-2 mb-3">
+                        <span
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-primary"
+                        >
+                          <Hash class="w-3 h-3 mr-1" />
+                          {{ post.topic }}
+                        </span>
+                        <span
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800"
+                        >
+                          <GraduationCap class="w-3 h-3 mr-1" />
+                          {{ post.level }}
+                        </span>
+                        <span
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-800"
+                        >
+                          <Clock class="w-3 h-3 mr-1" />
+                          {{ formatDate(post.createdAt) }}
+                        </span>
+                      </div>
+                      <div
+                        class="text-sm text-gray-600"
+                        v-html="truncateHTML(post.content, 100)"
+                      ></div>
+                      <div class="flex justify-end mt-3">
+                        <NuxtLink
+                          :to="`/bai-viet/${post.slug}`"
+                          class="bg-primary-gradient px-3 py-2 text-[12px] text-white rounded-[4px]"
+                          >Xem chi tiết</NuxtLink
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="py-10 text-center text-gray-500">
+                <FileText class="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p>Chưa có bài viết nào</p>
+              </div>
+            </el-tab-pane>
+
+            <el-tab-pane label="Hoạt động" name="activities">
+              <div class="py-10 text-center text-gray-500">
+                <Activity class="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p>Chưa có hoạt động nào</p>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="lg:col-span-3 space-y-6">
+          <!-- Recent Connections -->
+          <div class="bg-white rounded-md p-5 shadow-sm">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Users class="w-5 h-5 text-blue-500" />
+              Kết nối gần đây
+            </h3>
+            <div class="text-center py-8 text-gray-500">
+              <Users class="w-12 h-12 mx-auto mb-3 text-gray-300" />
+              <p>Chưa có kết nối nào</p>
+              <el-button class="mt-4" size="small">Tìm người dùng</el-button>
+            </div>
+          </div>
+
+          <!-- Recommended Projects -->
+          <div class="bg-white rounded-md p-5 shadow-sm">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Lightbulb class="w-5 h-5 text-blue-500" />
+              Dự án đề xuất
+            </h3>
+            <div class="space-y-4">
+              <div
+                class="border border-gray-100 rounded-md p-3 hover:bg-gray-50 transition-colors"
+              >
+                <h4 class="font-medium mb-1">
+                  Thiết kế UI/UX cho ứng dụng di động
+                </h4>
+                <div
+                  class="flex items-center justify-between text-sm text-gray-500"
+                >
+                  <span>4-6 triệu</span>
+                  <span>Hà Nội</span>
+                </div>
+              </div>
+              <div
+                class="border border-gray-100 rounded-md p-3 hover:bg-gray-50 transition-colors"
+              >
+                <h4 class="font-medium mb-1">Phát triển website WordPress</h4>
+                <div
+                  class="flex items-center justify-between text-sm text-gray-500"
+                >
+                  <span>5-8 triệu</span>
+                  <span>Làm từ xa</span>
+                </div>
+              </div>
+              <div class="text-center mt-4">
+                <el-button type="text" size="small">Xem thêm</el-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import {
-  MapPinHouse,
-  School,
-  BriefcaseBusiness,
-  ListStartIcon,
-  IdCard,
-  Contact,
+  UserCircle,
+  MapPin,
+  Briefcase,
+  GraduationCap,
+  Info,
+  BarChart3,
+  Trophy,
+  Star,
+  Heart,
+  Shield,
+  Users,
+  Calendar,
+  MessageCircle,
+  MoreHorizontal,
+  UserPlus,
+  Lightbulb,
+  FileText,
+  Activity,
+  Banknote,
   Clock,
+  IdCard,
+  Hash,
 } from "lucide-vue-next";
+import { ElNotification } from "element-plus";
+import DefaultAvatar from "@/assets/images/header/default-avatar.png";
+import { ref, onMounted, watch, computed } from "vue";
 
 const route = useRoute();
+const userData = ref(null);
+const activeTab = ref("posts"); // Changed default to posts since the user has posts
+const loading = ref(true);
 
-interface User {
-  id: number;
-  username: string;
-  fullName: string;
-  active: boolean;
-  bio: string;
-  avatar: string;
-  roleId: number;
-  created_at: string;
-}
-definePageMeta({
-  ssr: true,
-});
-defineProps({
-  avatar: {
-    type: String,
-    default: "",
-  },
-  size: {
-    type: Number,
-    default: 32,
-  },
+// Check if mobile
+const isMobile = computed(() => {
+  if (process.client) {
+    return window.innerWidth < 640;
+  }
+  return false;
 });
 
-const user = ref<User | null>(null);
+// Add window resize listener for mobile detection
+onMounted(() => {
+  if (process.client) {
+    window.addEventListener('resize', handleResize);
+  }
+});
 
-const initData = async () => {
+// Handle window resize
+const handleResize = () => {
+  // You can add additional responsive logic here if needed
+};
+
+// Clean up event listener
+onUnmounted(() => {
+  if (process.client) {
+    window.removeEventListener('resize', handleResize);
+  }
+});
+
+// Fetch user data from API
+onMounted(async () => {
   try {
-    const res = await userService.userControllerFindOne(
-      String(route.params.username)
+    loading.value = true;
+    console.log(`Fetching data for username: ${route.params.username}`);
+    const response = await userService.userControllerFindOne(
+      route.params.username
     );
-    user.value = res.data ?? null;
+    userData.value = response.data;
+    console.log("User data loaded:", userData.value);
+    
+    // Switch to posts tab if user has posts but no job postings
+    if (userData.value?.posts?.length > 0 && 
+        (!userData.value?.jobPostings || userData.value?.jobPostings.length === 0)) {
+      activeTab.value = "posts";
+    }
   } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu user:", error);
+    console.error("Error fetching user data:", error);
+    ElNotification({
+      type: "error",
+      message: "Không thể tải thông tin người dùng",
+      duration: 3000,
+    });
+  } finally {
+    loading.value = false;
+  }
+});
+
+watch(userData, (newData) => {
+  if (newData) {
+    useSeoMeta({
+      title: `Trang cá nhân của ${newData.fullName || newData.username}`,
+      ogTitle: `Trang cá nhân ${newData.fullName || newData.username}`,
+      description: `Thông tin chi tiết của ${
+        newData.fullName || newData.username
+      }`,
+    });
+  }
+});
+
+// Format date function
+const formatDate = (dateString) => {
+  if (!dateString) return "Chưa có dữ liệu";
+
+  const date = new Date(dateString);
+  return date.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
+// Truncate HTML content
+const truncateHTML = (html, length) => {
+  if (!html) return "";
+
+  if (process.client) {
+    // Create a temporary div to parse HTML in browser
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    
+    // Get text content
+    const text = tempDiv.textContent || tempDiv.innerText || "";
+    
+    // Truncate text
+    if (text.length <= length) return html;
+    return text.substring(0, length) + "...";
+  } else {
+    // Server-side fallback
+    if (html.length <= length) return html;
+    return html.substring(0, length) + "...";
   }
 };
-
-await initData();
-
-const profile = {
-  name: "Gia Khánh Phạm",
-  userId: "5156817",
-  friendCount: "0 bạn bè",
-  joinDate: "Thành viên từ 30-11-2023",
-  rank: "Hạt giống !",
-};
-
-const stats = [
-  {
-    icon: "ph:medal-fill",
-    iconColor: "text-amber-500",
-    label: "Điểm số",
-    value: "1,220",
-  },
-  {
-    icon: "ph:thumbs-up-fill",
-    iconColor: "text-primary",
-    label: "Lượt thích",
-    value: "2",
-  },
-  {
-    icon: "ph:star-fill",
-    iconColor: "text-yellow-500",
-    label: "Đánh giá",
-    value: "3",
-  },
-  {
-    icon: "ph:hand-heart-fill",
-    iconColor: "text-rose-500",
-    label: "Đã giúp đỡ",
-    value: "15",
-  },
-  {
-    icon: "ph:shield-check-fill",
-    iconColor: "text-emerald-500",
-    label: "Độ uy tín",
-    value: "0",
-  },
-];
-
-const tabs = ["Tường cá nhân", "Bạn bè", "Nhật ký hoạt động"];
-const activeTab = ref(0);
 </script>
+
+<style scoped>
+:deep(.el-tabs__nav-wrap::after) {
+  display: none;
+}
+
+:deep(.el-tabs__item) {
+  font-weight: 500;
+}
+
+:deep(.el-tabs__item.is-active) {
+  color: #3b82f6;
+}
+
+:deep(.el-tabs__active-bar) {
+  background-color: #3b82f6;
+}
+
+@media (max-width: 640px) {
+  :deep(.el-tabs__item) {
+    padding: 0 12px;
+    font-size: 14px;
+  }
+}
+</style>

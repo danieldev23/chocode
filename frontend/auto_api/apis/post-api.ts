@@ -18,7 +18,7 @@ import { Configuration } from '../configuration';
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { PostCommentRequest } from '../models';
 import { PostCreateRequest } from '../models';
-import { PostCreateResponse } from '../models';
+import { PostCreateResponseDto } from '../models';
 import { PostDeleteRequest } from '../models';
 import { PostDeleteResponse } from '../models';
 import { PostUpdateRequest } from '../models';
@@ -75,6 +75,39 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postControllerCount: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/post/count`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions :AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.params) {
+                query.set(key, options.params[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {PostCreateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -119,10 +152,20 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {number} limit 
+         * @param {number} skip 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postControllerFindAll: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        postControllerFindAll: async (limit: number, skip: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'limit' is not null or undefined
+            if (limit === null || limit === undefined) {
+                throw new RequiredError('limit','Required parameter limit was null or undefined when calling postControllerFindAll.');
+            }
+            // verify required parameter 'skip' is not null or undefined
+            if (skip === null || skip === undefined) {
+                throw new RequiredError('skip','Required parameter skip was null or undefined when calling postControllerFindAll.');
+            }
             const localVarPath = `/api/post/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -133,6 +176,14 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions :AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
 
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -152,17 +203,17 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        postControllerFindOne: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling postControllerFindOne.');
+        postControllerGetPostDetail: async (slug: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'slug' is not null or undefined
+            if (slug === null || slug === undefined) {
+                throw new RequiredError('slug','Required parameter slug was null or undefined when calling postControllerGetPostDetail.');
             }
-            const localVarPath = `/api/post/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/api/post/slug`
+                .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -301,11 +352,23 @@ export const PostApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postControllerCount(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
+            const localVarAxiosArgs = await PostApiAxiosParamCreator(configuration).postControllerCount(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @param {PostCreateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postControllerCreate(body: PostCreateRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<PostCreateResponse>>> {
+        async postControllerCreate(body: PostCreateRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<PostCreateResponseDto>>> {
             const localVarAxiosArgs = await PostApiAxiosParamCreator(configuration).postControllerCreate(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -314,11 +377,13 @@ export const PostApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} limit 
+         * @param {number} skip 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postControllerFindAll(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-            const localVarAxiosArgs = await PostApiAxiosParamCreator(configuration).postControllerFindAll(options);
+        async postControllerFindAll(limit: number, skip: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<PostCreateResponseDto>>>> {
+            const localVarAxiosArgs = await PostApiAxiosParamCreator(configuration).postControllerFindAll(limit, skip, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -326,12 +391,12 @@ export const PostApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postControllerFindOne(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-            const localVarAxiosArgs = await PostApiAxiosParamCreator(configuration).postControllerFindOne(id, options);
+        async postControllerGetPostDetail(slug: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<PostCreateResponseDto>>> {
+            const localVarAxiosArgs = await PostApiAxiosParamCreator(configuration).postControllerGetPostDetail(slug, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -383,29 +448,39 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postControllerCount(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+            return PostApiFp(configuration).postControllerCount(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {PostCreateRequest} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postControllerCreate(body: PostCreateRequest, options?: AxiosRequestConfig): Promise<AxiosResponse<PostCreateResponse>> {
+        async postControllerCreate(body: PostCreateRequest, options?: AxiosRequestConfig): Promise<AxiosResponse<PostCreateResponseDto>> {
             return PostApiFp(configuration).postControllerCreate(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @param {number} limit 
+         * @param {number} skip 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postControllerFindAll(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-            return PostApiFp(configuration).postControllerFindAll(options).then((request) => request(axios, basePath));
+        async postControllerFindAll(limit: number, skip: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<PostCreateResponseDto>>> {
+            return PostApiFp(configuration).postControllerFindAll(limit, skip, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async postControllerFindOne(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-            return PostApiFp(configuration).postControllerFindOne(id, options).then((request) => request(axios, basePath));
+        async postControllerGetPostDetail(slug: string, options?: AxiosRequestConfig): Promise<AxiosResponse<PostCreateResponseDto>> {
+            return PostApiFp(configuration).postControllerGetPostDetail(slug, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -447,32 +522,43 @@ export class PostApi extends BaseAPI {
     }
     /**
      * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostApi
+     */
+    public async postControllerCount(options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
+        return PostApiFp(this.configuration).postControllerCount(options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
      * @param {PostCreateRequest} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostApi
      */
-    public async postControllerCreate(body: PostCreateRequest, options?: AxiosRequestConfig) : Promise<AxiosResponse<PostCreateResponse>> {
+    public async postControllerCreate(body: PostCreateRequest, options?: AxiosRequestConfig) : Promise<AxiosResponse<PostCreateResponseDto>> {
         return PostApiFp(this.configuration).postControllerCreate(body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
+     * @param {number} limit 
+     * @param {number} skip 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostApi
      */
-    public async postControllerFindAll(options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
-        return PostApiFp(this.configuration).postControllerFindAll(options).then((request) => request(this.axios, this.basePath));
+    public async postControllerFindAll(limit: number, skip: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<PostCreateResponseDto>>> {
+        return PostApiFp(this.configuration).postControllerFindAll(limit, skip, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
-     * @param {string} id 
+     * @param {string} slug 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PostApi
      */
-    public async postControllerFindOne(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
-        return PostApiFp(this.configuration).postControllerFindOne(id, options).then((request) => request(this.axios, this.basePath));
+    public async postControllerGetPostDetail(slug: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<PostCreateResponseDto>> {
+        return PostApiFp(this.configuration).postControllerGetPostDetail(slug, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 

@@ -11,6 +11,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CategoryDto } from './category-dto';
+import { UserDto } from './user-dto';
 /**
  * 
  * @export
@@ -47,4 +49,52 @@ export interface PostCreateResponse {
      * @memberof PostCreateResponse
      */
     userId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateResponse
+     */
+    topic: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateResponse
+     */
+    level: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostCreateResponse
+     */
+    image: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PostCreateResponse
+     */
+    categoryId: number;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PostCreateResponse
+     */
+    createdAt: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof PostCreateResponse
+     */
+    updatedAt: Date;
+    /**
+     * 
+     * @type {CategoryDto}
+     * @memberof PostCreateResponse
+     */
+    category: CategoryDto;
+    /**
+     * 
+     * @type {UserDto}
+     * @memberof PostCreateResponse
+     */
+    user: UserDto;
 }

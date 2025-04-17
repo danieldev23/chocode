@@ -57,8 +57,16 @@ export class UserService {
           active: true,
           bio: true,
           avatar: true,
+          address: true,
+          job: true,
+          level: true,
+          score: true,
           roleId: true,
           created_at: true,
+          jobPostings: true,
+          posts: true,
+          comments: true,
+          feelings: true,
         },
       });
       return data !== null ? data : `username ${username} not found`;
@@ -144,5 +152,16 @@ export class UserService {
     } catch (error) {
       return error;
     }
+  }
+
+  async getBallance(username: string): Promise<{ balance: number }> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
+    return {
+      balance: user.ballance,
+    };
   }
 }

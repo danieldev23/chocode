@@ -1,25 +1,73 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PostCreateRequest } from './request/create-post.request';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PostUpdateRequest } from './request/update-post.request copy';
 import { PostDeleteRequest } from './request/remove-post.request';
 import { PostDeleteResponse } from './response/post-delete.response';
 import { PostCommentRequest } from './request/comment-post.request';
+import { generateSlug } from 'src/utils/gen-slug.utils';
+import { PostCreateResponseDto } from './response/post-create.response';
 
 @Injectable()
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(postCreateRequest: PostCreateRequest) {
-    const { title, content, userId } = postCreateRequest;
-    const generatedSlug = this.generateSlug(title);
+  async create(postCreateRequest: PostCreateRequest, userId: number) {
+    const { title, content, topic, level, image, category } = postCreateRequest;
+
+    if (!category || category.length === 0) {
+      return {
+        success: false,
+        message: 'Category is required',
+      };
+    }
+
+    const categoryName = category[0]; // Lấy phần tử đầu tiên từ mảng category
+
+    // Tìm hoặc tạo category
+    let existingCategory = await this.prisma.category.findFirst({
+      where: {
+        title: categoryName,
+      },
+    });
+
+    if (!existingCategory) {
+      // Tạo category mới nếu không tìm thấy
+      existingCategory = await this.prisma.category.create({
+        data: {
+          title: categoryName,
+          slug: generateSlug(categoryName),
+          icon: 'default-icon', // Bạn có thể điều chỉnh giá trị mặc định này
+        },
+      });
+    }
+
+    const generatedSlug = generateSlug(title);
     const data = await this.prisma.post.create({
       data: {
         title,
         content,
-        slug: `${generatedSlug}-${this.generateRandomString()}`,
+        slug: generatedSlug,
         user: {
           connect: {
             id: userId,
+          },
+        },
+        topic,
+        level,
+        image,
+        category: {
+          connect: {
+            id: existingCategory.id,
+          },
+        },
+      },
+      include: {
+        category: true,
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            avatar: true,
           },
         },
       },
@@ -27,21 +75,32 @@ export class PostService {
 
     return {
       success: true,
-      message: 'Registered successfully',
+      message: 'Post created successfully',
       data,
     };
   }
 
-  async findAll() {
-    return await this.prisma.post.findMany({
+  async findAll(limit = 10, skip = 0) {
+    return this.prisma.post.findMany({
+      take: limit,
+      skip,
       select: {
         id: true,
         title: true,
         content: true,
+
+        topic: true,
+        level: true,
+        image: true,
+        categoryId: true,
+        createdAt: true,
+        updatedAt: true,
+        category: true,
         user: {
           select: {
             id: true,
             fullName: true,
+            username: true,
             avatar: true,
           },
         },
@@ -58,10 +117,52 @@ export class PostService {
       },
     });
   }
-  async findOne(id: number) {
-    return await this.prisma.post.findFirst({
-      where: { id: id },
+
+  async getPostDetail(slug: string): Promise<PostCreateResponseDto> {
+    const post = await this.prisma.post.findFirst({
+      where: { slug },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            username: true,
+            avatar: true,
+          },
+        },
+        category: true,
+      },
     });
+
+    if (!post) {
+      throw new NotFoundException(`Job posting with ID ${slug} not found`);
+    }
+
+    return {
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      content: post.content,
+      userId: post.userId,
+      topic: post.topic,
+      level: post.level,
+      image: post.image,
+      categoryId: post.categoryId,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      category: {
+        id: post.category.id,
+        title: post.category.title,
+        slug: post.category.slug,
+        icon: post.category.icon,
+      },
+      user: {
+        id: post.userId,
+        fullName: post.user.fullName,
+        avatar: post.user.avatar,
+        username: post.user.username,
+      },
+    };
   }
 
   async update(
@@ -134,26 +235,7 @@ export class PostService {
     };
   }
 
-  generateSlug(title: string): string {
-    return title
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/đ/g, 'd')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-');
-  }
-
-  generateRandomString(length = 24) {
-    const characters =
-      'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(
-        Math.floor(Math.random() * characters.length),
-      );
-    }
-    return result.toLocaleLowerCase();
+  async countPost() {
+    return this.prisma.post.count();
   }
 }

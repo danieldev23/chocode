@@ -8,12 +8,17 @@ import {
   UseGuards,
   Request,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostCreateRequest } from './request/create-post.request';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
-import { PostCreateResponse } from './response/post-create.response';
+import { PostCreateResponseDto } from './response/post-create.response';
 import { PostDeleteRequest } from './request/remove-post.request';
 import { PostUpdateRequest } from './request/update-post.request copy';
 import { PostDeleteResponse } from './response/post-delete.response';
@@ -26,11 +31,15 @@ export class PostController {
 
   @Post('create')
   @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: PostCreateResponse })
   @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'The  post has been successfully created.',
+    type: PostCreateResponseDto,
+  })
+  @ApiUnauthorizedResponse({ description: '401 Unauthorized' })
   create(@Body() postCreateRequest: PostCreateRequest, @Request() req: any) {
     return postCreateRequest.userId === req.user.id
-      ? this.postService.create(postCreateRequest)
+      ? this.postService.create(postCreateRequest, req.user.id)
       : {
           success: false,
           message: 'You do not have permission to create a post',
@@ -38,15 +47,18 @@ export class PostController {
   }
 
   @Get('all')
-  findAll() {
-    return this.postService.findAll();
+  @ApiOkResponse({ type: [PostCreateResponseDto] })
+  findAll(@Query('limit') limit: number, @Query('skip') skip: number) {
+    const parsedLimit = parseInt(limit.toString() || '10', 10);
+    const parsedSkip = parseInt(skip.toString() || '0', 10);
+    return this.postService.findAll(parsedLimit, parsedSkip);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  @Get('slug')
+  @ApiOkResponse({ type: PostCreateResponseDto })
+  getPostDetail(@Param('slug') slug: string) {
+    return this.postService.getPostDetail(slug);
   }
-
   @Patch('update')
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: PostUpdateResponse })
@@ -78,8 +90,9 @@ export class PostController {
           message: 'You do not have permission to delete this post',
         };
   }
+
+  @Get('count')
+  count() {
+    return this.postService.countPost();
+  }
 }
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiaHV5QGdtYWlsLmNvbSIsImlhdCI6MTczNTMyMDMyOSwiZXhwIjoxNzM3OTEyMzI5fQ.VGb_P0QqFRQo2EWTd7s1Tp_qi2XRScmC_fi6vYdl-sU
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiaHV5ZGV2QGdtYWlsLmNvbSIsImlhdCI6MTczNTMyMDM2NiwiZXhwIjoxNzM3OTEyMzY2fQ.QrzxB03aGCmS8cZ04eElOvf5p12S3qZ05GIEr3sesJ4

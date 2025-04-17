@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `users` ADD COLUMN `ballance` INTEGER NOT NULL DEFAULT 0;

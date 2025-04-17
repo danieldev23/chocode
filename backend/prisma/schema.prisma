@@ -15,24 +15,103 @@ enum FeelingType {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  username   String    @unique @db.VarChar(50)
-  fullName   String    @map("full_name") @db.VarChar(255)
-  active     Boolean   @default(true)
-  block      Boolean   @default(false)
-  email      String    @unique @db.VarChar(255)
-  password   String    @db.VarChar(255)
-  avatar     String?   @db.Text
-  bio        String?   @db.Text
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  role       Role?     @relation(fields: [roleId], references: [id])
-  roleId     Int       @map("role_id")
-  posts      Post[]
-  comments   Comment[]
-  feelings   Feeling[]
+  id              Int              @id @default(autoincrement())
+  username        String           @unique @db.VarChar(50)
+  fullName        String           @map("full_name") @db.VarChar(255)
+  active          Boolean          @default(true)
+  block           Boolean          @default(false)
+  email           String           @unique @db.VarChar(255)
+  password        String           @db.VarChar(255)
+  avatar          String?          @db.Text
+  bio             String?          @db.Text
+  ballance        Int              @default(0)
+  score           String?          @db.Text
+  address         String?          @db.Text
+  job             String?          @db.Text
+  level           String?          @db.Text
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  role            Role?            @relation(fields: [roleId], references: [id])
+  roleId          Int              @map("role_id")
+  jobPostings     JobPosting[]
+  jobApplications JobApplication[]
+  posts           Post[]
+  comments        Comment[]
+  feelings        Feeling[]
 
   @@map("users")
+}
+
+// Model Post Job
+model JobPosting {
+  id             Int      @id @default(autoincrement())
+  title          String
+  slug           String   @unique @default("")
+  salaryMin      Float    @map("salary_min")
+  salaryMax      Float    @map("salary_max")
+  location       String
+  deadline       DateTime
+  jobDescription String   @map("job_description") @db.Text
+  image          String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+  status         String   @default("draft") // draft, published
+
+  // Relations
+  tags         TagsOnJobPosting[]
+  technologies TechnologiesOnJobPosting[]
+  user         User?                      @relation(fields: [userId], references: [id])
+  userId       Int?                       @map("user_id")
+  applications JobApplication[]
+
+  @@map("job_postings")
+}
+
+model Technology {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  jobPostings TechnologiesOnJobPosting[]
+
+  @@map("technologies")
+}
+
+// Many-to-many relationship between JobPosting and Tag
+model TagsOnJobPosting {
+  jobPosting   JobPosting @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
+  jobPostingId Int        @map("job_posting_id")
+  tag          Tag        @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId        Int        @map("tag_id")
+
+  @@id([jobPostingId, tagId])
+  @@map("tags_on_job_postings")
+}
+
+// Many-to-many relationship between JobPosting and Technology
+model TechnologiesOnJobPosting {
+  jobPosting   JobPosting @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
+  jobPostingId Int        @map("job_posting_id")
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  technologyId Int        @map("technology_id")
+
+  @@id([jobPostingId, technologyId])
+  @@map("technologies_on_job_postings")
+}
+
+// Additional related model for job applications
+model JobApplication {
+  id           Int        @id @default(autoincrement())
+  jobPosting   JobPosting @relation(fields: [jobPostingId], references: [id])
+  jobPostingId Int        @map("job_posting_id")
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int        @map("user_id")
+  status       String     @default("pending") // pending, reviewed, accepted, rejected
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @default(now()) @updatedAt @map("updated_at")
+
+  @@map("job_applications")
 }
 
 model Role {
@@ -44,15 +123,21 @@ model Role {
 }
 
 model Post {
-  id          Int           @id @default(autoincrement())
-  slug        String
-  title       String
-  content     String
-  user        User?         @relation(fields: [userId], references: [id])
-  userId      Int?          @map("user_id")
-  comments    Comment[]
-  feelings    Feeling[]
-  TagsOnPosts TagsOnPosts[]
+  id         Int       @id @default(autoincrement())
+  slug       String
+  title      String
+  content    String    @db.Text
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     Int?      @map("user_id")
+  topic      String
+  level      String
+  image      String
+  comments   Comment[]
+  feelings   Feeling[]
+  category   Category  @relation(fields: [categoryId], references: [id])
+  categoryId Int       @map("category_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at")
 
   @@map("posts")
 }
@@ -86,15 +171,15 @@ model Feeling {
 }
 
 model Tag {
-  id    Int           @id @default(autoincrement())
-  name  String
-  posts TagsOnPosts[]
+  id          Int                @id @default(autoincrement())
+  name        String             @unique
+  posts       TagsOnPosts[]
+  jobPostings TagsOnJobPosting[]
 
   @@map("tags")
 }
 
 model TagsOnPosts {
-  post       Post     @relation(fields: [postId], references: [id])
   postId     Int      @map("post_id")
   tag        Tag      @relation(fields: [tagId], references: [id])
   tagId      Int      @map("tag_id")
@@ -106,9 +191,11 @@ model TagsOnPosts {
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  title String 
-  slug String
-  icon String
+  id    Int    @id @default(autoincrement())
+  title String
+  slug  String
+  icon  String
+  posts Post[]
+
   @@map("categories")
 }

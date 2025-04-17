@@ -5,11 +5,15 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { UserModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
+import { GoogleStrategy } from './google/google.strategy';
 
 export const jwtSecret = process.env.JWT_SECRET;
 @Module({
   imports: [
     PrismaModule,
+    UserModule,
     PassportModule,
     JwtModule.register({
       secret: jwtSecret,
@@ -17,6 +21,6 @@ export const jwtSecret = process.env.JWT_SECRET;
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, UserService, JwtStrategy, GoogleStrategy],
 })
 export class AuthModule {}

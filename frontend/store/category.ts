@@ -42,12 +42,12 @@ export const useCategoryStore = defineStore("category", {
         // If response is already the array of categories
         if (Array.isArray(response.data)) {
           this.categories = response.data;
-          console.log("[SERVER] Categories:", JSON.stringify(this.categories, null, 2));
+          // console.log("[SERVER] Categories:", JSON.stringify(this.categories, null, 2));
         } 
         // If response has a data property containing the array
         else if (response.data && Array.isArray(response.data)) {
           this.categories = response.data;
-          console.log("[SERVER] Categories:", JSON.stringify(this.categories, null, 2));
+          // console.log("[SERVER] Categories:", JSON.stringify(this.categories, null, 2));
         }
         // Fallback
         else {

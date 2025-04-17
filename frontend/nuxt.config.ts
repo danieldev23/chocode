@@ -1,6 +1,32 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  // ssr: true,
+  ssr: true,
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: [
+        '/'
+      ],
+      ignore: ['/code'] 
+    }
+  },
+  vite: {
+    server: {
+      fs: {
+        allow: [
+          '..',
+          './', // always allow root
+          '/Users/macbook/Documents/Projects/node_modules' // <-- allow this path
+        ]
+      }
+    },
+    optimizeDeps: {
+      include: ['axios'] // <-- help Vite resolve axios
+    }
+  },
+  build: {
+    transpile: ['@tinymce/tinymce-vue']
+  },
   compatibilityDate: "2024-11-01",
   css: ["~/assets/css/main.css"],
   image: {
@@ -13,6 +39,11 @@ export default defineNuxtConfig({
     "@nuxt/image",
   ],
   devtools: { enabled: false },
+  runtimeConfig: {
+    public: {
+      BASE_API_URL: process.env.API_BASE || 'http://localhost:3001/api',
+    }
+  },
   auth: {
     isEnabled: true,
     disableServerSideAuth: false,

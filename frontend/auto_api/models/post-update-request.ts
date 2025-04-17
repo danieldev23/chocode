@@ -37,6 +37,30 @@ export interface PostUpdateRequest {
     userId?: number;
     /**
      * 
+     * @type {string}
+     * @memberof PostUpdateRequest
+     */
+    topic?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostUpdateRequest
+     */
+    level?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PostUpdateRequest
+     */
+    image?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostUpdateRequest
+     */
+    category?: Array<string>;
+    /**
+     * 
      * @type {number}
      * @memberof PostUpdateRequest
      */

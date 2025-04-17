@@ -90,3 +90,5 @@ import { MapPin, Calendar, Clock } from 'lucide-vue-next';
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 </style>
+
+
