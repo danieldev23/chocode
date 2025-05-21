@@ -14,7 +14,10 @@ export class AllUsersResponse {
   active: boolean;
 
   @ApiProperty()
-  email: string;
+  score: string;
+
+  @ApiProperty()
+  level: string;
 
   @ApiProperty()
   avatar?: string;

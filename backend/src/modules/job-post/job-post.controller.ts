@@ -20,6 +20,8 @@ import {
   ApiParam,
   ApiBearerAuth,
   ApiBody,
+  ApiQuery,
+  ApiOkResponse,
 } from '@nestjs/swagger';
 import {
   CreateJobPostingDto,
@@ -52,6 +54,20 @@ export class JobPostController {
     @Request() req: any,
   ): Promise<JobPostingResponseDto> {
     return this.jobPostingService.create(createJobPostingDto, req.user.id);
+  }
+
+  @Get('search')
+  @ApiOperation({ summary: 'Search the job by query' })
+  @ApiQuery({ name: 'q', required: false, type: String })
+  @ApiQuery({ name: 'category', required: false, type: String })
+  @ApiQuery({ name: 'location', required: false, type: String })
+  @ApiOkResponse({ type: [JobPostingResponseDto] })
+  async seacrhByCategory(
+    @Query('q') q: string,
+    @Query('category') category: string,
+    @Query('location') location: string,
+  ): Promise<{ data: JobPostingResponseDto[] }> {
+    return this.jobPostingService.searchByCategory(q, category, location);
   }
 
   @Get(':slug')

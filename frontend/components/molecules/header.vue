@@ -162,14 +162,14 @@
               class="flex items-center text-gray-600 hover:text-primary text-sm"
               @click="menuOpen = false"
             >
-              <User class="w-4 h-4 mr-2" />
+              <User class="w-[18px] h-[18px] mr-2" />
               Thông tin tài khoản
             </NuxtLink>
             <button
               class="flex items-center text-gray-600 hover:text-primary text-sm"
               @click="logout"
             >
-              <Lock class="w-4 h-4 mr-2" />
+              <Lock class="w-[18px] h-[18px] mr-2" />
               Đăng xuất
             </button>
           </div>
@@ -257,7 +257,6 @@ const token = useCookie("auth.token");
 const serverToken = useCookie("access_token");
 const currentUser = await useCurrentUser();
 
-// Close mobile menu when screen size changes to desktop
 onMounted(() => {
   const handleResize = () => {
     if (window.innerWidth >= 1024 && menuOpen.value) {

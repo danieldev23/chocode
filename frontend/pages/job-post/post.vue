@@ -218,7 +218,7 @@ import { ElMessage } from "element-plus";
 import { Upload } from "@element-plus/icons-vue";
 import Editor from "@tinymce/tinymce-vue";
 import type { FormInstance, FormRules } from "element-plus";
-
+import { availableTags } from "@/types/tags";
 // SEO Meta
 useSeoMeta({
   title: "Đăng dự án - Chợ Code",
@@ -367,66 +367,10 @@ const rules = reactive<FormRules>({
   ],
 });
 
-
 // Tag input
 const tagInputVisible = ref(false);
 const tagInputValue = ref<string[]>([]);
 const tagSelectRef = ref<HTMLElement | null>(null);
-const availableTags = [
-  // Kỹ năng chuyên môn
-  "Kỹ thuật",
-  "Frontend",
-  "Backend",
-  "Fullstack",
-  "Mobile",
-  "DevOps",
-  "AI",
-  "Machine Learning",
-  "Data Science",
-  "Data Engineering",
-  "UI/UX Design",
-  "Game Development",
-  "Embedded Systems",
-  "Security",
-  "Blockchain",
-  "Cloud Computing",
-  "Testing",
-
-  // Quản lý & phát triển nghề nghiệp
-  "Quản lý dự án",
-  "Product Management",
-  "Agile",
-  "Scrum",
-  "Career Development",
-  "Freelancing",
-  "Remote Work",
-  "Startups",
-
-  // Học tập & Công cụ
-  "Kỹ năng mềm",
-  "Tiếng Anh chuyên ngành",
-  "Git & Version Control",
-  "CI/CD",
-  "Automation",
-  "System Design",
-  "Design Patterns",
-  "Database Design",
-  "API Design",
-  "Performance Optimization",
-  "Technical Writing",
-  "Clean Code",
-  "Code Review",
-
-  // Công nghệ & nền tảng
-  "Open Source",
-  "Dev Tools",
-  "Cloud Services",
-  "IoT",
-  "AR/VR",
-  "Big Data",
-  "NoSQL",
-  "Serverless",
-];
 
 // Tech input
 const techInputVisible = ref(false);
@@ -540,7 +484,7 @@ const availableTechs = [
 // Form reference
 const formRef = ref<FormInstance>();
 const loading = ref(false);
-const token = useCookie('auth.token');
+const token = useCookie("auth.token");
 
 // Methods
 const showTagInput = () => {
@@ -608,16 +552,12 @@ const handleUploadSuccess = (response: any) => {
 
 const beforeUpload = (file: File) => {
   const isImage = file.type.startsWith("image/");
-  const isLt2M = file.size / 1024 / 1024 < 2;
 
   if (!isImage) {
     ElMessage.error("Chỉ có thể tải lên file ảnh!");
     return false;
   }
-  if (!isLt2M) {
-    ElMessage.error("Kích thước ảnh không được vượt quá 2MB!");
-    return false;
-  }
+
   return true;
 };
 
@@ -643,12 +583,12 @@ const submitForm = async () => {
         // Fix date format issue: ensure we're passing correctly formatted date
         const formatDate = (dateString: string) => {
           if (!dateString) return "";
-          
+
           try {
             if (dateString.includes("/")) {
               const [day, month, year] = dateString.split("/");
               // Return ISO-like format or your API expected format
-              return `${year}-${month}-${day}`;  // Changed to YYYY-MM-DD format
+              return `${year}-${month}-${day}`; // Changed to YYYY-MM-DD format
             }
             return dateString;
           } catch (e) {
@@ -658,13 +598,14 @@ const submitForm = async () => {
         };
 
         // Convert location to array if it's a string
-        const locationValue = typeof form.location === 'string' ? [form.location] : form.location;
+        const locationValue =
+          typeof form.location === "string" ? [form.location] : form.location;
 
         const jobPostingData = {
           title: form.title,
           salary: {
-            min: parseInt(String(form.salary.min)),
-            max: parseInt(String(form.salary.max)),
+            min: formatSalary(String(form.salary.min)),
+            max: formatSalary(String(form.salary.max)),
           },
           location: locationValue.toString(),
           deadline: formatDate(form.deadline),
@@ -693,7 +634,7 @@ const submitForm = async () => {
               type: "success",
             });
             // Navigate to jobs page after successful submission
-            navigateTo('/');
+            navigateTo("/");
           }, 2000);
         }
       } catch (error: any) {
@@ -715,6 +656,12 @@ const submitForm = async () => {
   });
 };
 
+const formatSalary = (value: string | number) => {
+  if (typeof value === "string") {
+    return parseInt(value.replace(/\./g, ""));
+  }
+  return value;
+};
 // Initialize date if empty
 onMounted(() => {
   if (!form.deadline) {

@@ -203,6 +203,45 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} category 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        postControllerFindWithCategory: async (category: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'category' is not null or undefined
+            if (category === null || category === undefined) {
+                throw new RequiredError('category','Required parameter category was null or undefined when calling postControllerFindWithCategory.');
+            }
+            const localVarPath = `/api/post/{category}`
+                .replace(`{${"category"}}`, encodeURIComponent(String(category)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions :AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.params) {
+                query.set(key, options.params[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -212,7 +251,7 @@ export const PostApiAxiosParamCreator = function (configuration?: Configuration)
             if (slug === null || slug === undefined) {
                 throw new RequiredError('slug','Required parameter slug was null or undefined when calling postControllerGetPostDetail.');
             }
-            const localVarPath = `/api/post/slug`
+            const localVarPath = `/api/post/{slug}`
                 .replace(`{${"slug"}}`, encodeURIComponent(String(slug)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -391,6 +430,19 @@ export const PostApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} category 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postControllerFindWithCategory(category: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<PostCreateResponseDto>>>> {
+            const localVarAxiosArgs = await PostApiAxiosParamCreator(configuration).postControllerFindWithCategory(category, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -475,6 +527,15 @@ export const PostApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} category 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async postControllerFindWithCategory(category: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<PostCreateResponseDto>>> {
+            return PostApiFp(configuration).postControllerFindWithCategory(category, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {string} slug 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -549,6 +610,16 @@ export class PostApi extends BaseAPI {
      */
     public async postControllerFindAll(limit: number, skip: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<PostCreateResponseDto>>> {
         return PostApiFp(this.configuration).postControllerFindAll(limit, skip, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
+     * @param {string} category 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PostApi
+     */
+    public async postControllerFindWithCategory(category: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<PostCreateResponseDto>>> {
+        return PostApiFp(this.configuration).postControllerFindWithCategory(category, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 

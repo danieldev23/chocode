@@ -99,7 +99,7 @@
                     :class="
                       userData?.roleId === 1
                         ? 'bg-blue-100 text-primary'
-                        : 'bg-green-100 text-green-800'
+                        : 'bg-green-100 text-[#2acb2c]'
                     "
                   >
                     {{ userData?.roleId === 1 ? "User" : "Dev" }}
@@ -126,11 +126,11 @@
               <!-- Action Buttons -->
               <div class="flex items-center justify-center sm:justify-end gap-2 sm:gap-3 mt-4 sm:mt-0">
                 <el-button type="primary" class="flex items-center gap-1" size="small" :size="isMobile ? 'small' : 'default'">
-                  <UserPlus class="w-4 h-4" />
+                  <UserPlus class="w-4 h-4 mr-1 mb-[2px]" />
                   <span>Kết nối</span>
                 </el-button>
                 <el-button class="flex items-center gap-1" size="small" :size="isMobile ? 'small' : 'default'">
-                  <MessageCircle class="w-4 h-4" />
+                  <MessageCircle class="w-4 h-4 mr-1" />
                   <span>Nhắn tin</span>
                 </el-button>
                 <el-dropdown trigger="click">
@@ -288,13 +288,13 @@
                           {{ job.location }}
                         </span>
                         <span
-                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800"
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-[#2acb2c]"
                         >
                           <Banknote class="w-3 h-3 mr-1" />
                           {{ job.salaryMin }}-{{ job.salaryMax }} triệu
                         </span>
                         <span
-                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-800"
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-orange-100 text-[#FF7979]"
                         >
                           <Clock class="w-3 h-3 mr-1" />
                           Hạn: {{ formatDate(job.deadline) }}
@@ -365,13 +365,13 @@
                           {{ post.topic }}
                         </span>
                         <span
-                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800"
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-[#2acb2c]"
                         >
                           <GraduationCap class="w-3 h-3 mr-1" />
                           {{ post.level }}
                         </span>
                         <span
-                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-orange-100 text-orange-800"
+                          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-orange-100 text-[#FF7979]"
                         >
                           <Clock class="w-3 h-3 mr-1" />
                           {{ formatDate(post.createdAt) }}

@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <div class="text-gray-500 mb-4">1,023,426 câu hỏi</div>
+    <div class="text-gray-500 mb-4">{{ totalPost.data }} câu hỏi</div>
 
     <!-- Questions List -->
     <div class="space-y-4">
@@ -84,25 +84,31 @@
               <NuxtLink
                 :to="`/trang-ca-nhan/${post.user?.username}`"
                 class="font-medium"
-                >{{ post.user?.fullName }}</NuxtLink
-              >
+                >{{ post.user?.fullName }}
+              </NuxtLink>
               <div class="text-gray-500 text-sm">
                 {{ formatRelativeTime(post.createdAt.toString()) }}
               </div>
             </div>
           </div>
           <div class="flex items-center space-x-2">
-            <span class="text-gray-700"
-              ><NuxtLink :to="`/thao-luan/${post.category?.slug}`">{{
+            <span class="text-gray-700">
+              <NuxtLink :to="`/thao-luan/${post.category?.slug}`">{{
                 post.category.title
               }}</NuxtLink>
-              • {{ post.level }}</span
-            >
+              • {{ post.level }}
+            </span>
             <button>
               <Image class="h-5 w-5 text-gray-500" />
             </button>
             <button>
               <Bookmark class="h-5 w-5 text-gray-500" />
+            </button>
+            <button
+              v-if="post.user.id === currentUser?.id"
+              @click="deletePost(post.title, post.id, post.user.id)"
+            >
+              <Trash class="h-5 w-5 text-gray-500" />
             </button>
           </div>
         </div>
@@ -141,13 +147,60 @@ import {
   Bookmark,
   ThumbsUp,
   ThumbsDown,
+  Trash,
 } from "lucide-vue-next";
-import DefaultAvatarUser from '~/assets/images/header/default-avatar.png';
+import DefaultAvatarUser from "~/assets/images/header/default-avatar.png";
 import type { PostCreateResponseDto } from "~/auto_api";
+const currentUser = await useCurrentUser();
+const token = useCookie("auth.token");
 const posts = ref<PostCreateResponseDto[] | null>(null);
-const response = await postService.postControllerFindAll(10, 4);
-posts.value = response.data.reverse();
-const totalPost = await postService.postControllerCount();
-console.log(totalPost);
 const selectedClass = ref("all");
+
+const [postsResponse, totalPost] = await Promise.all([
+  postService.postControllerFindAll(4, 0),
+  postService.postControllerCount(),
+]);
+
+const deletePost = (question: string, id: number, userId: number) => {
+  ElMessageBox.confirm(`Bạn muốn xoá bài đăng ${question}`, "Bạn muốn xoá", {
+    confirmButtonText: "OK",
+    cancelButtonText: "Cancel",
+    type: "warning",
+  })
+    .then(() => {
+      postService
+        .postControllerRemove(
+          {
+            id,
+            userId,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token.value}`,
+            },
+          }
+        )
+        .then((data) => {
+          ElMessage({
+            type: "success",
+            message: "Xoá bài đăng thành công!",
+          });
+          window.location.reload();
+        })
+        .catch(() => {
+          ElMessage({
+            type: "error",
+            message: "Xoá bài đăng không thành công!",
+          });
+        });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "Huỷ xoá bài đăng!",
+      });
+    });
+};
+posts.value = postsResponse.data.reverse();
 </script>

@@ -8,10 +8,15 @@ import {
 } from './dto/job-post.dto';
 import { JobPostingStatus } from './dto/job-post.dto';
 import { generateSlug } from 'src/utils/gen-slug.utils';
+import { MailService } from '../mail/mail.service';
+import { templateEmail } from '../mail/mail.template';
 
 @Injectable()
 export class JobPostService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly mailService: MailService,
+  ) {}
 
   private async upsertTagsAndTechnologies(
     tags: string[],
@@ -82,49 +87,70 @@ export class JobPostService {
     dto: CreateJobPostingDto,
     userId: number,
   ): Promise<JobPostingResponseDto> {
-    const { tags, technologies, salary, ...rest } = dto;
+    try {
+      const { tags, technologies, salary, ...rest } = dto;
 
-    // Create job posting
-    const jobPosting = await this.prisma.jobPosting.create({
-      data: {
-        ...rest,
-        salaryMin: salary.min,
-        salaryMax: salary.max,
-        slug: `${generateSlug(dto.title)}`,
-        deadline: new Date(dto.deadline),
-        userId,
-      },
-    });
+      // Create job posting
+      const jobPosting = await this.prisma.jobPosting.create({
+        data: {
+          ...rest,
+          salaryMin: salary.min,
+          salaryMax: salary.max,
+          slug: generateSlug(dto.title),
+          deadline: new Date(dto.deadline),
+          userId,
+        },
+      });
 
-    // Process tags and technologies
-    const { tagIds, techIds } = await this.upsertTagsAndTechnologies(
-      tags,
-      technologies,
-    );
+      // Process tags and technologies in parallel with job creation
+      const { tagIds, techIds } = await this.upsertTagsAndTechnologies(
+        tags,
+        technologies,
+      );
 
-    // Create relationships
-    await Promise.all([
-      // Create tag relationships
-      ...tagIds.map((tagId) =>
-        this.prisma.tagsOnJobPosting.create({
-          data: {
+      // Create all relationships concurrently
+      await Promise.all([
+        // Batch create tag relationships
+        this.prisma.tagsOnJobPosting.createMany({
+          data: tagIds.map((tagId) => ({
             jobPostingId: jobPosting.id,
             tagId,
-          },
+          })),
+          skipDuplicates: true,
         }),
-      ),
-      // Create technology relationships
-      ...techIds.map((techId) =>
-        this.prisma.technologiesOnJobPosting.create({
-          data: {
+
+        // Batch create technology relationships
+        this.prisma.technologiesOnJobPosting.createMany({
+          data: techIds.map((techId) => ({
             jobPostingId: jobPosting.id,
             technologyId: techId,
-          },
+          })),
+          skipDuplicates: true,
         }),
-      ),
-    ]);
 
-    return this.formatJobPostingResponse(jobPosting);
+        // Send email notification
+        this.mailService.sendMail(
+          'huyhacker60948@gmail.com',
+          'Việc làm mới nhất từ Chocode',
+          'Có 1 việc làm mới',
+          templateEmail(
+            jobPosting.title,
+            jobPosting.jobDescription,
+            jobPosting.slug,
+            jobPosting.location,
+            `${jobPosting.salaryMin} đ - ${jobPosting.salaryMax} đ`,
+            new Date(jobPosting.createdAt).toLocaleString('vi-VN'),
+            new Date().toLocaleDateString('vi-VN'),
+          ),
+        ),
+      ]);
+
+      return this.formatJobPostingResponse(jobPosting);
+    } catch (error) {
+      // Handle errors properly
+      console.error('Error creating job posting:', error);
+      throw new Error(`Failed to create job posting: ${error.message}`);
+    }
   }
 
   async findAll(
@@ -351,6 +377,118 @@ export class JobPostService {
     return {
       data: formattedPostings,
       total,
+    };
+  }
+
+  async searchByCategory(
+    q: string,
+    category: string,
+    location: string,
+  ): Promise<{ data: any[] }> {
+    if (!q && !category && !location) {
+      return {
+        data: [],
+      };
+    }
+    const whereCondition: any = {
+      AND: [],
+    };
+    if (q) {
+      whereCondition.AND.push({
+        OR: [
+          { title: { contains: q } },
+          {
+            technologies: {
+              some: {
+                technology: {
+                  name: { contains: q },
+                },
+              },
+            },
+          },
+        ],
+      });
+    }
+    if (category) {
+      whereCondition.AND.push({
+        tags: {
+          some: {
+            tag: {
+              name: { equals: category },
+            },
+          },
+        },
+      });
+    }
+    if (location) {
+      whereCondition.AND.push({ location: { contains: location } });
+    }
+    if (whereCondition.AND.length === 0) {
+      delete whereCondition.AND;
+    }
+
+    const data = await this.prisma.jobPosting.findMany({
+      where: whereCondition,
+      include: {
+        tags: {
+          include: {
+            tag: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        technologies: {
+          include: {
+            technology: true,
+          },
+        },
+        user: {
+          select: {
+            username: true,
+            fullName: true,
+            avatar: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    // Chuyển đổi dữ liệu sang format mới theo yêu cầu
+    const formattedData = data.map((job) => ({
+      id: job.id,
+      title: job.title,
+      slug: job.slug,
+      salaryMin: job.salaryMin,
+      salaryMax: job.salaryMax,
+      location: job.location,
+      deadline: job.deadline,
+      jobDescription: job.jobDescription,
+      image: job.image || '',
+      status: job.status,
+      user: {
+        username: job.user.username,
+        fullName: job.user.fullName,
+        avatar: job.user.avatar,
+      },
+      tags: job.tags.map((tag) => tag.tag.name),
+      technologies: job.technologies.map((tech) => tech.technology.name),
+      createdAt: job.createdAt,
+      updatedAt: job.updatedAt,
+      userId: job.userId,
+    }));
+
+    if (!data || data.length === 0) {
+      return {
+        data: [],
+      };
+    }
+
+    return {
+      data: formattedData,
     };
   }
 }

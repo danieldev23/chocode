@@ -15,10 +15,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('all')
-  @ApiOkResponse({ type: AllUsersResponse })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  findAll() {
+  @ApiOkResponse({ type: [AllUsersResponse] })
+  findAll(): Promise<AllUsersResponse[]> {
     return this.userService.findAll();
   }
   @Patch('/ban/:id')

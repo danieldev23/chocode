@@ -2,20 +2,22 @@
   <div class="min-h-screen my-4">
     <!-- Navigation Breadcrumb -->
     <div class="border-primary-500 mb-2">
-      <div class="container mx-auto py-3">
-        <div class="flex items-center text-sm text-primary">
-          <NuxtLink to="/" class="hover:underline">Trang chủ</NuxtLink>
-          <ChevronRight class="w-4 h-4 mx-1" />
-          <NuxtLink
-            to="/tim-viec-lam-nhan-vien-kinh-doanh"
-            class="hover:underline"
-            >Việc làm Freelance</NuxtLink
-          >
-          <ChevronRight class="w-4 h-4 mx-1" />
-          <span class="text-gray-600">{{  jobDetail?.title }} </span>
-        </div>
+  <div class="container mx-auto py-3">
+    <div class="flex flex-wrap items-center text-sm text-primary">
+      <div class="flex items-center mr-2 mb-1">
+        <NuxtLink to="/" class="hover:underline">Trang chủ</NuxtLink>
+        <ChevronRight class="w-4 h-4 mx-1" />
+      </div>
+      <div class="flex items-center mr-2 mb-1">
+        <NuxtLink to="/tim-viec-lam-nhan-vien-kinh-doanh" class="hover:underline">Việc làm Freelance</NuxtLink>
+        <ChevronRight class="w-4 h-4 mx-1" />
+      </div>
+      <div class="mb-1">
+        <span class="text-gray-600 break-words">{{ jobDetail?.title }}</span>
       </div>
     </div>
+  </div>
+</div>
     <!-- Dialog -->
 
     <el-dialog
@@ -100,6 +102,7 @@
                 class="w-full flex justify-center items-center bg-primary-gradient"
                 @click="handleApplyClick"
                 :loading="loading"
+                :disabled="formatDeadline(jobDetail?.deadline) === 'Đã hết hạn'"
               >
                 <Send class="w-4 h-4 mr-2" />
                 Ứng tuyển ngay
@@ -108,6 +111,9 @@
                 <el-button
                   @click="save"
                   class="w-full md:w-auto flex items-center border bg-white text-black"
+                  :disabled="
+                    formatDeadline(jobDetail?.deadline) === 'Đã hết hạn'
+                  "
                 >
                   <Bookmark class="w-4 h-4 mr-2" />
                   Lưu tin
@@ -117,99 +123,116 @@
 
             <!-- Balance Check Modal -->
             <el-dialog
-    v-model="dialogVisible"
-    :title="modalState.title"
-    width="440px"
-    :close-on-click-modal="false"
-    :show-close="modalState.showClose"
-    class="modern-dialog"
-  >
-    <!-- Loading State -->
-    <div v-if="modalState.status === 'loading'" class="status-container">
-      <div class="loading-animation">
-        <el-progress
-          type="circle"
-          :percentage="loadingProgress"
-          :stroke-width="6"
-          :width="110"
-          :color="'#0089FF'"
-        />
-      </div>
-      <p class="status-text">Đang kiểm tra số dư...</p>
-    </div>
+              v-model="dialogVisible"
+              :title="modalState.title"
+              width="440px"
+              :close-on-click-modal="false"
+              :show-close="modalState.showClose"
+              class="modern-dialog"
+            >
+              <!-- Loading State -->
+              <div
+                v-if="modalState.status === 'loading'"
+                class="status-container"
+              >
+                <div class="loading-animation">
+                  <el-progress
+                    type="circle"
+                    :percentage="loadingProgress"
+                    :stroke-width="6"
+                    :width="110"
+                    :color="'#0089FF'"
+                  />
+                </div>
+                <p class="status-text">Đang kiểm tra số dư...</p>
+              </div>
 
-    <!-- Success State -->
-    <div v-else-if="modalState.status === 'success'" class="status-container">
-      <div class="status-icon success">
-        <CheckCircle class="icon" />
-      </div>
-      
-      <h3 class="status-title success-title">Đủ điều kiện nhận job này!</h3>
-      
-      <div class="balance-info">
-        <span>Số dư tài khoản:</span>
-        <div class="balance-value">
-          {{ userBalance }}
-          <el-tooltip
-            placement="top"
-            content="<strong>Code Points (CP)</strong><br>Là đơn vị tiền tệ tại <em>Chocode</em><br>1 CP = 1.000 VNĐ"
-            raw-content
-          >
-            <span class="cp-label">CP</span>
-          </el-tooltip>
-        </div>
-      </div>
+              <!-- Success State -->
+              <div
+                v-else-if="modalState.status === 'success'"
+                class="status-container"
+              >
+                <div class="status-icon success">
+                  <CheckCircle class="icon" />
+                </div>
 
-      <div class="user-info-card">
-        <h4 class="section-title">Thông tin khách hàng</h4>
-        <div class="user-info-row">
-          <span class="label">Họ tên:</span>
-          <span class="value">{{ jobDetail?.user?.fullName }}</span>
-        </div>
-        <div class="user-info-row">
-          <span class="label">Email:</span>
-          <span class="value">huydq.@gmail.com</span>
-        </div>
-        <div class="user-info-row">
-          <span class="label">SĐT:</span>
-          <span class="value">03498453984980</span>
-        </div>
-      </div>
+                <h3 class="status-title success-title">
+                  Đủ điều kiện nhận job này!
+                </h3>
 
-      <button class="action-button confirm bg-primary-gradient" @click="confirmApply">
-        Xác nhận ứng tuyển
-      </button>
-    </div>
+                <div class="balance-info">
+                  <span>Số dư tài khoản:</span>
+                  <div class="balance-value">
+                    {{ userBalance }}
+                    <el-tooltip
+                      placement="top"
+                      content="<strong>Code Points (CP)</strong><br>Là đơn vị tiền tệ tại <em>Chocode</em><br>1 CP = 1.000 VNĐ"
+                      raw-content
+                    >
+                      <span class="cp-label">CP</span>
+                    </el-tooltip>
+                  </div>
+                </div>
 
-    <!-- Error State -->
-    <div v-else-if="modalState.status === 'error'" class="status-container">
-      <div class="status-icon error">
-        <AlertCircle class="icon" />
-      </div>
-      
-      <h3 class="status-title error-title">Không đủ số dư</h3>
-      
-      <div class="balance-comparison">
-        <div class="balance-row">
-          <span>Số dư hiện tại:</span>
-          <span class="value">{{ userBalance }} CP</span>
-        </div>
-        <div class="balance-row required">
-          <span>Số dư cần thiết:</span>
-          <span class="value">6 CP</span>
-        </div>
-      </div>
+                <div class="user-info-card">
+                  <h4 class="section-title">Thông tin khách hàng</h4>
+                  <div class="user-info-row">
+                    <span class="label">Họ tên:</span>
+                    <span class="value">{{ jobDetail?.user?.fullName }}</span>
+                  </div>
+                  <div class="user-info-row">
+                    <span class="label">Email:</span>
+                    <span class="value">huydq.@gmail.com</span>
+                  </div>
+                  <div class="user-info-row">
+                    <span class="label">SĐT:</span>
+                    <span class="value">03498453984980</span>
+                  </div>
+                </div>
 
-      <div class="action-buttons">
-        <button class="action-button recharge bg-secondary-gradient" @click="goToRecharge">
-          Nạp tiền ngay
-        </button>
-        <button class="action-button cancel" @click="closeDialog">
-          Đóng
-        </button>
-      </div>
-    </div>
-  </el-dialog>
+                <button
+                  class="action-button confirm bg-primary-gradient"
+                  @click="confirmApply"
+                >
+                  Xác nhận ứng tuyển
+                </button>
+              </div>
+
+              <!-- Error State -->
+              <div
+                v-else-if="modalState.status === 'error'"
+                class="status-container"
+              >
+                <div class="status-icon error">
+                  <AlertCircle class="icon" />
+                </div>
+
+                <h3 class="status-title error-title">Không đủ số dư</h3>
+
+                <div class="balance-comparison">
+                  <div class="balance-row">
+                    <span>Số dư hiện tại:</span>
+                    <span class="value">{{ userBalance }} CP</span>
+                  </div>
+                  <div class="balance-row required">
+                    <span>Số dư cần thiết:</span>
+                    <span class="value">6 CP</span>
+                  </div>
+                </div>
+
+                <div class="action-buttons">
+                  <button
+                    class="action-button recharge bg-secondary-gradient"
+                    @click="goToRecharge"
+                  >
+                    Nạp tiền ngay
+                  </button>
+                  <button class="action-button cancel" @click="closeDialog">
+                    Đóng
+                  </button>
+                </div>
+              </div>
+            </el-dialog>
           </div>
 
           <!-- Job Details Card -->
@@ -225,11 +248,23 @@
             </div> -->
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-              <!-- <img
+              <img
+                :src="jobDetail?.image || CompanyImage"
+                alt="Company image"
+                class="rounded-md w-full cursor-pointer"
+                @click="centerDialogVisible = true"
+              />
+              <el-dialog
+                v-model="centerDialogVisible"
+                fullscreen
+                align-center
+              >
+              <img
                 :src="jobDetail?.image || CompanyImage"
                 alt="Company image"
                 class="rounded-md w-full"
-              /> -->
+              />
+              </el-dialog>
               <!-- <div class="relative rounded-lg overflow-hidden">
                 <img src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/employer_medias/bead6bd6028cf85ab6b2f76f88759de9-67ca5114134ea.jpg" alt="Additional photo" class="rounded-lg">
                 <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white font-bold text-xl">
@@ -259,7 +294,10 @@
                 </li>
               </ul>
             </div> -->
-            <div class="mb-6 text-base" v-html="jobDetail?.jobDescription"></div>
+            <div
+              class="mb-6 text-base"
+              v-html="jobDetail?.jobDescription"
+            ></div>
             <!-- <div>
               <h3 class="text-lg font-bold mb-3">Yêu cầu ứng viên</h3>
               <ul class="space-y-2 list-inside text-gray-700">
@@ -515,7 +553,7 @@ import type { AxiosResponse } from "axios";
 interface UserBalanceResponse {
   ballance: number;
 }
-
+const centerDialogVisible = ref(false)
 // Modal state management
 const modalState = reactive({
   status: "loading", // 'loading', 'success', 'error'
@@ -538,49 +576,53 @@ const animateLoading = () => {
 // Handle apply click
 const handleApplyClick = async () => {
   loading.value = true;
-
-  try {
-    dialogVisible.value = true;
-    modalState.status = "loading";
-    modalState.title = "Kiểm tra số dư";
-    modalState.showClose = false;
-
-    // Animate loading
-    animateLoading();
-
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    const response = await userService.userControllerGetBallance(
-      currentUser.value?.username as string,
-      {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      }
-    );
-    userBalance.value = (
-      response.data as unknown as { balance: number }
-    ).balance;
-
-    // Wait a bit before showing result
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    if (userBalance.value >= 6) {
-      modalState.status = "success";
-      modalState.title = "Kết quả kiểm tra";
-      modalState.showClose = true;
-    } else {
-      modalState.status = "error";
-      modalState.title = "Kết quả kiểm tra";
-      modalState.showClose = true;
-    }
-  } catch (error) {
-    console.error("Error checking balance:", error);
-    modalState.status = "error";
-    modalState.title = "Lỗi kiểm tra";
-    modalState.showClose = true;
-  } finally {
+  if (status.value === "unauthenticated") {
+    ElMessage.warning("Bạn cần phải đăng nhập để nhận job này!");
     loading.value = false;
+  } else {
+    try {
+      dialogVisible.value = true;
+      modalState.status = "loading";
+      modalState.title = "Kiểm tra số dư";
+      modalState.showClose = false;
+
+      // Animate loading
+      animateLoading();
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const response = await userService.userControllerGetBallance(
+        currentUser.value?.username as string,
+        {
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+          },
+        }
+      );
+      userBalance.value = (
+        response.data as unknown as { balance: number }
+      ).balance;
+
+      // Wait a bit before showing result
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      if (userBalance.value >= 6) {
+        modalState.status = "success";
+        modalState.title = "Kết quả kiểm tra";
+        modalState.showClose = true;
+      } else {
+        modalState.status = "error";
+        modalState.title = "Kết quả kiểm tra";
+        modalState.showClose = true;
+      }
+    } catch (error) {
+      console.error("Error checking balance:", error);
+      modalState.status = "error";
+      modalState.title = "Lỗi kiểm tra";
+      modalState.showClose = true;
+    } finally {
+      loading.value = false;
+    }
   }
 };
 
@@ -619,11 +661,16 @@ const closeDialog = () => {
 };
 
 const save = () => {
-  ElNotification({
-    title: "Thành công",
-    message: "Lưu việc làm thành công",
-    type: "success",
-  });
+  if (status.value === "unauthenticated") {
+    ElMessage.warning("Bạn cần phải đăng nhập để lưu job này!");
+    loading.value = false;
+  } else {
+    ElNotification({
+      title: "Thành công",
+      message: "Lưu việc làm thành công",
+      type: "success",
+    });
+  }
 };
 const route = useRoute();
 const slug = route.params.slug as string;
@@ -675,14 +722,16 @@ const toProfile = (username: string) => {
 };
 
 const formatPostDate = (date: string) => {
-  return new Date(date).toLocaleString("vi-VN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).replace(' ', ', ');
+  return new Date(date)
+    .toLocaleString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+    .replace(" ", ", ");
 };
 </script>
 
@@ -773,7 +822,7 @@ const formatPostDate = (date: string) => {
 }
 
 .cp-label {
-  color: #0089FF;
+  color: #0089ff;
   margin-left: 4px;
   cursor: help;
 }
@@ -787,7 +836,7 @@ const formatPostDate = (date: string) => {
 }
 
 .section-title {
-  color: #0089FF;
+  color: #0089ff;
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 16px;
@@ -892,13 +941,12 @@ button.el-button.w-full.md\:w-auto.flex.items-center.border.bg-white.text-black.
   display: inline-flex;
 }
 button.el-button.flex.items-center.border-none.bg-transparent.el-tooltip__trigger.el-tooltip__trigger {
-    border: none;
-    color: #FF7979;
-    padding: 0;
-    margin-bottom: 1px;
+  border: none;
+  color: #ff7979;
+  padding: 0;
+  margin-bottom: 1px;
 }
 button.el-button.flex.items-center.border-none.bg-transparent.el-tooltip__trigger.el-tooltip__trigger:hover {
   background: transparent;
-
 }
 </style>

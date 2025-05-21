@@ -1,5 +1,5 @@
 <template>
-  <HomeJobs :jobs="jobs" :is-loading="isLoading" />
+  <HomeJobs :jobs="jobs" :is-loading="isLoading" :title="title" />
   <!-- <HomeBanner /> -->
 </template>
 
@@ -20,6 +20,8 @@ useSeoMeta({
     "Tìm việc làm Freelancer hoặc thuê Developer uy tín chỉ với vài cú click tại ChoCode.com!",
   twitterImage: "https://choCode.com/assets/twitter-image.png",
 });
+const title = `🔥
+        Việc làm HOT nhất!`;
 const {
   data: jobs,
   pending: isLoading,

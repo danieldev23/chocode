@@ -53,11 +53,21 @@ export class PostController {
     const parsedSkip = parseInt(skip.toString() || '0', 10);
     return this.postService.findAll(parsedLimit, parsedSkip);
   }
+  @Get('count')
+  count() {
+    return this.postService.countPost();
+  }
 
-  @Get('slug')
+  @Get(':slug')
   @ApiOkResponse({ type: PostCreateResponseDto })
   getPostDetail(@Param('slug') slug: string) {
     return this.postService.getPostDetail(slug);
+  }
+
+  @Get(':category')
+  @ApiOkResponse({ type: [PostCreateResponseDto] })
+  findWithCategory(@Param('category') category: string) {
+    return this.postService.findWithCategory(category);
   }
   @Patch('update')
   @UseGuards(JwtAuthGuard)
@@ -89,10 +99,5 @@ export class PostController {
           success: false,
           message: 'You do not have permission to delete this post',
         };
-  }
-
-  @Get('count')
-  count() {
-    return this.postService.countPost();
   }
 }

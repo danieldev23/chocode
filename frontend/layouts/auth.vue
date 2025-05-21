@@ -1,5 +1,5 @@
 <template>
-  <MoleculesHeader/>
-            <slot />
-  <MoleculesFooter/>
+  <MoleculesHeader />
+  <slot />
+  <MoleculesFooter />
 </template>

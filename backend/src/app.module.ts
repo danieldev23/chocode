@@ -11,6 +11,7 @@ import { CategoryService } from './modules/category/category.service';
 import { CategoryModule } from './modules/category/category.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { JobPostModule } from './modules/job-post/job-post.module';
+import { MailModule } from './modules/mail/mail.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,6 +27,7 @@ import { JobPostModule } from './modules/job-post/job-post.module';
     CategoryModule,
     UploadModule,
     JobPostModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService, CategoryService],

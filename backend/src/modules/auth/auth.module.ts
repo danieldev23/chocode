@@ -8,12 +8,14 @@ import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { GoogleStrategy } from './google/google.strategy';
+import { MailModule } from '../mail/mail.module';
 
 export const jwtSecret = process.env.JWT_SECRET;
 @Module({
   imports: [
     PrismaModule,
     UserModule,
+    MailModule,
     PassportModule,
     JwtModule.register({
       secret: jwtSecret,

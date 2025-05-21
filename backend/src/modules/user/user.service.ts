@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { AllUsersResponse } from './response/get-users.response';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -29,14 +30,15 @@ export class UserService {
     return data;
   }
 
-  async findAll() {
+  async findAll(): Promise<AllUsersResponse[]> {
     return this.prisma.user.findMany({
       select: {
         id: true,
         username: true,
         fullName: true,
         active: true,
-        email: true,
+        score: true,
+        level: true,
         avatar: true,
         bio: true,
         created_at: true,

@@ -12,9 +12,28 @@ export default <RouterConfig>{
       {
         name: "home",
         path: "/",
-        alias: ["/trang-chu"],
+        alias: ["/trang-chu", '/home'],
         component: () =>
-          import("~/pages/index.vue").then((r) => r.default || r),
+          import("~/pages/home/index.vue").then((r) => r.default || r),
+        meta: {
+          layout: "home",
+        },
+      },
+      {
+        name: "ranking",
+        path: "/xep-hang",
+        alias: ["/ranking"],
+        component: () =>
+          import("~/pages/user/ranking.vue").then((r) => r.default || r),
+        meta: {
+        },
+      },
+      {
+        name: "search",
+        path: "/tim-kiem-viec-lam",
+        alias: ["/find-job-freelance"],
+        component: () =>
+          import("~/pages/home/job-search.vue").then((r) => r.default || r),
         meta: {
           layout: "home",
         },
@@ -63,6 +82,18 @@ export default <RouterConfig>{
         },
       },
       {
+        name: "forum-detail",
+        path: "/thao-luan/bai-dang/:slug",
+        alias: ["/forum/post/:slug"],
+        component: () =>
+          import("~/pages/forum/detail.vue").then((r) => r.default || r),
+        meta: {
+          layout: "forum",
+          auth: true,
+          middleware: auth,
+        },
+      },
+      {
         name: "marketplace",
         path: "/mua-ban",
         alias: ["/marketplace"],
@@ -74,7 +105,7 @@ export default <RouterConfig>{
         path: "/trang-ca-nhan/:username",
         alias: ["/profile/:username"],
         component: () =>
-          import("~/pages/profile.vue").then((r) => r.default || r),
+          import("~/pages/user/profile.vue").then((r) => r.default || r),
         meta: {
           layout: "user",
         },

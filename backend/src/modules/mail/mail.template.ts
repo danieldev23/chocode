@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+export const templateEmail = (
+  jobTitle: string,
+  jobDetail: string,
+  jobSlug: string,
+  location: string,
+  salary: string,
+  time: string,
+  today: string,
+) => {
+  return `
+  <!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -34,7 +44,7 @@
             font-size: 24px;
             font-weight: 600;">Thông Báo Việc Làm Mới</h1>
         <p style="color: rgba(255, 255, 255, 0.9); margin: 0.5rem 0 0; font-size: 16px;">
-          Cập nhật ngày 19/04/2025
+          Cập nhật ngày ${today}
         </p>
       </div>
       
@@ -86,7 +96,7 @@
                   color: #2b4d8f;
                   margin-top: 0;
                   margin-bottom: 0.75rem;">
-                Lập Trình Viên Front End (ReactJS, NextJS, NodeJS)
+                ${jobTitle}
               </h3>
               <p style="
                   display: flex;
@@ -120,7 +130,7 @@
                 border-radius: 20px;
                 font-size: 14px;
                 font-weight: 500;">
-                📍 Đà Nẵng, Liên Chiểu
+                📍 ${location}
             </span>
             <span style="
                 background-color: #f0f0f0;
@@ -129,7 +139,7 @@
                 border-radius: 20px;
                 font-size: 14px;
                 font-weight: 500;">
-                💵 Thương lượng
+                💵 ${salary}
             </span>
             <span style="
                 background-color: #fff1da;
@@ -138,7 +148,7 @@
                 border-radius: 20px;
                 font-size: 14px;
                 font-weight: 500;">
-                ⏰ Đăng 2 ngày trước
+                ⏰ ${time}
             </span>
           </div>
 
@@ -152,10 +162,7 @@
                 font-size: 15px;
                 margin: 0;
                 line-height: 1.6;">
-              Bạn sẽ chịu trách nhiệm cho các công việc hàng ngày liên quan đến
-              việc triển khai và bảo trì các giải pháp phần mềm. Bạn sẽ làm việc
-              chặt chẽ với các đội thiết kế và backend để xây dựng trải nghiệm
-              người dùng liền mạch...
+              ${jobDetail}
             </p>
           </div>
 
@@ -233,3 +240,5 @@
     </div>
   </body>
 </html>
+`;
+};

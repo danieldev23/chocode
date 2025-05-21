@@ -9,14 +9,12 @@ import { AuthLoginResponse } from './response/auth.login-response';
 import { AuthRegisterRequest } from './request/create.request';
 import * as bcrypt from 'bcrypt';
 import { AuthRegisterResponse } from './response/auth.register-response';
-import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-    private readonly userService: UserService,
   ) {}
 
   async login(

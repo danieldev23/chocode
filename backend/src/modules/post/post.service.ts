@@ -21,9 +21,7 @@ export class PostService {
       };
     }
 
-    const categoryName = category[0]; // Lấy phần tử đầu tiên từ mảng category
-
-    // Tìm hoặc tạo category
+    const categoryName = category[0];
     let existingCategory = await this.prisma.category.findFirst({
       where: {
         title: categoryName,
@@ -31,12 +29,11 @@ export class PostService {
     });
 
     if (!existingCategory) {
-      // Tạo category mới nếu không tìm thấy
       existingCategory = await this.prisma.category.create({
         data: {
           title: categoryName,
           slug: generateSlug(categoryName),
-          icon: 'default-icon', // Bạn có thể điều chỉnh giá trị mặc định này
+          icon: 'default-icon',
         },
       });
     }
@@ -82,8 +79,8 @@ export class PostService {
 
   async findAll(limit = 10, skip = 0) {
     return this.prisma.post.findMany({
-      take: limit,
-      skip,
+      // take: limit,
+      // skip,
       select: {
         id: true,
         title: true,
@@ -102,6 +99,12 @@ export class PostService {
             fullName: true,
             username: true,
             avatar: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            comment: true,
           },
         },
       },
@@ -135,7 +138,7 @@ export class PostService {
     });
 
     if (!post) {
-      throw new NotFoundException(`Job posting with ID ${slug} not found`);
+      throw new NotFoundException(`Post with slug "${slug}" not found`);
     }
 
     return {
@@ -157,12 +160,41 @@ export class PostService {
         icon: post.category.icon,
       },
       user: {
-        id: post.userId,
+        id: post.user.id,
         fullName: post.user.fullName,
         avatar: post.user.avatar,
         username: post.user.username,
       },
     };
+  }
+
+  async findWithCategory(category: string) {
+    const post = await this.prisma.post.findMany({
+      where: {
+        category: {
+          title: {
+            equals: category,
+          },
+        },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            fullName: true,
+            username: true,
+            avatar: true,
+          },
+        },
+        category: true,
+      },
+    });
+
+    if (!post || post.length === 0) {
+      throw new NotFoundException(`Post with category "${category}" not found`);
+    }
+
+    return post;
   }
 
   async update(

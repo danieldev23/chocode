@@ -235,7 +235,7 @@ export class JobPostingResponseDto {
   jobDescription: string;
 
   @ApiProperty()
-  image: string | null;
+  image?: string | null;
 
   @ApiProperty({ enum: JobPostingStatus })
   status: JobPostingStatus;
