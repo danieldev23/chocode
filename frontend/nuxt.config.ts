@@ -4,45 +4,53 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: [
-        '/'
-      ],
-      ignore: ['/code'] 
-    }
+      routes: ["/"],
+      ignore: ["/code"],
+    },
   },
   vite: {
     server: {
       fs: {
         allow: [
-          '..',
-          './', // always allow root
-          '/Users/macbook/Documents/Projects/node_modules' // <-- allow this path
-        ]
-      }
+          "..",
+          "./", // always allow root
+          "/Users/macbook/Documents/Projects/node_modules", // <-- allow this path
+        ],
+      },
     },
     optimizeDeps: {
-      include: ['axios'] // <-- help Vite resolve axios
-    }
+      include: ["axios"], // <-- help Vite resolve axios
+    },
   },
   build: {
-    transpile: ['@tinymce/tinymce-vue']
+    transpile: ["@tinymce/tinymce-vue"],
   },
   compatibilityDate: "2024-11-01",
   css: ["~/assets/css/main.css"],
   image: {
-    dir: 'assets/images'
+    dir: "assets/images",
   },
   modules: [
     "@element-plus/nuxt",
-    '@pinia/nuxt',
+    "@pinia/nuxt",
     "@sidebase/nuxt-auth",
     "@nuxt/image",
+    "nuxt-socket-io",
   ],
+  io: {
+    // module options
+    sockets: [
+      {
+        name: "main",
+        url: "http://localhost:3000",
+      },
+    ],
+  },
   devtools: { enabled: false },
   runtimeConfig: {
     public: {
-      BASE_API_URL: process.env.API_BASE || 'http://localhost:3001/api',
-    }
+      BASE_API_URL: process.env.API_BASE || "http://localhost:3001/api",
+    },
   },
   auth: {
     isEnabled: true,

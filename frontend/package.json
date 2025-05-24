@@ -14,14 +14,15 @@
     "@nuxt/image": "^1.9.0",
     "@pinia/nuxt": "0.10.1",
     "element-plus": "^2.9.2",
+    "emoji-picker-element": "^1.26.3",
     "lucide-vue-next": "^0.469.0",
     "nuxt": "^3.15.0",
+    "nuxt-socket-io": "^3.0.13",
     "pinia": "^3.0.1",
+    "socket.io-client": "^4.8.1",
     "swiper": "^11.2.6",
     "vue": "^3.5.13",
-    "vue-marquee-slider": "^1.0.6",
-    "vue-router": "latest",
-    "vue3-marquee": "^4.2.2"
+    "vue-router": "latest"
   },
   "devDependencies": {
     "@sidebase/nuxt-auth": "^0.10.0",

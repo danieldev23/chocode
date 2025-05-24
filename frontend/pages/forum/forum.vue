@@ -1,6 +1,12 @@
 <template>
   <!-- Main Content -->
   <div class="flex-1">
+    <ForumSearch :query="search" />
+    <ForumChat
+      :username="currentUser?.username || ''"
+      :name="currentUser?.fullName || 'Default User'"
+      :avatar="currentUser?.avatar || ''"
+    />
     <!-- Hero Section -->
     <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
       <div class="flex flex-col md:flex-row items-center justify-between">
@@ -105,7 +111,7 @@
               <Bookmark class="h-5 w-5 text-gray-500" />
             </button>
             <button
-              v-if="post.user.id === currentUser?.id"
+              v-if="post.user && post.user.id === currentUser?.id"
               @click="deletePost(post.title, post.id, post.user.id)"
             >
               <Trash class="h-5 w-5 text-gray-500" />
@@ -139,12 +145,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import {
-  Grid,
-  ChevronRight,
   Image,
   Bookmark,
+  Search,
   ThumbsUp,
   ThumbsDown,
   Trash,
@@ -152,14 +156,51 @@ import {
 import DefaultAvatarUser from "~/assets/images/header/default-avatar.png";
 import type { PostCreateResponseDto } from "~/auto_api";
 const currentUser = await useCurrentUser();
+const user = {
+  username: currentUser.value?.username,
+  name: currentUser.value?.fullName,
+  avatar: currentUser.value?.avatar,
+};
 const token = useCookie("auth.token");
 const posts = ref<PostCreateResponseDto[] | null>(null);
 const selectedClass = ref("all");
-
+const search = ref();
 const [postsResponse, totalPost] = await Promise.all([
   postService.postControllerFindAll(4, 0),
   postService.postControllerCount(),
 ]);
+
+function formatRelativeTime(timestamp: string): string {
+  const now = new Date();
+  const past = new Date(timestamp);
+
+  // Make sure the date is valid
+  if (isNaN(past.getTime())) {
+    throw new Error("Invalid date format");
+  }
+
+  const diffMs = now.getTime() - past.getTime();
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const diffMonths = Math.floor(diffDays / 30);
+  const diffYears = Math.floor(diffDays / 365);
+
+  if (diffSecs < 60) {
+    return `${diffSecs} giây trước`;
+  } else if (diffMins < 60) {
+    return `${diffMins} phút trước`;
+  } else if (diffHours < 24) {
+    return `${diffHours} giờ trước`;
+  } else if (diffDays < 30) {
+    return `${diffDays} ngày trước`;
+  } else if (diffMonths < 12) {
+    return `${diffMonths} tháng trước`;
+  } else {
+    return `${diffYears} năm trước`;
+  }
+}
 
 const deletePost = (question: string, id: number, userId: number) => {
   ElMessageBox.confirm(`Bạn muốn xoá bài đăng ${question}`, "Bạn muốn xoá", {

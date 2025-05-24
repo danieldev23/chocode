@@ -22,18 +22,6 @@
                 <div class="text-gray-600 text-sm">Hỏi & đáp IT</div>
               </div>
             </div>
-            <div class="flex space-x-2">
-              <img
-                src="https://randomuser.me/api/portraits/men/62.jpg"
-                alt="App Store"
-                class="h-10"
-              />
-              <img
-                src="https://randomuser.me/api/portraits/men/62.jpg"
-                alt="Google Play"
-                class="h-10"
-              />
-            </div>
           </div>
 
           <!-- Top Contributors -->
@@ -52,55 +40,68 @@
             </div>
 
             <div class="space-y-4">
-              <div class="flex items-center">
+              <div
+                v-for="user in users"
+                :key="user.id"
+                class="flex items-center"
+              >
                 <img
-                  src="https://randomuser.me/api/portraits/men/62.jpg"
-                  alt="User"
+                  :src="
+                    user.avatar ||
+                    '~/assets/images/header/default-avatar.png'
+                  "
+                  :alt="user.fullName"
                   class="w-10 h-10 rounded-full"
                 />
                 <div class="ml-3 flex-1">
-                  <div class="font-medium">Hermione</div>
-                  <div class="text-gray-600 text-sm">11,930 Điểm</div>
+                  <div class="font-medium">{{ user.fullName }}</div>
+                  <div class="text-gray-600 text-sm">
+                    {{ user.score || 0 }} Điểm
+                  </div>
                 </div>
               </div>
-              <div class="flex items-center">
-                <img
-                  src="https://randomuser.me/api/portraits/men/62.jpg"
-                  alt="User"
-                  class="w-10 h-10 rounded-full"
-                />
-                <div class="ml-3 flex-1">
-                  <div class="font-medium">朱志鑫🌟ZZX_1911💛</div>
-                  <div class="text-gray-600 text-sm">4,610 Điểm</div>
+
+              <!-- Fallback static data if no users -->
+              <template v-if="!users || users.length === 0">
+                <div class="flex items-center">
+                  <img
+                    src="~/assets/images/header/default-avatar.png"
+                    alt="User"
+                    class="w-10 h-10 rounded-full"
+                  />
+                  <div class="ml-3 flex-1">
+                    <div class="font-medium">朱志鑫🌟ZZX_1911💛</div>
+                    <div class="text-gray-600 text-sm">4,610 Điểm</div>
+                  </div>
                 </div>
-              </div>
-              <div class="flex items-center">
-                <img
-                  src="https://randomuser.me/api/portraits/men/62.jpg"
-                  alt="User"
-                  class="w-10 h-10 rounded-full"
-                />
-                <div class="ml-3 flex-1">
-                  <div class="font-medium">Nguyễn Lê Thủy Dương</div>
-                  <div class="text-gray-600 text-sm">2,310 Điểm</div>
+                <div class="flex items-center">
+                  <img
+                    src="~/assets/images/header/default-avatar.png"
+                    alt="User"
+                    class="w-10 h-10 rounded-full"
+                  />
+                  <div class="ml-3 flex-1">
+                    <div class="font-medium">Nguyễn Lê Thủy Dương</div>
+                    <div class="text-gray-600 text-sm">2,310 Điểm</div>
+                  </div>
                 </div>
-              </div>
-              <div class="flex items-center">
-                <img
-                  src="https://randomuser.me/api/portraits/men/62.jpg"
-                  alt="User"
-                  class="w-10 h-10 rounded-full"
-                />
-                <div class="ml-3 flex-1">
-                  <div class="font-medium">🔥8A_k11🔥</div>
-                  <div class="text-gray-600 text-sm">2,160 Điểm</div>
+                <div class="flex items-center">
+                  <img
+                    src="~/assets/images/header/default-avatar.png"
+                    alt="User"
+                    class="w-10 h-10 rounded-full"
+                  />
+                  <div class="ml-3 flex-1">
+                    <div class="font-medium">🔥8A_k11🔥</div>
+                    <div class="text-gray-600 text-sm">2,160 Điểm</div>
+                  </div>
                 </div>
-              </div>
+              </template>
             </div>
           </div>
 
           <!-- Advertisement -->
-          <div class="rounded-md p-2 bg-orange-200 text-center">
+          <div class="rounded-md border shadow-lg text-center">
             <img
               src="~/assets/images/sidebar/sidebar-banner.gif"
               alt="Advertisement"
@@ -115,16 +116,37 @@
     <MoleculesFooter />
   </div>
 </template>
+
 <script setup lang="ts">
+import type { AllUsersResponse } from "~/auto_api";
 import { useCategoryStore } from "~/store/category";
+
+const users = ref<AllUsersResponse[]>([]);
 const categoryStore = useCategoryStore();
+
 await useAsyncData("categories", async () => {
   await categoryStore.fetchCategories();
+});
+
+const getTopUsers = async () => {
+  try {
+    const response = await userService.userControllerFindAll();
+    users.value = response.data || [];
+    console.table(users.value);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    users.value = [];
+  }
+};
+
+onMounted(() => {
+  getTopUsers();
 });
 
 const { categories } = storeToRefs(categoryStore);
 const timeFilter = ref("week");
 </script>
+
 <style>
 .scrollbar-hide {
   -ms-overflow-style: none;
