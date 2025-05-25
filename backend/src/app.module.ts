@@ -12,6 +12,8 @@ import { CategoryModule } from './modules/category/category.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { JobPostModule } from './modules/job-post/job-post.module';
 import { MailModule } from './modules/mail/mail.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { UserService } from './modules/user/user.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +21,7 @@ import { MailModule } from './modules/mail/mail.module';
       ignoreEnvFile: true,
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     PrismaModule,
     AuthModule,
@@ -30,6 +33,6 @@ import { MailModule } from './modules/mail/mail.module';
     MailModule,
   ],
   controllers: [AppController],
-  providers: [AppService, CategoryService],
+  providers: [AppService, CategoryService, UserService],
 })
 export class AppModule {}

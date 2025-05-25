@@ -1,15 +1,28 @@
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { AllUsersResponse } from './response/get-users.response';
+import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
+import fs from 'fs';
+import axios from 'axios';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(UserService.name);
+  private startTime = Date.now();
+  constructor(
+    private readonly prisma: PrismaService,
+    private schedulerRegistry: SchedulerRegistry,
+  ) {}
+
+  @Cron('* * * * *')
+  async handleCron() {
+    // this.checkTransactionHistory();
+  }
   async create(createUserDto: CreateUserDto) {
     const username = Math.floor(
       Math.random() * 1_000_000_000_000_000,
@@ -165,5 +178,16 @@ export class UserService {
     return {
       balance: user.ballance,
     };
+  }
+
+  async checkTransactionHistory() {
+    const data = await axios.get(
+      'http://localhost:4000/api/bank/transaction-history',
+    );
+    return data.data;
+  }
+
+  getUserFromAddDescription(des: string): string {
+    return des.match(/\d+$/)[0];
   }
 }

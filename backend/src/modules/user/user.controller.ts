@@ -19,6 +19,12 @@ export class UserController {
   findAll(): Promise<AllUsersResponse[]> {
     return this.userService.findAll();
   }
+
+  @Get('transaction-history')
+  checkTransactionHistory() {
+    return this.userService.checkTransactionHistory();
+  }
+
   @Patch('/ban/:id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

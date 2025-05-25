@@ -54,12 +54,13 @@
 
             <!-- Notification Popover -->
           </div>
-          <button
+          <NuxtLink
+            v-if="currentUser"
             class="bg-primary-gradient text-white py-1 px-2 rounded-[3px]"
-            @click="navigateTo('/dang-bai')"
+            to="/dang-bai"
           >
             Đăng bài
-          </button>
+          </NuxtLink>
           <!-- User Menu -->
           <div v-if="currentUser" class="relative ml-2">
             <el-dropdown trigger="hover">
@@ -101,13 +102,13 @@
           </div>
 
           <!-- Login Button -->
-          <el-button
+          <NuxtLink
             v-else
             class="!h-9 !px-5 !font-medium !text-sm bg-primary-gradient text-white"
-            @click="navigateTo('auth/dang-nhap')"
+            to="/auth/login"
           >
             Đăng nhập
-          </el-button>
+          </NuxtLink>
         </nav>
         <div class="flex items-center space-x-2 lg:hidden mr-[-0.4rem]">
           <el-button
@@ -430,15 +431,12 @@
           </div>
 
           <div class="px-4 pt-4">
-            <button
+            <NuxtLink
               class="w-full bg-primary-gradient text-white py-2 px-4 rounded font-medium"
-              @click="
-                navigateTo('/dang-bai');
-                menuOpen = false;
-              "
+              to="/dang-bai"
             >
               Đăng bài
-            </button>
+            </NuxtLink>
           </div>
         </nav>
       </div>
@@ -464,10 +462,9 @@ import { ArrowDown } from "@element-plus/icons-vue";
 const menuOpen = ref(false);
 const dialogBanking = ref(false);
 const toLogin = () => {
-  navigateTo("/auth/dang-nhap");
+  navigateTo("/auth/login");
 };
-const codeRef = ref(null);
-const copied = ref(false);
+const codeRef = ref('It is demo');
 
 function handleCopy() {
   const text = codeRef.value.innerText;

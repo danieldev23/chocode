@@ -2,22 +2,28 @@
   <div class="min-h-screen my-4">
     <!-- Navigation Breadcrumb -->
     <div class="border-primary-500 mb-2">
-  <div class="container mx-auto py-3">
-    <div class="flex flex-wrap items-center text-sm text-primary">
-      <div class="flex items-center mr-2 mb-1">
-        <NuxtLink to="/" class="hover:underline">Trang chủ</NuxtLink>
-        <ChevronRight class="w-4 h-4 mx-1" />
-      </div>
-      <div class="flex items-center mr-2 mb-1">
-        <NuxtLink to="/tim-viec-lam-nhan-vien-kinh-doanh" class="hover:underline">Việc làm Freelance</NuxtLink>
-        <ChevronRight class="w-4 h-4 mx-1" />
-      </div>
-      <div class="mb-1">
-        <span class="text-gray-600 break-words">{{ jobDetail?.title }}</span>
+      <div class="container mx-auto py-3">
+        <div class="flex flex-wrap items-center text-sm text-primary">
+          <div class="flex items-center mr-2 mb-1">
+            <NuxtLink to="/" class="hover:underline">Trang chủ</NuxtLink>
+            <ChevronRight class="w-4 h-4 mx-1" />
+          </div>
+          <div class="flex items-center mr-2 mb-1">
+            <NuxtLink
+              to="/tim-viec-lam-nhan-vien-kinh-doanh"
+              class="hover:underline"
+              >Việc làm Freelance</NuxtLink
+            >
+            <ChevronRight class="w-4 h-4 mx-1" />
+          </div>
+          <div class="mb-1">
+            <span class="text-gray-600 break-words">{{
+              jobDetail?.title
+            }}</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
     <!-- Dialog -->
 
     <el-dialog
@@ -254,16 +260,12 @@
                 class="rounded-md w-full cursor-pointer"
                 @click="centerDialogVisible = true"
               />
-              <el-dialog
-                v-model="centerDialogVisible"
-                fullscreen
-                align-center
-              >
-              <img
-                :src="jobDetail?.image || CompanyImage"
-                alt="Company image"
-                class="rounded-md w-full"
-              />
+              <el-dialog v-model="centerDialogVisible" fullscreen align-center>
+                <img
+                  :src="jobDetail?.image || CompanyImage"
+                  alt="Company image"
+                  class="rounded-md w-full"
+                />
               </el-dialog>
               <!-- <div class="relative rounded-lg overflow-hidden">
                 <img src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/employer_medias/bead6bd6028cf85ab6b2f76f88759de9-67ca5114134ea.jpg" alt="Additional photo" class="rounded-lg">
@@ -553,7 +555,7 @@ import type { AxiosResponse } from "axios";
 interface UserBalanceResponse {
   ballance: number;
 }
-const centerDialogVisible = ref(false)
+const centerDialogVisible = ref(false);
 // Modal state management
 const modalState = reactive({
   status: "loading", // 'loading', 'success', 'error'
@@ -677,7 +679,7 @@ const slug = route.params.slug as string;
 const jobDetail = ref<JobPostingResponseDtoUpdate | undefined>(undefined);
 
 const response = await jobPostingService.jobPostControllerFindOne(slug);
-jobDetail.value = response.data;
+jobDetail.value = response.data as JobPostingResponseDtoUpdate;
 watchEffect(() => {
   if (!jobDetail.value) return;
 
