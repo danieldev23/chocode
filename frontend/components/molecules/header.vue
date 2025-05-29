@@ -135,183 +135,242 @@
     <!-- Dialog banking  -->
     <el-dialog
       v-model="dialogBanking"
-      title=""
-      width="500"
       :show-close="false"
-      class="banking-dialog"
+      width="450"
+      class="banking-dialog overflow-hidden"
+      :close-on-click-modal="false"
     >
-      <!-- Custom Header -->
+      <!-- Header -->
       <template #header>
-        <div class="flex items-center justify-between px-6 pb-0">
-          <div class="flex items-center space-x-3">
-            <div
-              class="w-12 h-12 bg-primary-gradient rounded-xl flex items-center justify-center shadow-lg"
-            >
-              <svg
-                class="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-2xl font-bold text-gray-800">Chuyển khoản</h3>
-              <p class="text-sm text-gray-500">Nạp Code Point dễ dàng</p>
-            </div>
-          </div>
-          <button
-            @click="dialogBanking = false"
-            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-          >
-            <svg
-              class="w-4 h-4 text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            </svg>
-          </button>
-        </div>
-      </template>
-
-      <!-- Dialog Body -->
-      <div class="p-6 pt-2">
-        <!-- QR Code Section -->
-        <div class="relative mb-8">
+        <div class="relative overflow-hidden">
           <div
-            class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100 border-dashed"
+            class="absolute inset-0 bg-gradient-to-br from-primary via-purple-600 to-pink-500 opacity-90"
+          ></div>
+          <div
+            class="relative flex items-center justify-between p-4 text-white"
           >
-            <div class="flex flex-col items-center space-y-4">
-              <!-- QR Code Container -->
+            <div class="flex items-center space-x-3">
               <div class="relative">
                 <div
-                  class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl blur opacity-20"
+                  class="absolute inset-0 bg-white rounded-xl blur opacity-20 animate-pulse"
                 ></div>
                 <div
-                  class="relative bg-white rounded-2xl shadow-xl border-2 border-white"
+                  class="relative w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 shadow-2xl hover:scale-105 transition-all duration-300"
                 >
-                  <img
-                    alt="Banking QR"
-                    :src="`https://api.vietqr.io/image/970422-09999838622222-1d7x779.jpg?accountName=DANG%20QUOC%20HUY&addInfo=CHOCODE_${currentUser?.username}`"
-                    class="w-49 h-49 object-contain rounded-xl"
+                  <CreditCard
+                    class="w-5 h-5 text-white animate-bounce"
+                    style="animation-delay: 0.5s"
                   />
                 </div>
               </div>
-
-              <!-- Bank Info -->
-              <div class="text-center space-y-2">
-                <div class="flex items-center justify-center space-x-2">
-                  <img
-                    class="w-12 h-5"
-                    src="~/assets/images/header/mbbank_logo.png"
-                  />
-                  <span class="font-semibold text-gray-700">MB Bank</span>
-                </div>
-                <p class="text-sm text-gray-600">STK: 09999838622222</p>
-                <p class="text-sm font-medium text-gray-800">DANG QUOC HUY</p>
-                <h4 class="font-semibold text-gray-800 mb-1">
-                  Nội dung chuyển khoản:
-                </h4>
-                <div
-                  class="bg-gray-50 rounded-lg p-3 font-mono text-sm border-2 border-dashed border-gray-200 flex items-center justify-center gap-x-4"
+              <div>
+                <h3 class="text-base font-bold mb-0.5 animate-fade-in">
+                  Chuyển khoản
+                </h3>
+                <p
+                  class="text-white/80 text-xs animate-fade-in"
+                  style="animation-delay: 0.2s"
                 >
-                  <span class="text-primary font-bold" ref="codeRef"
-                    >CHOCODE_{{ currentUser?.username }}</span
-                  >
-                  <Copy class="w-4 h-4 cursor-pointer" @click="handleCopy" />
-                </div>
-                <p class="text-xs text-gray-500 mt-2">
-                  💡 Vui lòng chuyển khoản đúng nội dung để được cộng điểm tự
-                  động
+                  <Sparkles class="w-3 h-3 inline mr-1" />
+                  Nạp Code Point siêu nhanh
                 </p>
               </div>
             </div>
+            <button
+              @click="dialogBanking = false"
+              class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/30"
+            >
+              <X class="w-4 h-4 text-white" />
+            </button>
           </div>
         </div>
+      </template>
 
-        <!-- Transfer Info -->
-        <div class="space-y-4 mb-6">
-          <!-- Exchange Rate -->
-          <div
-            class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200"
-          >
-            <div class="flex items-center space-x-3">
-              <div
-                class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"
-              >
-                <svg
-                  class="w-5 h-5 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+      <!-- Body -->
+      <div class="p-4 bg-gradient-to-b from-gray-50 to-white">
+        <!-- QR -->
+        <div class="mb-4">
+          <div class="relative group">
+            <div
+              class="absolute -inset-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"
+            ></div>
+            <div
+              class="relative bg-white rounded-2xl p-4 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500"
+            >
+              <div class="flex flex-col items-center space-y-4">
+                <div
+                  class="relative group cursor-pointer"
+                  @click="handleQRClick"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  ></path>
-                </svg>
-              </div>
-              <div class="flex-1">
-                <h4 class="font-semibold text-gray-800">Tỷ giá quy đổi</h4>
-                <div class="flex items-center space-x-2 mt-1">
-                  <span class="text-2xl font-bold text-green-500">1 CP</span>
-                  <span class="text-gray-400">=</span>
-                  <span class="text-2xl font-bold text-[#F97316]"
-                    >1.000 VNĐ</span
+                  <div
+                    class="absolute -inset-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300"
+                  ></div>
+                  <div
+                    class="absolute -inset-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-2xl opacity-20 animate-spin-slow"
+                  ></div>
+
+                  <div
+                    class="relative bg-white rounded-xl shadow-2xl border-4 border-white transform group-hover:scale-105 transition-all duration-300"
+                    :class="{ 'animate-pulse': qrAnimated }"
                   >
+                    <img
+                      :src="`https://api.vietqr.io/image/970422-09999838622222-1d7x779.jpg?accountName=DANG%20QUOC%20HUY&addInfo=CHOCODE_${currentUser?.username}`"
+                      alt="Banking QR"
+                      class="w-40 h-40 object-contain rounded-lg"
+                    />
+                    <div
+                      class="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/10 rounded-lg"
+                    ></div>
+                  </div>
+
+                  <div
+                    class="absolute -top-1.5 -right-1.5 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg animate-bounce"
+                  >
+                    <Icon name="lucide:qr-code" class="w-3 h-3 text-white" />
+                  </div>
+                </div>
+
+                <!-- Bank Info -->
+                <div class="text-center space-y-2 w-full">
+                  <div class="flex items-center justify-center space-x-2 mb-2">
+                    <div
+                      class="w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-500 rounded-xl flex items-center justify-center shadow"
+                    >
+                      <Building class="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <span class="font-bold text-base text-gray-800"
+                        >MB Bank</span
+                      >
+                      <p class="text-xs text-gray-500">
+                        Ngân hàng TMCP Quân đội
+                      </p>
+                    </div>
+                  </div>
+
+                  <div
+                    class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-3 border border-blue-100"
+                  >
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                      <div class="text-center">
+                        <p class="text-gray-500 mb-0.5">Số tài khoản</p>
+                        <p class="font-bold text-gray-800 text-sm">
+                          09999838622222
+                        </p>
+                      </div>
+                      <div class="text-center">
+                        <p class="text-gray-500 mb-0.5">Chủ tài khoản</p>
+                        <p class="font-bold text-gray-800 text-sm">
+                          DANG QUOC HUY
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Transfer Content -->
+                  <div>
+                    <h4
+                      class="font-bold text-sm text-gray-800 mb-2 flex items-center justify-center"
+                    >
+                      <Icon
+                        name="lucide:message-square"
+                        class="w-4 h-4 mr-1 text-blue-500"
+                      />
+                      Nội dung chuyển khoản
+                    </h4>
+
+                    <div class="relative">
+                      <div
+                        class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-3 border-2 border-dashed border-blue-200 hover:border-blue-300 transition-colors duration-300"
+                      >
+                        <div class="flex items-center justify-between">
+                          <span
+                            class="font-mono text-sm font-bold text-primary flex-1 text-center"
+                          >
+                            CHOCODE_{{ currentUser?.username }}
+                          </span>
+                          <button
+                            @click="handleCopy"
+                            class="ml-2 p-1.5 rounded-lg bg-blue-400 hover:bg-primary text-white transition-all duration-300 hover:scale-110 shadow"
+                            :class="{
+                              'bg-green-500 hover:bg-green-600': copied,
+                            }"
+                          >
+                            <Copy class="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div
+                        v-if="copied"
+                        class="absolute -top-1 -right-1 animate-ping"
+                      >
+                        <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="mt-2 flex items-center justify-center text-[10px] text-gray-500"
+                    >
+                      <Icon
+                        name="lucide:lightbulb"
+                        class="w-3 h-3 mr-1 text-yellow-500"
+                      />
+                      Vui lòng chuyển khoản đúng nội dung để được cộng điểm tự
+                      động
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Support Info -->
-        <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-          <div class="flex items-start space-x-3">
-            <div
-              class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-            >
-              <svg
-                class="w-4 h-4 text-yellow-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-            </div>
-            <div class="text-sm text-yellow-800">
-              <p class="font-medium mb-1">Lưu ý quan trọng:</p>
-              <ul class="space-y-1 text-xs">
-                <li>• Chuyển khoản sai nội dung sẽ không được cộng điểm</li>
-                <li>• Thời gian xử lý: 1-5 phút sau khi chuyển khoản</li>
-                <li>• Liên hệ hỗ trợ nếu có vấn đề</li>
-              </ul>
+        <!-- Tỷ giá -->
+        <div class="mb-4">
+          <div
+            class="bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 rounded-xl p-4 text-white shadow hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
+          >
+            <div class="flex items-center flex-col justify-between">
+              <div class="flex items-center gap-x-3 mb-3">
+                <div
+                  class="w-9 h-9 bg-white/20 backdrop-blur-sm rounded flex items-center justify-center"
+                >
+                  <TrendingUp class="w-4 h-4 text-white animate-pulse" />
+                </div>
+                <div>
+                  <h4 class="font-bold text-sm mb-0.5">Tỷ giá quy đổi</h4>
+                  <p class="text-white text-md">
+                    Cập nhật theo thời gian thực
+                  </p>
+                </div>
+              </div>
+
+              <div class="text-right text-sm">
+                <div class="flex items-center justify-between">
+                  <div class="text-center flex items-center">
+                    <div class="text-lg font-bold">1 CP (CodePoint)</div>
+                    
+                  </div>
+
+               
+                    <ArrowRight class="w-4 h-4 text-white" />
+                 
+
+                  <div class="text-center flex items-center">
+                    <div class="text-lg font-bold text-yellow-200">
+                      1.000 VNĐ
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </el-dialog>
+    <!-- Dialog payment success  -->
+    <PaymentSuccess />
     <!-- Mobile Menu -->
     <aside
       class="fixed top-0 left-0 bottom-0 w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 lg:hidden"
@@ -448,7 +507,6 @@
 import {
   MessageSquare,
   Store,
-  BriefcaseBusiness,
   User,
   HandCoins,
   Lock,
@@ -456,6 +514,12 @@ import {
   Bell,
   Menu,
   Laptop,
+  Sparkles,
+  CreditCard,
+  X,
+  TrendingUp,
+  ArrowRight,
+  Building,
 } from "lucide-vue-next";
 
 import { ArrowDown } from "@element-plus/icons-vue";
@@ -464,7 +528,15 @@ const dialogBanking = ref(false);
 const toLogin = () => {
   navigateTo("/auth/login");
 };
-const codeRef = ref('It is demo');
+const codeRef = ref("It is demo");
+const qrAnimated = ref(false);
+
+const handleQRClick = () => {
+  qrAnimated.value = true;
+  setTimeout(() => {
+    qrAnimated.value = false;
+  }, 600);
+};
 
 function handleCopy() {
   const text = codeRef.value.innerText;
@@ -564,5 +636,45 @@ button.el-button.w-full.\!h-9.\!font-medium.\!text-sm.bg-primary-gradient.text-w
 /* Add these styles for smooth mobile menu animation */
 body {
   overflow-x: hidden;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* Hover effects */
+.group:hover .animate-bounce {
+  animation-duration: 0.5s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  :deep(.el-dialog) {
+    width: 95% !important;
+    margin: 20px auto !important;
+  }
 }
 </style>

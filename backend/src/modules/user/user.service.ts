@@ -1,5 +1,5 @@
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateTransactionDto, CreateUserDto } from './dto/create-user.dto';
 import { Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
@@ -7,6 +7,7 @@ import { AllUsersResponse } from './response/get-users.response';
 import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import fs from 'fs';
 import axios from 'axios';
+import { NotificationGateway } from 'src/gateways/notification.gateway';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -16,7 +17,7 @@ export class UserService {
   private startTime = Date.now();
   constructor(
     private readonly prisma: PrismaService,
-    private schedulerRegistry: SchedulerRegistry,
+    private notificationGateway: NotificationGateway
   ) {}
 
   @Cron('* * * * *')
@@ -180,13 +181,59 @@ export class UserService {
     };
   }
 
-  async checkTransactionHistory() {
-    const data = await axios.get(
-      'http://localhost:4000/api/bank/transaction-history',
-    );
-    return data.data;
+  async checkTransactionHistoryAndAddBalanceUser(
+    createTransactionDto: CreateTransactionDto,
+  ) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        username: createTransactionDto.username,
+      },
+    });
+    if (!user) {
+      return 'Người dùng không tồn tại!';
+    }
+    await Promise.all([
+      this.addBalanceForUser(
+        createTransactionDto.username,
+        createTransactionDto.credit_amount,
+      ),
+      this.notificationGateway.emitPayment(createTransactionDto),
+      this.addTransactionHistory(createTransactionDto),
+    ]);
+  }
+  async addBalanceForUser(username: string, balance: string) {
+    const rawNumber = parseInt(balance.replace(/\./g, ''), 10);
+    const normalizedBalance = Math.floor(rawNumber / 1000);
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+      select: { ballance: true }, // chỉ lấy field cần
+    });
+
+    if (!user) {
+      throw new Error(`User ${username} not found`);
+    }
+    const updatedBalance = (user.ballance || 0) + normalizedBalance;
+
+    await this.prisma.user.update({
+      where: { username },
+      data: { ballance: updatedBalance },
+    });
   }
 
+  async addTransactionHistory(createTransactionDto: CreateTransactionDto) {
+    await this.prisma.transactionHistory.create({
+      data: {
+        username: createTransactionDto.username,
+        postingDate: createTransactionDto.posting_date,
+        transactionDate: createTransactionDto.transaction_date,
+        creditAmount: createTransactionDto.credit_amount,
+        debitAmount: createTransactionDto.debit_amount,
+        currency: createTransactionDto.currency,
+        description: createTransactionDto.description,
+        refNo: createTransactionDto.ref_no,
+      },
+    });
+  }
   getUserFromAddDescription(des: string): string {
     return des.match(/\d+$/)[0];
   }

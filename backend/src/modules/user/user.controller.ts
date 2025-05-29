@@ -5,11 +5,14 @@ import {
   Param,
   UseGuards,
   Request,
+  Body,
+  Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { AllUsersResponse } from './response/get-users.response';
+import { CreateTransactionDto } from './dto/create-user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -20,9 +23,9 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get('transaction-history')
-  checkTransactionHistory() {
-    return this.userService.checkTransactionHistory();
+  @Post('add-balance')
+  addBalance(@Body() transactionDto: CreateTransactionDto) {
+    return this.userService.checkTransactionHistoryAndAddBalanceUser(transactionDto);
   }
 
   @Patch('/ban/:id')

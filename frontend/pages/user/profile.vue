@@ -529,12 +529,10 @@ onUnmounted(() => {
 onMounted(async () => {
   try {
     loading.value = true;
-    console.log(`Fetching data for username: ${route.params.username}`);
     const response = await userService.userControllerFindOne(
       route.params.username
     );
     userData.value = response.data;
-    console.log("User data loaded:", userData.value);
     
     // Switch to posts tab if user has posts but no job postings
     if (userData.value?.posts?.length > 0 && 

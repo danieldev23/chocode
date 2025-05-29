@@ -12,7 +12,7 @@ export default <RouterConfig>{
       {
         name: "home",
         path: "/",
-        alias: ["/trang-chu", '/home'],
+        alias: ["/trang-chu", "/home"],
         component: () =>
           import("~/pages/home/index.vue").then((r) => r.default || r),
         meta: {
@@ -25,8 +25,7 @@ export default <RouterConfig>{
         alias: ["/ranking"],
         component: () =>
           import("~/pages/user/ranking.vue").then((r) => r.default || r),
-        meta: {
-        },
+        meta: {},
       },
       {
         name: "search",

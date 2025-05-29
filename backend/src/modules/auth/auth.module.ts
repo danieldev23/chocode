@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { GoogleStrategy } from './google/google.strategy';
 import { MailModule } from '../mail/mail.module';
+import { NotificationGateway } from 'src/gateways/notification.gateway';
 
 export const jwtSecret = process.env.JWT_SECRET;
 @Module({
@@ -23,6 +24,6 @@ export const jwtSecret = process.env.JWT_SECRET;
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService, JwtStrategy, GoogleStrategy],
+  providers: [AuthService, UserService, JwtStrategy, GoogleStrategy, NotificationGateway],
 })
 export class AuthModule {}
