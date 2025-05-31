@@ -14,13 +14,6 @@ enum FeelingType {
   TYM
 }
 
-enum NotificationType {
-  INFO
-  WARNING
-  ERROR
-  SUCCESS
-  SYSTEM
-}
 
 enum TargetType {
   ALL      
@@ -233,7 +226,7 @@ model Notification {
   id        Int       @id @default(autoincrement())
   title     String
   message   String
-  type      NotificationType @default(INFO)
+  type      String
   createdAt DateTime  @default(now()) @map("created_at")
   target    TargetType @default(SPECIFIC)
 

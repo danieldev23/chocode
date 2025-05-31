@@ -12,37 +12,58 @@
             </div>
             <ul class="space-y-3">
               <li>
-                <NuxtLink to="/ve-chung-toi" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/ve-chung-toi"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Về chúng tôi
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tham-gia" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tham-gia"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Tham gia vào đội của chúng tôi
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/lien-he" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/lien-he"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Liên hệ với chúng tôi
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/blog" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/blog"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Blog
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/chinh-sach-bao-mat" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/chinh-sach-bao-mat"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Chính sách bảo mật
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/dieu-khoan" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/dieu-khoan"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Điều khoản dịch vụ
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/cookie" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/cookie"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Cài đặt Cookie
                 </NuxtLink>
               </li>
@@ -56,27 +77,42 @@
             </div>
             <ul class="space-y-3">
               <li>
-                <NuxtLink to="/tro-giup" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tro-giup"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Trung tâm trợ giúp
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/cach-hoat-dong" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/cach-hoat-dong"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Cách hoạt động
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/ke-hoach-thanh-vien" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/ke-hoach-thanh-vien"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Kế hoạch thành viên
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/diem-nhan" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/diem-nhan"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Điểm nhấn
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/sitemap" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/sitemap"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Sitemap
                 </NuxtLink>
               </li>
@@ -93,42 +129,66 @@
               </div>
               <ul class="space-y-3">
                 <li>
-                  <NuxtLink to="/freelance/python" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/python"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     Python
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/freelance/csharp" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/csharp"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     C#
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/freelance/nodejs-mongodb" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/nodejs-mongodb"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     Nodejs, MongoDB
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/freelance/php-laravel" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/php-laravel"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     Php, Laravel
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/freelance/web" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/web"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     Web Development
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/freelance/mobile" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/mobile"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     Ứng dụng di động
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/freelance/react-vue" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/react-vue"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     ReactJs, VueJS
                   </NuxtLink>
                 </li>
                 <li>
-                  <NuxtLink to="/freelance/html-css-js" class="text-gray-700 hover:text-primary text-sm">
+                  <NuxtLink
+                    to="/freelance/html-css-js"
+                    class="text-gray-700 hover:text-primary text-sm"
+                  >
                     HTML, CSS, Javascript
                   </NuxtLink>
                 </li>
@@ -145,42 +205,66 @@
             </div>
             <ul class="space-y-3">
               <li>
-                <NuxtLink to="/tim-dev/nodejs" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/nodejs"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Nodejs Developer
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tim-dev/csharp" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/csharp"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   C# Developer
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tim-dev/web" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/web"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Web Developer
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tim-dev/mobile" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/mobile"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Mobile App Developer
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tim-dev/desktop" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/desktop"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Desktop App Developer
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tim-dev/tools-mmo" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/tools-mmo"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Tools MMO
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tim-dev/react" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/react"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   ReactJs Developer
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/tim-dev/laravel" class="text-gray-700 hover:text-primary text-sm">
+                <NuxtLink
+                  to="/tim-dev/laravel"
+                  class="text-gray-700 hover:text-primary text-sm"
+                >
                   Laravel Developer
                 </NuxtLink>
               </li>
@@ -190,7 +274,8 @@
       </div>
 
       <p class="text-center text-sm text-gray-custom">
-        © 2025 - <NuxtLink class="text-primary" to="/">CodeMarket.Com</NuxtLink> Co, Ltd.
+        © 2025 -
+        <NuxtLink class="text-primary" to="/">CodeMarket.Com</NuxtLink> Co, Ltd.
         All Rights Reserved.
       </p>
     </main>
@@ -204,10 +289,19 @@
         <div class="flex justify-between items-center mb-6">
           <img src="~/assets/images/header/logo.svg" class="h-8" />
           <button @click="mobileMenuOpen = false" class="text-gray-700">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-              viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M6 18L18 6M6 6l12 12" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -217,6 +311,5 @@
 </template>
 
 <script setup lang="ts">
-
 const mobileMenuOpen = ref(false);
 </script>

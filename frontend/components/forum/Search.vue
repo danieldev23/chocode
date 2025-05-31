@@ -12,7 +12,7 @@
         >
           <template #prefix>
             <span class="text-gray-400 flex items-center">
-              <lucide-search class="h-4 w-4" />
+              <Search class="h-4 w-4" />
             </span>
           </template>
         </el-input>

@@ -12,12 +12,12 @@ export class AdminService {
   ) {}
 
   async createNotification(createNotificationDto: CreateNotificationDto) {
-    const notification =  this.prismaService.notification.create({
+    const notification = await this.prismaService.notification.create({
       data: createNotificationDto,
     });
     if (notification) {
       console.log(notification);
-      this.notificationGateway.emitNotification(notification);
+      this.notificationGateway.emitNotification(createNotificationDto);
       return 'Tạo thông báo thành công!';
     }
     return 'Tạo thông báo không thành công!';

@@ -1,42 +1,26 @@
 interface NotificationData {
   title: string;
   message: string;
-  type: "info" | "warning" | "success" | "error"; // ElNotification chỉ nhận lowercase
+  type: "info" | "warning" | "success" | "error";
   target: string;
-}
-
-interface PaymentData {
-  username: string;
-  posting_date: string;
-  transaction_date: string;
-  credit_amount: string;
-  debit_amount: string;
-  currency: string;
-  description: string;
-  ref_no: string;
-  created: string;
 }
 
 export const useSocketNotification = () => {
   const { $socket } = useNuxtApp();
 
   const handleNotification = (rawData: any) => {
-    const noti: NotificationData | undefined = rawData?.spec?.args?.data;
+    const notification: NotificationData = rawData?.spec?.args?.data;
+    console.log(notification);
 
-    if (!noti || !noti.title || !noti.message || !noti.type) {
-      console.warn("❗ Dữ liệu thông báo không hợp lệ:", rawData);
-      return;
-    }
+    // ElNotification({
+    //   title: notification.title,
+    //   message: notification.message,
+    //   type: notification.type,
+    //   position: "bottom-left",
+    //   duration: 5000,
+    // });
 
-    ElNotification({
-      title: noti.title,
-      message: noti.message,
-      type: noti.type.toLowerCase() as NotificationData["type"],
-      position: "bottom-left",
-      duration: 5000,
-    });
   };
-
 
   onMounted(() => {
     if (!$socket) {

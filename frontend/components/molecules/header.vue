@@ -198,10 +198,7 @@
               class="relative bg-white rounded-2xl p-4 shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500"
             >
               <div class="flex flex-col items-center space-y-4">
-                <div
-                  class="relative group cursor-pointer"
-                  @click="handleQRClick"
-                >
+                <div class="relative group cursor-pointer">
                   <div
                     class="absolute -inset-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300"
                   ></div>
@@ -226,7 +223,7 @@
                   <div
                     class="absolute -top-1.5 -right-1.5 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg animate-bounce"
                   >
-                    <Icon name="lucide:qr-code" class="w-3 h-3 text-white" />
+                    <QrCode class="w-3 h-3 text-white" />
                   </div>
                 </div>
 
@@ -272,8 +269,7 @@
                     <h4
                       class="font-bold text-sm text-gray-800 mb-2 flex items-center justify-center"
                     >
-                      <Icon
-                        name="lucide:message-square"
+                      <MessageSquare
                         class="w-4 h-4 mr-1 text-blue-500"
                       />
                       Nội dung chuyển khoản
@@ -312,8 +308,7 @@
                     <div
                       class="mt-2 flex items-center justify-center text-[10px] text-gray-500"
                     >
-                      <Icon
-                        name="lucide:lightbulb"
+                      <Lightbulb
                         class="w-3 h-3 mr-1 text-yellow-500"
                       />
                       Vui lòng chuyển khoản đúng nội dung để được cộng điểm tự
@@ -340,9 +335,7 @@
                 </div>
                 <div>
                   <h4 class="font-bold text-sm mb-0.5">Tỷ giá quy đổi</h4>
-                  <p class="text-white text-md">
-                    Cập nhật theo thời gian thực
-                  </p>
+                  <p class="text-white text-md">Cập nhật theo thời gian thực</p>
                 </div>
               </div>
 
@@ -350,12 +343,9 @@
                 <div class="flex items-center justify-between">
                   <div class="text-center flex items-center">
                     <div class="text-lg font-bold">1 CP (CodePoint)</div>
-                    
                   </div>
 
-               
-                    <ArrowRight class="w-4 h-4 text-white" />
-                 
+                  <ArrowRight class="w-4 h-4 text-white" />
 
                   <div class="text-center flex items-center">
                     <div class="text-lg font-bold text-yellow-200">
@@ -520,26 +510,21 @@ import {
   TrendingUp,
   ArrowRight,
   Building,
+  QrCode,
+  Lightbulb,
 } from "lucide-vue-next";
-
+useSocketNotification();
 import { ArrowDown } from "@element-plus/icons-vue";
 const menuOpen = ref(false);
 const dialogBanking = ref(false);
 const toLogin = () => {
   navigateTo("/auth/login");
 };
-const codeRef = ref("It is demo");
 const qrAnimated = ref(false);
 
-const handleQRClick = () => {
-  qrAnimated.value = true;
-  setTimeout(() => {
-    qrAnimated.value = false;
-  }, 600);
-};
-
+const copied = ref(false);
 function handleCopy() {
-  const text = codeRef.value.innerText;
+  const text = `CHOCODE_${currentUser.value?.username}`;
   navigator.clipboard
     .writeText(text)
     .then(() => {

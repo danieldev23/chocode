@@ -379,8 +379,6 @@ const props = defineProps<{
   avatar: string;
   name: string;
 }>();
-
-import { ref, nextTick, onMounted, onUnmounted, watch, computed } from "vue";
 import {
   X,
   Minus,
@@ -873,7 +871,7 @@ watch(isConnected, (connected) => {
 });
 
 // Lifecycle hooks
-onMounted(() => {
+onMounted(async () => {
   console.log("Chat component mounted for user:", currentUser.value);
   initializeSocket();
 });

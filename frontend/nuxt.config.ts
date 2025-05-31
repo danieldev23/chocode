@@ -13,8 +13,8 @@ export default defineNuxtConfig({
       fs: {
         allow: [
           "..",
-          "./", // always allow root
-          "/Users/macbook/Documents/Projects/node_modules", // <-- allow this path
+          "./", 
+          "/Users/macbook/Documents/Projects/node_modules",
         ],
       },
     },
