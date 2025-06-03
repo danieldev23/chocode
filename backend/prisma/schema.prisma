@@ -224,6 +224,8 @@ model TransactionHistory {
 
 model Notification {
   id        Int       @id @default(autoincrement())
+  name String
+  avatar String
   title     String
   message   String
   type      String

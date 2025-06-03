@@ -18,6 +18,14 @@ export class CreateNotificationDto {
   @IsString()
   title: string;
 
+  @ApiProperty()
+  @IsString()
+  avatar: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
+  
   @IsString()
   @ApiProperty()
   message: string;
