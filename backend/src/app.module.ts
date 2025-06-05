@@ -19,7 +19,7 @@ import { NotificationGateway } from './gateways/notification.gateway';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development.local', '.env.development'],
+      envFilePath: ['.env.development.local', '.env.development', '.env'],
       ignoreEnvFile: true,
       isGlobal: true,
     }),
