@@ -35,4 +35,10 @@ export interface CommentCreateRequest {
      * @memberof CommentCreateRequest
      */
     comment: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CommentCreateRequest
+     */
+    parentId: number;
 }

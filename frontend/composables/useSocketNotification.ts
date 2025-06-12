@@ -10,16 +10,6 @@ export const useSocketNotification = () => {
 
   const handleNotification = (rawData: any) => {
     const notification: NotificationData = rawData?.spec?.args?.data;
-    console.log(notification);
-
-    // ElNotification({
-    //   title: notification.title,
-    //   message: notification.message,
-    //   type: notification.type,
-    //   position: "bottom-left",
-    //   duration: 5000,
-    // });
-
   };
 
   onMounted(() => {

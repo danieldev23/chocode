@@ -8,4 +8,7 @@ export class CommentCreateRequest {
   postId: number;
   @ApiProperty()
   comment: string;
+
+  @ApiProperty()
+  parentId?: number;
 }

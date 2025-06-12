@@ -84,7 +84,7 @@
               :class="[
                 'px-3 py-1 rounded-full text-sm font-medium transition-colors duration-200',
                 index === 0
-                  ? 'bg-primary-gradient text-white'
+                  ? 'bg-primary text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
               ]"
             >

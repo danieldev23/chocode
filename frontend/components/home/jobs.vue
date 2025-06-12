@@ -1,129 +1,7 @@
 <template>
   <div>
     <!-- Search Section with semantic HTML -->
-    <section
-      class="bg-primary-gradient py-6 px-4 my-6 rounded-md"
-      aria-label="Tìm kiếm việc làm"
-    >
-      <div class="text-center mb-2">
-        <h1 class="text-white text-xl md:text-3xl font-medium">
-          Kết nối với dự án IT Freelance hot nhất thị trường
-        </h1>
-      </div>
 
-      <div class="text-center mb-6">
-        <p class="text-white text-sm md:text-base">
-          Tiếp cận <span class="font-bold">40,000+</span> cơ hội freelance công
-          nghệ mới mỗi ngày từ các startup và doanh nghiệp hàng đầu Việt Nam
-        </p>
-      </div>
-
-      <!-- Improved Search Bar with proper labeling -->
-      <div class="max-w-5xl mx-auto">
-        <form
-          @submit.prevent="handleSearch"
-          class="flex flex-col md:flex-row items-stretch border border-primary rounded-md overflow-hidden shadow-lg bg-white transition-all hover:shadow-xl"
-          role="search"
-          aria-label="Tìm kiếm việc làm"
-        >
-          <!-- Job Category Select -->
-          <div
-            class="relative flex-1 w-full border-b md:border-b-0 md:border-r border-gray-200 group hover:bg-gray-50 transition-colors"
-          >
-            <label for="job-category" class="sr-only">Danh mục Nghề</label>
-            <div class="flex items-center h-full px-4 py-3">
-              <List
-                class="text-primary mr-3 flex-shrink-0 w-5 h-5"
-                aria-hidden="true"
-              />
-              <el-select
-                id="job-category"
-                v-model="state.jobCategory"
-                placeholder="Danh mục Nghề"
-                clearable
-                class="flex-1 !border-none !shadow-none w-full !text-gray-700"
-                popper-class="!rounded-md !shadow-lg"
-              >
-                <el-option
-                  v-for="item in jobCategories"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
-            </div>
-          </div>
-
-          <!-- Search Input - Được điều chỉnh để giống với các dropdown -->
-          <div
-            class="relative flex-1 w-full border-b md:border-b-0 md:border-r border-gray-200 group hover:bg-gray-50 transition-colors"
-          >
-            <label for="search-keywords" class="sr-only"
-              >Từ khóa tìm kiếm</label
-            >
-            <div class="flex items-center h-full px-4 py-3">
-              <Search
-                class="text-primary mr-3 flex-shrink-0 w-5 h-5"
-                aria-hidden="true"
-              />
-              <el-input
-                id="search-keywords"
-                v-model="input"
-                placeholder="Website, Javascript, Php,..."
-                class="flex-1 !border-none !shadow-none !text-gray-700 bg-transparent"
-              />
-              <button
-                v-if="input"
-                @click="input = ''"
-                class="text-gray-400 hover:text-primary flex-shrink-0 transition-colors ml-2"
-                aria-label="Xóa từ khóa tìm kiếm"
-                type="button"
-              >
-                <X class="w-4 h-4" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-
-          <!-- Location Select -->
-          <div
-            class="relative flex-1 w-full border-b md:border-b-0 md:border-r border-gray-200 group hover:bg-gray-50 transition-colors"
-          >
-            <label for="location-select" class="sr-only">Địa điểm</label>
-            <div class="flex items-center h-full px-4 py-3">
-              <MapPin
-                class="text-primary mr-3 flex-shrink-0 w-5 h-5"
-                aria-hidden="true"
-              />
-              <el-select
-                id="location-select"
-                v-model="state.location"
-                placeholder="Địa điểm"
-                clearable
-                class="flex-1 !border-none !shadow-none w-full !text-gray-700"
-                popper-class="!rounded-md !shadow-lg"
-              >
-                <el-option
-                  v-for="location in locations"
-                  :value="location"
-                  :label="location"
-                />
-              </el-select>
-            </div>
-          </div>
-
-          <!-- Search Button -->
-          <div class="md:flex-shrink-0 p-3">
-            <button
-              type="submit"
-              class="w-full px-4 py-2 rounded-full md:rounded-full flex items-center justify-center bg-primary-gradient hover:bg-primary-dark transition-all text-white font-medium"
-            >
-              <Search class="w-5 h-5 mr-2" aria-hidden="true" />
-              <span>Tìm kiếm</span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
     <!-- Header-->
     <div class="flex justify-between items-center mt-6 mb-3">
       <h1 class="text-xl font-semibold text-gray-800 flex items-center">
@@ -234,7 +112,7 @@
         <div class="flex justify-between items-center">
           <button
             @click="applyForJob(job.id, job.title)"
-            class="bg-primary-gradient text-white text-sm font-medium py-2 px-4 rounded-full hover:bg-blue-700 transition duration-150 flex items-center"
+            class="bg-primary text-white text-sm font-medium py-2 px-4 rounded-full hover:bg-blue-700 transition duration-150 flex items-center"
           >
             Nhận job ngay!
             <Send class="w-4 h-4 ml-1" />
@@ -248,6 +126,17 @@
           </button>
         </div>
       </div>
+    </div>
+    <div class="flex justify-center mt-6">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        background
+        layout="prev, pager, next"
+        :total="totalItems"
+        class="items-center"
+        @current-change="handlePageChange"
+      />
     </div>
   </div>
 </template>
@@ -269,7 +158,6 @@ import {
   ChevronDown,
   Heart,
 } from "lucide-vue-next";
-import { locations } from "@/types/locations";
 import { availableTags } from "@/types/tags";
 import type { JobPostingResponseDtoUpdate } from "~/interfaces/job.interface";
 const router = useRouter();
@@ -281,6 +169,9 @@ defineProps<{
 
 const input = ref("");
 const jobCategories = availableTags;
+const currentPage = ref(1);
+const pageSize = ref(10);
+const totalItems = ref(100);
 
 // Search state with default values
 const state = reactive({
@@ -289,6 +180,15 @@ const state = reactive({
   location: "",
 });
 
+function handlePageChange(page: number) {
+  currentPage.value = page;
+  fetchData();
+}
+
+function fetchData() {
+  // Gọi API hoặc xử lý data tương ứng page hiện tại
+  console.log("Fetching page", currentPage.value);
+}
 // Search handler with analytics tracking
 const handleSearch = () => {
   const params = new URLSearchParams();
@@ -352,3 +252,14 @@ const saveJob = (jobId: number) => {
   console.log("Job saved:", jobId);
 };
 </script>
+
+<style>
+.hero-section {
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(0, 105, 148, 1) 15.6%,
+    rgba(0, 163, 217, 1) 51.9%,
+    rgba(0, 194, 226, 1) 81%
+  );
+}
+</style>

@@ -105,7 +105,7 @@
             <div class="flex space-x-3">
               <el-button
                 type="primary"
-                class="w-full flex justify-center items-center bg-primary-gradient"
+                class="w-full flex justify-center items-center bg-primary"
                 @click="handleApplyClick"
                 :loading="loading"
                 :disabled="formatDeadline(jobDetail?.deadline) === 'Đã hết hạn'"
@@ -197,7 +197,7 @@
                 </div>
 
                 <button
-                  class="action-button confirm bg-primary-gradient"
+                  class="action-button confirm bg-primary"
                   @click="confirmApply"
                 >
                   Xác nhận ứng tuyển
@@ -379,7 +379,7 @@
             <div class="mt-6">
               <NuxtLink
                 :to="`/trang-ca-nhan/${jobDetail?.user?.username}`"
-                class="w-full flex items-center justify-center bg-primary-gradient text-white rounded-[3px] py-[5px]"
+                class="w-full flex items-center justify-center bg-primary text-white rounded-[3px] py-[5px]"
               >
                 <ExternalLink class="w-4 h-4 mr-2" />
                 Ghé thăm trang cá nhân

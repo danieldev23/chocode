@@ -108,7 +108,7 @@
               native-type="submit"
               :loading="loading"
               :disabled="!agreeToTerms"
-              class="w-full h-12 text-base rounded-md bg-primary-gradient flex items-center justify-center"
+              class="w-full h-12 text-base rounded-md bg-primary flex items-center justify-center"
             >
               <span v-if="loading">
                 <svg
@@ -170,7 +170,7 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Đăng ký tài khoản Chocode.com'
+  title: "Đăng ký tài khoản Chocode.com",
 });
 
 import { User, Mail, Lock, BriefcaseBusiness } from "lucide-vue-next";

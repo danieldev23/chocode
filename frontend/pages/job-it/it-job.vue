@@ -182,7 +182,7 @@
             </div>
 
             <!-- Job Status Badge -->
-            <div class="bg-primary-gradient px-4 py-3">
+            <div class="bg-primary px-4 py-3">
               <span
                 v-if="job.isHot === '1'"
                 class="inline-flex items-center bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-2"
@@ -266,8 +266,8 @@
       </div>
 
       <!-- full job  -->
-            <!-- Job Count -->
-            <div class="flex justify-between items-center mb-4">
+      <!-- Job Count -->
+      <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold text-gray-800 flex items-center">
           <Flame class="w-5 h-5 text-red-500 mr-2" />
           Tất cả việc làm
@@ -351,120 +351,121 @@
         </p>
       </div>
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  <div
-    v-for="(job, index) in fullJob.filter(job => job.jobCategory === 'Software Engineering').slice((currentPage-1) * 9, currentPage * 9)"
-    :key="job.jobOrderID"
-    class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-100"
-  >
-    <!-- Job Card Header -->
-    <div class="relative">
-      <!-- Company Logo -->
-      <div
-        class="absolute top-4 right-4 bg-white rounded-full p-2 shadow"
-      >
-        <el-image
-          :src="job.companyLogo || defaultLogo"
-          :alt="job.companyName"
-          class="w-10 h-10 object-contain rounded-full"
-          fit="cover"
+        <div
+          v-for="(job, index) in fullJob
+            .filter((job) => job.jobCategory === 'Software Engineering')
+            .slice((currentPage - 1) * 9, currentPage * 9)"
+          :key="job.jobOrderID"
+          class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-100"
         >
-          <template #error>
+          <!-- Job Card Header -->
+          <div class="relative">
+            <!-- Company Logo -->
             <div
-              class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full text-gray-500"
+              class="absolute top-4 right-4 bg-white rounded-full p-2 shadow"
             >
-              <Building2 class="w-6 h-6" />
+              <el-image
+                :src="job.companyLogo || defaultLogo"
+                :alt="job.companyName"
+                class="w-10 h-10 object-contain rounded-full"
+                fit="cover"
+              >
+                <template #error>
+                  <div
+                    class="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full text-gray-500"
+                  >
+                    <Building2 class="w-6 h-6" />
+                  </div>
+                </template>
+              </el-image>
             </div>
-          </template>
-        </el-image>
-      </div>
 
-      <!-- Job Status Badge -->
-      <div class="bg-primary-gradient px-4 py-3">
-        <span
-          v-if="job.isHot === '1'"
-          class="inline-flex items-center bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-2"
-        >
-          <Flame class="w-3 h-3 mr-1" />
-          Hot
-        </span>
-        <span
-          class="inline-flex items-center bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
-        >
-          <Clock class="w-3 h-3 mr-1" />
-          {{ job.daysOld }} days ago
-        </span>
-      </div>
-    </div>
+            <!-- Job Status Badge -->
+            <div class="bg-primary px-4 py-3">
+              <span
+                v-if="job.isHot === '1'"
+                class="inline-flex items-center bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-2"
+              >
+                <Flame class="w-3 h-3 mr-1" />
+                Hot
+              </span>
+              <span
+                class="inline-flex items-center bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
+              >
+                <Clock class="w-3 h-3 mr-1" />
+                {{ job.daysOld }} days ago
+              </span>
+            </div>
+          </div>
 
-    <!-- Job Content -->
-    <div class="p-5">
-      <div class="mb-4">
-        <NuxtLink
-          :to="`/chi-tiet-job/${job.jobOrderID}-${job.title
-            .replace(/\s+/g, '-')
-            .replace(/\+/g, '')
-            .replace(/-+/g, '-')}`"
-          class="text-xl font-semibold text-gray-800 mb-1"
-          >{{ job.title }}</NuxtLink
-        >
-        <p class="text-gray-600 flex items-center">
-          <Building2 class="w-4 h-4 mr-1" />
-          {{ job.companyName }}
-        </p>
-      </div>
+          <!-- Job Content -->
+          <div class="p-5">
+            <div class="mb-4">
+              <NuxtLink
+                :to="`/chi-tiet-job/${job.jobOrderID}-${job.title
+                  .replace(/\s+/g, '-')
+                  .replace(/\+/g, '')
+                  .replace(/-+/g, '-')}`"
+                class="text-xl font-semibold text-gray-800 mb-1"
+                >{{ job.title }}</NuxtLink
+              >
+              <p class="text-gray-600 flex items-center">
+                <Building2 class="w-4 h-4 mr-1" />
+                {{ job.companyName }}
+              </p>
+            </div>
 
-      <div class="flex items-center text-gray-500 text-sm mb-4">
-        <div class="flex items-center mr-4">
-          <MapPin class="w-4 h-4 mr-1" />
-          {{ job.city }}, {{ job.state }}
+            <div class="flex items-center text-gray-500 text-sm mb-4">
+              <div class="flex items-center mr-4">
+                <MapPin class="w-4 h-4 mr-1" />
+                {{ job.city }}, {{ job.state }}
+              </div>
+              <div class="flex items-center">
+                <Briefcase class="w-4 h-4 mr-1" />
+                {{ job.type === "FT" ? "Full Time" : job.type }}
+              </div>
+            </div>
+
+            <div class="flex items-center text-sm mb-4">
+              <span class="bg-blue-50 text-primary px-2 py-1 rounded mr-2">
+                {{ job.jobCategory }}
+              </span>
+              <span
+                v-if="job.salary"
+                class="bg-green-50 text-green-700 px-2 py-1 rounded"
+              >
+                {{ job.salary }}
+              </span>
+            </div>
+
+            <div
+              class="border-t border-gray-100 pt-4 mt-4 flex justify-between items-center"
+            >
+              <span class="text-xs text-gray-500">
+                Posted on {{ formatDate(job.dateCreated) }}
+              </span>
+              <el-button type="primary" size="small" class="flex items-center">
+                <ArrowRight class="w-4 h-4" />
+                Apply Now
+              </el-button>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center">
-          <Briefcase class="w-4 h-4 mr-1" />
-          {{ job.type === "FT" ? "Full Time" : job.type }}
-        </div>
       </div>
 
-      <div class="flex items-center text-sm mb-4">
-        <span class="bg-blue-50 text-primary px-2 py-1 rounded mr-2">
-          {{ job.jobCategory }}
-        </span>
-        <span
-          v-if="job.salary"
-          class="bg-green-50 text-green-700 px-2 py-1 rounded"
-        >
-          {{ job.salary }}
-        </span>
+      <!-- Pagination -->
+      <div class="mt-8 flex justify-center">
+        <el-pagination
+          v-model:current-page="currentPage"
+          :page-size="12"
+          :total="
+            fullJob.filter((job) => job.jobCategory === 'Software Engineering')
+              .length
+          "
+          layout="prev, pager, next"
+          @current-change="handlePageChange"
+        />
       </div>
-
-      <div
-        class="border-t border-gray-100 pt-4 mt-4 flex justify-between items-center"
-      >
-        <span class="text-xs text-gray-500">
-          Posted on {{ formatDate(job.dateCreated) }}
-        </span>
-        <el-button
-          type="primary"
-          size="small"
-          class="flex items-center"
-        >
-          <ArrowRight class="w-4 h-4" />
-          Apply Now
-        </el-button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Pagination -->
-<div class="mt-8 flex justify-center">
-  <el-pagination
-    v-model:current-page="currentPage"
-    :page-size="12"
-    :total="fullJob.filter(job => job.jobCategory === 'Software Engineering').length"
-    layout="prev, pager, next"
-    @current-change="handlePageChange"
-  />
-</div>
     </main>
   </div>
 </template>
@@ -502,8 +503,7 @@ const totalJobs = ref(0);
 const loading = ref(true);
 const jobs = ref([]);
 const fullJob = ref([]);
-import defaultLogo from '@/assets/images/header/logo.png';
-
+import defaultLogo from "@/assets/images/header/logo.png";
 
 // Fetch jobs from API
 const fetchJobs = async () => {

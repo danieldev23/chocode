@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div
+    class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+  >
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <NuxtLink to="/">
         <img
@@ -13,7 +15,10 @@
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         Hoặc
-        <NuxtLink to="/auth/dang-ky" class="font-medium text-primary hover:text-primary-dark">
+        <NuxtLink
+          to="/auth/dang-ky"
+          class="font-medium text-primary hover:text-primary-dark"
+        >
           đăng ký tài khoản mới
         </NuxtLink>
       </p>
@@ -53,9 +58,7 @@
 
           <!-- Remember & Forgot -->
           <div class="flex items-center justify-between">
-            <el-checkbox class="text-gray-600">
-              Ghi nhớ đăng nhập
-            </el-checkbox>
+            <el-checkbox class="text-gray-600"> Ghi nhớ đăng nhập </el-checkbox>
             <el-link type="primary" class="text-sm font-medium">
               Quên mật khẩu?
             </el-link>
@@ -67,12 +70,28 @@
               type="primary"
               native-type="submit"
               :loading="loading"
-              class="w-full h-12 text-base rounded-md bg-primary-gradient flex items-center justify-center"
+              class="w-full h-12 text-base rounded-md bg-primary flex items-center justify-center"
             >
               <span v-if="loading">
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 Đang đăng nhập...
               </span>
@@ -88,7 +107,9 @@
               <div class="w-full border-t border-gray-300"></div>
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-white text-gray-500">Hoặc đăng nhập với</span>
+              <span class="px-2 bg-white text-gray-500"
+                >Hoặc đăng nhập với</span
+              >
             </div>
           </div>
 
@@ -113,7 +134,7 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Đăng nhập Chocode.com'
+  title: "Đăng nhập Chocode.com",
 });
 
 import { Mail, Lock } from "lucide-vue-next";
@@ -142,9 +163,9 @@ const { signIn } = useAuth();
 
 const loginBtn = async () => {
   if (!form.value) return;
-  
+
   loading.value = true;
-  
+
   try {
     const payload = {
       email: form.value.email,

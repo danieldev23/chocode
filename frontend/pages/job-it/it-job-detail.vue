@@ -91,8 +91,6 @@
               v-html="formatDescription(job.description)"
             ></div>
           </div>
-
-          
         </div>
 
         <!-- Right sidebar with company info and application -->
@@ -107,7 +105,7 @@
             <div class="flex flex-col items-center">
               <el-button
                 type="primary"
-                class="w-full mb-4 flex items-center justify-center bg-primary-gradient"
+                class="w-full mb-4 flex items-center justify-center bg-primary"
               >
                 <Send class="w-4 h-4 mr-2" />
                 Ứng tuyển ngay
@@ -151,7 +149,7 @@
               </div>
             </div>
             <div class="mt-4 pt-4 border-t">
-              <el-button size="default" class="w-full mt-2 bg-primary-gradient">
+              <el-button size="default" class="w-full mt-2 bg-primary">
                 Xem thông tin công ty
               </el-button>
             </div>
@@ -188,7 +186,9 @@
                   <p class="text-sm text-gray-500">Chia sẻ việc làm này</p>
                   <div class="flex mt-2 gap-5">
                     <a
-                      :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`"
+                      :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                        currentUrl
+                      )}`"
                       target="blank__"
                     >
                       <img
@@ -339,7 +339,7 @@ import {
   Share2,
   Calendar,
 } from "lucide-vue-next";
-import defaultLogo from '@/assets/images/header/logo.png'
+import defaultLogo from "@/assets/images/header/logo.png";
 const route = useRoute();
 const url = useRequestURL(); // từ Nuxt 3
 const currentUrl = url.href;
@@ -380,7 +380,7 @@ function formatDescription(description) {
 
 <style>
 button.el-button.w-full.flex.items-center.justify-center.bg-secondary-gradient.mr-3.text-white {
-    color: white;
+  color: white;
 }
 .job-description {
   @apply text-gray-700 leading-relaxed;

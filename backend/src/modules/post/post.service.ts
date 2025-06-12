@@ -87,6 +87,7 @@ export class PostService {
         content: true,
 
         topic: true,
+        slug: true,
         level: true,
         image: true,
         categoryId: true,
@@ -121,7 +122,7 @@ export class PostService {
     });
   }
 
-  async getPostDetail(slug: string): Promise<PostCreateResponseDto> {
+  async getPostDetail(slug: string): Promise<any> {
     const post = await this.prisma.post.findFirst({
       where: { slug },
       include: {
@@ -134,12 +135,100 @@ export class PostService {
           },
         },
         category: true,
+        comments: {
+          where: { parentId: null },
+          orderBy: {
+            createdAt: 'desc',
+          },
+          select: {
+            id: true,
+            comment: true,
+            createdAt: true,
+            parentId: true,
+            user: {
+              select: {
+                id: true,
+                fullName: true,
+                username: true,
+                avatar: true,
+              },
+            },
+            feelings: {
+              select: {
+                id: true,
+                type: true,
+              },
+            },
+            replies: {
+              select: {
+                id: true,
+                comment: true,
+                createdAt: true,
+                parentId: true,
+                user: {
+                  select: {
+                    id: true,
+                    fullName: true,
+                    username: true,
+                    avatar: true,
+                  },
+                },
+                feelings: {
+                  select: {
+                    id: true,
+                    type: true,
+                  },
+                },
+                replies: {
+                  select: {
+                    id: true,
+                    comment: true,
+                    createdAt: true,
+                    parentId: true,
+                    user: {
+                      select: {
+                        id: true,
+                        fullName: true,
+                        username: true,
+                        avatar: true,
+                      },
+                    },
+                    feelings: {
+                      select: {
+                        id: true,
+                        type: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 
     if (!post) {
       throw new NotFoundException(`Post with slug "${slug}" not found`);
     }
+
+    // Hàm đệ quy xử lý bình luận con
+    const mapComment = (comment: any): any => ({
+      id: comment.id,
+      comment: comment.comment,
+      createdAt: comment.createdAt,
+      user: {
+        id: comment.user.id,
+        fullName: comment.user.fullName,
+        username: comment.user.username,
+        avatar: comment.user.avatar,
+      },
+      feelings: comment.feelings.map((f: any) => ({
+        id: f.id,
+        type: f.type,
+      })),
+      replies: comment.replies?.map(mapComment) || [],
+    });
 
     return {
       id: post.id,
@@ -165,6 +254,7 @@ export class PostService {
         avatar: post.user.avatar,
         username: post.user.username,
       },
+      comments: post.comments.map(mapComment),
     };
   }
 

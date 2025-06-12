@@ -56,7 +56,7 @@
           </div>
           <NuxtLink
             v-if="currentUser"
-            class="bg-primary-gradient text-white py-1 px-2 rounded-[3px]"
+            class="bg-primary text-white py-1 px-2 rounded-[3px]"
             to="/dang-bai"
           >
             Đăng bài
@@ -102,18 +102,18 @@
           </div>
 
           <!-- Login Button -->
-          <NuxtLink
+          <el-button
             v-else
-            class="!h-9 !px-5 !font-medium !text-sm bg-primary-gradient text-white"
-            to="/auth/login"
+            class="!h-9 !px-5 !font-medium !text-sm bg-primary text-white"
+            @click="toLogin"
           >
             Đăng nhập
-          </NuxtLink>
+          </el-button>
         </nav>
         <div class="flex items-center space-x-2 lg:hidden mr-[-0.4rem]">
           <el-button
             v-if="!currentUser"
-            class="!h-9 !px-5 !font-medium !text-sm bg-primary-gradient text-white"
+            class="!h-9 !px-5 !font-medium !text-sm bg-primary text-white"
             @click="toLogin"
           >
             Đăng nhập
@@ -269,9 +269,7 @@
                     <h4
                       class="font-bold text-sm text-gray-800 mb-2 flex items-center justify-center"
                     >
-                      <MessageSquare
-                        class="w-4 h-4 mr-1 text-blue-500"
-                      />
+                      <MessageSquare class="w-4 h-4 mr-1 text-blue-500" />
                       Nội dung chuyển khoản
                     </h4>
 
@@ -308,9 +306,7 @@
                     <div
                       class="mt-2 flex items-center justify-center text-[10px] text-gray-500"
                     >
-                      <Lightbulb
-                        class="w-3 h-3 mr-1 text-yellow-500"
-                      />
+                      <Lightbulb class="w-3 h-3 mr-1 text-yellow-500" />
                       Vui lòng chuyển khoản đúng nội dung để được cộng điểm tự
                       động
                     </div>
@@ -472,7 +468,7 @@
 
           <div class="px-4 pt-4" v-if="!currentUser">
             <el-button
-              class="w-full !h-9 !font-medium !text-sm bg-primary-gradient text-white"
+              class="w-full !h-9 !font-medium !text-sm bg-primary text-white"
               @click="toLogin"
             >
               Đăng nhập
@@ -481,7 +477,7 @@
 
           <div class="px-4 pt-4">
             <NuxtLink
-              class="w-full bg-primary-gradient text-white py-2 px-4 rounded font-medium"
+              class="w-full bg-primary text-white py-2 px-4 rounded font-medium"
               to="/dang-bai"
             >
               Đăng bài
@@ -540,7 +536,21 @@ const currentUser = await useCurrentUser();
 const showBankingModal = () => {
   dialogBanking.value = !dialogBanking.value;
 };
+const { $socket } = useNuxtApp();
+const user = {
+  userId: currentUser.value?.id,
+  name: currentUser.value?.fullName,
+  username: currentUser.value?.username,
+  avatar: currentUser.value?.avatar,
+};
+
 onMounted(() => {
+  $socket.emit("online-user", {
+    user: user,
+  });
+  $socket.on("user-status-changed", (data) => {
+    console.log(data);
+  });
   const handleResize = () => {
     if (window.innerWidth >= 1024 && menuOpen.value) {
       menuOpen.value = false;
@@ -611,10 +621,10 @@ div#el-id-1024-13 {
 .border-gray-300 {
   border-color: #e2e8f0;
 }
-button.el-button.\!h-9.\!px-5.\!font-medium.\!text-sm.bg-primary-gradient.text-white {
+button.el-button.\!h-9.\!px-5.\!font-medium.\!text-sm.bg-primary.text-white {
   color: white;
 }
-button.el-button.w-full.\!h-9.\!font-medium.\!text-sm.bg-primary-gradient.text-white {
+button.el-button.w-full.\!h-9.\!font-medium.\!text-sm.bg-primary.text-white {
   color: white;
 }
 

@@ -191,6 +191,13 @@ export default <RouterConfig>{
           layout: "auth",
         },
       },
+      {
+        name: "ranking/developers",
+        path: "/xep-hang/developer",
+        alias: ["/ranking/developers"],
+        component: () =>
+          import("~/pages/ranking/ranking.vue").then((r) => r.default || r),
+      },
     ];
   },
 };

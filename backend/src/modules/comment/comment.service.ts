@@ -7,23 +7,48 @@ import { CommentDeleteRequest } from './request/delete-comment.request';
 @Injectable()
 export class CommentService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(
-    commentCreateRequest: CommentCreateRequest,
-  ): Promise<{ success: boolean; message: string; data?: any }> {
-    const data = await this.prisma.comment.create({
-      data: commentCreateRequest,
+  async create(commentCreateRequest: CommentCreateRequest) {
+    const { userId, postId, comment, parentId } = commentCreateRequest;
+
+    if (!userId) throw new Error('userId is required');
+    if (!postId) throw new Error('postId is required');
+    if (!comment || comment.trim() === '')
+      throw new Error('comment is required');
+
+    const postExists = await this.prisma.post.findUnique({
+      where: { id: postId },
     });
-    return data
-      ? {
-          success: true,
-          message: 'Comment created successfully',
-          data,
-        }
-      : {
-          success: false,
-          message: 'Comment creation failed',
-          data: [],
-        };
+    if (!postExists) throw new Error('Post not found');
+
+    if (parentId) {
+      const parentExists = await this.prisma.comment.findUnique({
+        where: { id: parentId },
+      });
+      if (!parentExists) throw new Error('Parent comment not found');
+    }
+
+    const data = await this.prisma.comment.create({
+      data: {
+        comment,
+        user: { connect: { id: userId } },
+        post: { connect: { id: postId } },
+        parent: parentId ? { connect: { id: parentId } } : undefined,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            fullName: true,
+            avatar: true,
+          },
+        },
+        replies: true,
+        feelings: true,
+      },
+    });
+
+    return { success: true, message: 'Comment created', data };
   }
 
   findAll() {

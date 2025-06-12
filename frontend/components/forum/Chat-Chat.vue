@@ -14,7 +14,7 @@
       >
         <!-- Chat Header -->
         <div
-          class="bg-primary-gradient text-white p-4 flex items-center justify-between relative overflow-hidden"
+          class="bg-primary text-white p-4 flex items-center justify-between relative overflow-hidden"
         >
           <!-- Animated background -->
           <div class="absolute inset-0 opacity-20">
@@ -217,7 +217,7 @@
             <div v-else class="flex items-end justify-end group">
               <div class="max-w-xs sm:max-w-sm">
                 <div
-                  class="bg-primary-gradient to-pink-500 text-white rounded-2xl rounded-tr-md px-4 py-3 shadow-lg relative group-hover:shadow-xl transition-all duration-200"
+                  class="bg-primary to-pink-500 text-white rounded-2xl rounded-tr-md px-4 py-3 shadow-lg relative group-hover:shadow-xl transition-all duration-200"
                 >
                   <div class="break-words leading-relaxed">
                     {{ message.text }}
@@ -301,9 +301,9 @@
                 placeholder="Nhập tin nhắn của bạn..."
                 rows="1"
                 class="w-full px-4 py-3 pr-12 border border-gray-200/80 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-300 resize-none text-sm bg-gray-50/50 transition-all duration-200 placeholder-gray-400"
-                :disabled="!isConnected"
                 ref="messageInput"
               ></textarea>
+
               <!-- Emoji picker -->
               <div
                 v-if="showEmojiPicker"
@@ -325,7 +325,6 @@
             <!-- Send button -->
             <button
               @click="sendMessage"
-              :disabled="!canSendMessage"
               class="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 disabled:from-gray-300 disabled:to-gray-400 text-white p-3 rounded-xl flex-shrink-0 transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg disabled:shadow-none items-center mb-1"
               title="Gửi tin nhắn"
             >
@@ -458,167 +457,6 @@ let reconnectAttempts = 0;
 const maxReconnectAttempts = 5;
 
 // Socket initialization and event handlers
-const initializeSocket = () => {
-  if (!$socket) {
-    console.error("Socket not available");
-    return;
-  }
-
-  // Connection events
-  $socket.on("connect", () => {
-    console.log("✅ Connected to chat server");
-    isConnected.value = true;
-    reconnectAttempts = 0;
-
-    // Register user as online
-    $socket.emit("userOnline", {
-      userId: currentUser.value.id,
-      username: currentUser.value.username,
-      avatar: currentUser.value.avatar,
-    });
-  });
-
-  $socket.on("disconnect", (reason: string) => {
-    console.log("❌ Disconnected from server:", reason);
-    isConnected.value = false;
-
-    // Attempt reconnection for certain disconnect reasons
-    if (reason === "io server disconnect") {
-      // Server disconnected us, don't reconnect automatically
-      return;
-    }
-
-    attemptReconnection();
-  });
-
-  $socket.on("connect_error", (error: any) => {
-    console.error("Connection error:", error);
-    isConnected.value = false;
-    attemptReconnection();
-  });
-
-  // Chat message events
-  $socket.on("newMessage", (messageData: any) => {
-    console.log("Received new message:", messageData);
-
-    const message: ChatMessage = {
-      id: messageData.id,
-      sender: messageData.sender,
-      text: messageData.text,
-      time: formatTime(new Date(messageData.timestamp)),
-      isOwn: messageData.userId === currentUser.value.id,
-      avatar: messageData.avatar,
-      isMember: messageData.isMember || false,
-      status: "delivered",
-      userId: messageData.userId,
-      timestamp: messageData.timestamp,
-    };
-
-    // Don't add duplicate messages or own messages (already added locally)
-    if (!messages.value.find((m) => m.id === message.id) && !message.isOwn) {
-      messages.value.push(message);
-
-      // Increment unread count if chat is closed
-      if (!isChatOpen.value) {
-        unreadCount.value++;
-      }
-
-      nextTick(() => {
-        scrollToBottom();
-      });
-    }
-  });
-
-  // Message history
-  $socket.on("messageHistory", (historyData: any[]) => {
-    console.log("Received message history:", historyData);
-
-    const historyMessages = historyData.map((msg: any) => ({
-      id: msg.id,
-      sender: msg.sender,
-      text: msg.text,
-      time: formatTime(new Date(msg.timestamp)),
-      isOwn: msg.userId === currentUser.value.id,
-      avatar: msg.avatar,
-      isMember: msg.isMember || false,
-      status: "delivered" as const,
-      userId: msg.userId,
-      timestamp: msg.timestamp,
-    }));
-
-    // Add history messages that aren't already in the list
-    historyMessages.forEach((historyMsg: ChatMessage) => {
-      if (!messages.value.find((m) => m.id === historyMsg.id)) {
-        messages.value.push(historyMsg);
-      }
-    });
-
-    // Sort messages by timestamp
-    messages.value.sort(
-      (a, b) =>
-        new Date(a.timestamp || 0).getTime() -
-        new Date(b.timestamp || 0).getTime()
-    );
-
-    nextTick(() => {
-      scrollToBottom();
-    });
-  });
-
-  // Typing indicator events
-  $socket.on("userTyping", (data: any) => {
-    if (data.userId !== currentUser.value.id) {
-      const existingTypingUser = typingUsers.value.find(
-        (u) => u.userId === data.userId
-      );
-      if (!existingTypingUser) {
-        typingUsers.value.push({
-          userId: data.userId,
-          username: data.username,
-        });
-      }
-
-      nextTick(() => {
-        scrollToBottom();
-      });
-    }
-  });
-
-  $socket.on("userStoppedTyping", (data: any) => {
-    typingUsers.value = typingUsers.value.filter(
-      (u) => u.userId !== data.userId
-    );
-  });
-
-  // Online users events
-  $socket.on("onlineCount", (count: number) => {
-    onlineCount.value = count;
-  });
-
-  $socket.on("onlineUsersList", (users: OnlineUser[]) => {
-    onlineUsers.value = users.filter((u) => u.userId !== currentUser.value.id);
-  });
-
-  // Message status events
-  $socket.on("messageDelivered", (messageId: string) => {
-    const message = messages.value.find((m) => m.id === messageId);
-    if (message && message.isOwn) {
-      message.status = "delivered";
-    }
-  });
-
-  $socket.on("messageRead", (messageId: string) => {
-    const message = messages.value.find((m) => m.id === messageId);
-    if (message && message.isOwn) {
-      message.status = "read";
-    }
-  });
-
-  $socket.on("messageError", (error: any) => {
-    console.error("Message error:", error);
-    // Handle message error (e.g., show error message to user)
-  });
-};
 
 // Reconnection logic
 const attemptReconnection = () => {

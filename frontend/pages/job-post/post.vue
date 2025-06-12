@@ -199,7 +199,7 @@
               >Lưu tin</el-button
             >
             <el-button
-              class="bg-primary-gradient submit-btn"
+              class="bg-primary submit-btn"
               @click="submitForm"
               :loading="loading"
             >
@@ -697,7 +697,7 @@ button.el-button.button-new-tag {
 button.el-button.bg-secondary-gradient.text-white.reset {
   color: white;
 }
-button.el-button.bg-primary-gradient.submit-btn {
+button.el-button.bg-primary.submit-btn {
   color: white;
 }
 </style>

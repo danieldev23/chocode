@@ -33,7 +33,7 @@
             </h1>
             <h2 class="text-xl md:text-2xl lg:text-3xl font-bold mt-2">
               <span class="text-gray-700">TÌM</span>
-              <span class="text-transparent bg-primary-gradient bg-clip-text">
+              <span class="text-transparent bg-primary bg-clip-text">
                 DEV
               </span>
               <span class="text-gray-700">GIỎI, CHỈ CÓ TẠI</span>
@@ -53,7 +53,7 @@
           <!-- CTA Buttons -->
           <div class="flex flex-col sm:flex-row gap-4 my-6">
             <button
-              class="bg-primary-gradient text-white px-4 py-2 md:px-6 md:py-2 rounded-full hover:bg-primary transition text-sm md:text-base"
+              class="bg-primary text-white px-4 py-2 md:px-6 md:py-2 rounded-full hover:bg-primary transition text-sm md:text-base"
             >
               Tôi muốn tìm việc
             </button>
@@ -135,7 +135,7 @@
 
           <!-- CTA Button -->
           <button
-            class="bg-primary-gradient hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full mt-12 transition"
+            class="bg-primary hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full mt-12 transition"
           >
             Trải Nghiệm Ngay!
           </button>

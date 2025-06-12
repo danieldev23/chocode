@@ -308,8 +308,47 @@
       </div>
     </div>
   </div>
+  <div
+    v-if="showPopup"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+  >
+    <div
+      class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md text-center mx-4"
+    >
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">
+        Vui lòng cập nhật vai trò của bạn
+      </h2>
+      <p class="text-gray-600 mb-6">
+        Hệ thống chưa có thông tin vai trò của bạn. Hãy cập nhật để tiếp tục.
+      </p>
+      <button
+        @click="confirmRoleUpdate"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition"
+      >
+        Tôi đã hiểu
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
+import nuxtStorage from 'nuxt-storage';
+
+const showPopup = ref(false)
+
+onMounted(() => {
+  const role = nuxtStorage.localStorage.getData('updatedRole')
+  
+  // Nếu chưa có hoặc giá trị không phải "done" => hiện popup
+  if (!role || role !== 'done') {
+    showPopup.value = true
+  }
+})
+
+const confirmRoleUpdate = () => {
+  // Giả sử người dùng đã cập nhật role thành công, lưu vào localStorage
+  nuxtStorage.localStorage.setData('updatedRole', 'done')
+  showPopup.value = false
+}
 const mobileMenuOpen = ref(false);
 </script>

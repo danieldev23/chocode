@@ -8,10 +8,16 @@
           <div class="flex flex-col gap-4">
             <el-skeleton-item variant="p" style="height: 240px" />
             <div class="flex gap-4">
-              <el-skeleton-item variant="image" style="width: 120px; height: 120px" />
+              <el-skeleton-item
+                variant="image"
+                style="width: 120px; height: 120px"
+              />
               <div class="flex-1">
                 <el-skeleton-item variant="h3" style="width: 50%" />
-                <el-skeleton-item variant="text" style="margin-top: 16px; width: 80%" />
+                <el-skeleton-item
+                  variant="text"
+                  style="margin-top: 16px; width: 80%"
+                />
               </div>
             </div>
           </div>
@@ -38,7 +44,9 @@
             <div
               class="px-3 py-2 bg-black/30 backdrop-blur-lg rounded-md text-white"
             >
-              <div class="text-lg sm:text-xl font-bold">{{ userData?.score || 0 }}</div>
+              <div class="text-lg sm:text-xl font-bold">
+                {{ userData?.score || 0 }}
+              </div>
               <div class="text-xs opacity-80">Điểm số</div>
             </div>
             <div
@@ -90,7 +98,9 @@
               class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
             >
               <div>
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center gap-3 mb-2"
+                >
                   <h1 class="text-2xl font-bold text-gray-900">
                     {{ userData?.fullName }}
                   </h1>
@@ -124,17 +134,31 @@
               </div>
 
               <!-- Action Buttons -->
-              <div class="flex items-center justify-center sm:justify-end gap-2 sm:gap-3 mt-4 sm:mt-0">
-                <el-button type="primary" class="flex items-center gap-1" size="small" :size="isMobile ? 'small' : 'default'">
+              <div
+                class="flex items-center justify-center sm:justify-end gap-2 sm:gap-3 mt-4 sm:mt-0"
+              >
+                <el-button
+                  type="primary"
+                  class="flex items-center gap-1"
+                  size="small"
+                  :size="isMobile ? 'small' : 'default'"
+                >
                   <UserPlus class="w-4 h-4 mr-1 mb-[2px]" />
                   <span>Kết nối</span>
                 </el-button>
-                <el-button class="flex items-center gap-1" size="small" :size="isMobile ? 'small' : 'default'">
+                <el-button
+                  class="flex items-center gap-1"
+                  size="small"
+                  :size="isMobile ? 'small' : 'default'"
+                >
                   <MessageCircle class="w-4 h-4 mr-1" />
                   <span>Nhắn tin</span>
                 </el-button>
                 <el-dropdown trigger="click">
-                  <el-button size="small" :size="isMobile ? 'small' : 'default'">
+                  <el-button
+                    size="small"
+                    :size="isMobile ? 'small' : 'default'"
+                  >
                     <MoreHorizontal class="w-4 h-4" />
                   </el-button>
                   <template #dropdown>
@@ -171,7 +195,9 @@
                 <span>{{ userData?.job || "Chưa cập nhật công việc" }}</span>
               </div>
               <div class="flex items-start gap-3 text-gray-600">
-                <GraduationCap class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                <GraduationCap
+                  class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"
+                />
                 <span>{{ userData?.level || "Chưa cập nhật học vấn" }}</span>
               </div>
               <div class="flex items-start gap-3 text-gray-600">
@@ -243,7 +269,10 @@
 
         <!-- Main Content Area -->
         <div class="lg:col-span-6">
-          <el-tabs v-model="activeTab" class="bg-white rounded-md shadow-sm p-4 sm:p-5">
+          <el-tabs
+            v-model="activeTab"
+            class="bg-white rounded-md shadow-sm p-4 sm:p-5"
+          >
             <el-tab-pane label="Dự án" name="projects">
               <div
                 v-if="userData?.jobPostings && userData.jobPostings.length > 0"
@@ -307,7 +336,7 @@
                       <div class="flex justify-end mt-3">
                         <NuxtLink
                           :to="`/viec-freelance/${job.slug}`"
-                          class="bg-primary-gradient px-3 py-2 text-[12px] text-white rounded-[4px]"
+                          class="bg-primary px-3 py-2 text-[12px] text-white rounded-[4px]"
                           >Xem chi tiết</NuxtLink
                         >
                       </div>
@@ -384,7 +413,7 @@
                       <div class="flex justify-end mt-3">
                         <NuxtLink
                           :to="`/bai-viet/${post.slug}`"
-                          class="bg-primary-gradient px-3 py-2 text-[12px] text-white rounded-[4px]"
+                          class="bg-primary px-3 py-2 text-[12px] text-white rounded-[4px]"
                           >Xem chi tiết</NuxtLink
                         >
                       </div>
@@ -492,7 +521,7 @@ import {
 import { ElNotification } from "element-plus";
 import DefaultAvatar from "@/assets/images/header/default-avatar.png";
 import { ref, onMounted, watch, computed } from "vue";
-
+const { $socket } = useNuxtApp();
 const route = useRoute();
 const userData = ref(null);
 const activeTab = ref("posts"); // Changed default to posts since the user has posts
@@ -508,8 +537,11 @@ const isMobile = computed(() => {
 
 // Add window resize listener for mobile detection
 onMounted(() => {
+  $socket.on("connect", (user) => {
+    console.log(user);
+  });
   if (process.client) {
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
   }
 });
 
@@ -521,7 +553,7 @@ const handleResize = () => {
 // Clean up event listener
 onUnmounted(() => {
   if (process.client) {
-    window.removeEventListener('resize', handleResize);
+    window.removeEventListener("resize", handleResize);
   }
 });
 
@@ -533,10 +565,12 @@ onMounted(async () => {
       route.params.username
     );
     userData.value = response.data;
-    
+
     // Switch to posts tab if user has posts but no job postings
-    if (userData.value?.posts?.length > 0 && 
-        (!userData.value?.jobPostings || userData.value?.jobPostings.length === 0)) {
+    if (
+      userData.value?.posts?.length > 0 &&
+      (!userData.value?.jobPostings || userData.value?.jobPostings.length === 0)
+    ) {
       activeTab.value = "posts";
     }
   } catch (error) {
@@ -583,10 +617,10 @@ const truncateHTML = (html, length) => {
     // Create a temporary div to parse HTML in browser
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
-    
+
     // Get text content
     const text = tempDiv.textContent || tempDiv.innerText || "";
-    
+
     // Truncate text
     if (text.length <= length) return html;
     return text.substring(0, length) + "...";

@@ -1,17 +1,18 @@
 // ForumSearch.vue
 <template>
-  <div class="max-w-5xl mx-auto w-full py-3 px-0 rounded-lg">
-    <div class="flex items-stretch gap-2">
-      <div class="relative flex-grow">
+  <div class="mx-auto mb-4 w-full py-0 px-0 rounded-lg">
+    <div class="flex flex-col sm:flex-row items-stretch gap-2">
+      <div class="flex-1 w-full">
         <el-input
           v-model="localQuery"
           placeholder="Tìm kiếm..."
-          class="minimal-search h-full"
+          class="minimal-search h-full focus:text-secondary rounded-md"
           clearable
           @input="updateQuery"
+          @keyup.enter="$emit('search', localQuery)"
         >
           <template #prefix>
-            <span class="text-gray-400 flex items-center">
+            <span class="text-gray-400 flex items-center hidden sm:flex">
               <Search class="h-4 w-4" />
             </span>
           </template>
@@ -19,11 +20,13 @@
       </div>
 
       <button
-        class="bg-secondary-gradient text-white font-medium px-6 rounded-lg transition-all duration-200 text-base flex items-center justify-center whitespace-nowrap"
+        class="bg-secondary-gradient text-white font-medium px-4 sm:px-6 py-2 sm:py-0 rounded-lg transition-all duration-200 text-sm sm:text-base flex items-center justify-center whitespace-nowrap min-h-[42px] w-full sm:w-auto"
         @click="$emit('search', localQuery)"
       >
-        Tìm kiếm
-        <Search width="22" height="22" class="ml-2"/>
+        <Search class="w-4 h-4 sm:hidden mr-2" />
+        <span class="hidden sm:inline">Tìm kiếm</span>
+        <span class="sm:hidden">Tìm kiếm</span>
+        <Search class="ml-2 w-4 h-4 hidden sm:block" />
       </button>
     </div>
   </div>
@@ -70,12 +73,14 @@ const updateQuery = () => {
   box-shadow: none;
   border: 1px solid #f0f0f0;
   height: 100%;
+  min-height: 42px;
 }
 
 .minimal-search :deep(.el-input__inner) {
   color: #6b7280;
   font-size: 0.95rem;
   height: 100%;
+  min-height: 40px;
 }
 
 .minimal-search :deep(.el-input__inner)::placeholder {
@@ -97,12 +102,26 @@ const updateQuery = () => {
   color: #9ca3af;
 }
 
-/* Button style to match input height */
+/* Responsive button styling */
 button {
-  height: 42px; /* Match height to Input */
+  min-height: 42px;
 }
 
-span.el-input__prefix {
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .minimal-search :deep(.el-input__inner) {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  button {
+    font-size: 0.875rem;
+  }
+}
+
+/* Hide prefix icon on very small screens */
+@media (max-width: 480px) {
+  .minimal-search :deep(.el-input__prefix) {
     display: none;
+  }
 }
 </style>

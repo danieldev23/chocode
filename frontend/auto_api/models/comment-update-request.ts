@@ -40,5 +40,11 @@ export interface CommentUpdateRequest {
      * @type {number}
      * @memberof CommentUpdateRequest
      */
+    parentId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CommentUpdateRequest
+     */
     id: number;
 }

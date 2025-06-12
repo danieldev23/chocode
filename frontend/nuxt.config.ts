@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: true,
   nitro: {
@@ -11,15 +10,11 @@ export default defineNuxtConfig({
   vite: {
     server: {
       fs: {
-        allow: [
-          "..",
-          "./", 
-          "/Users/macbook/Documents/Projects/node_modules",
-        ],
+        allow: ["..", "./", "/Users/macbook/Documents/Projects/node_modules"],
       },
     },
     optimizeDeps: {
-      include: ["axios"], // <-- help Vite resolve axios
+      include: ["axios"],
     },
   },
   build: {
@@ -38,25 +33,25 @@ export default defineNuxtConfig({
     "nuxt-socket-io",
   ],
   io: {
-    // module options
     sockets: [
       {
         name: "main",
-        url: "http://localhost:3000",
+        url: process.env.SOCKET_URL,
       },
     ],
   },
   devtools: { enabled: false },
   runtimeConfig: {
+    AUTH_ORIGIN: process.env.AUTH_ORIGIN,
     public: {
-      BASE_API_URL: process.env.API_BASE || "http://localhost:3001/api",
+      BASE_API_URL: process.env.API_BASE,
     },
   },
   auth: {
     isEnabled: true,
     disableServerSideAuth: false,
     originEnvKey: "AUTH_ORIGIN",
-    baseURL: "http://localhost:3001/api/auth",
+    baseURL: `${process.env.API_BASE}/auth`,
     provider: {
       type: "local",
       endpoints: {
@@ -71,7 +66,6 @@ export default defineNuxtConfig({
       pages: {
         login: "/",
       },
-
       token: {
         maxAgeInSeconds: 30 * 24 * 60 * 60,
         type: "Bearer",

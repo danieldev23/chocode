@@ -18,7 +18,6 @@ import globalAxios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 
 export const BASE_PATH = "http://localhost:3001".replace(/\/+$/, "");
 
-
 /**
  *
  * @export

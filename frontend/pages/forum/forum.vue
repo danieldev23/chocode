@@ -2,11 +2,11 @@
   <!-- Main Content -->
   <div class="flex-1">
     <ForumSearch :query="search" />
-    <ForumChat
+    <!-- <ForumChat
       :username="currentUser?.username || ''"
       :name="currentUser?.fullName || 'Default User'"
       :avatar="currentUser?.avatar || ''"
-    />
+    /> -->
     <!-- Hero Section -->
     <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
       <div class="flex flex-col md:flex-row items-center justify-between">
@@ -119,7 +119,9 @@
           </div>
         </div>
 
-        <div class="mb-3">{{ post.title }}</div>
+        <div class="mb-3"><NuxtLink :to="`/thao-luan/bai-dang/${post.slug}`" class="hover:text-primary cursor-pointer">
+          {{ post.title }}
+        </NuxtLink></div>
 
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
