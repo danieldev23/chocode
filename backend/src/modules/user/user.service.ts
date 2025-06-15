@@ -1,5 +1,9 @@
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateTransactionDto, CreateUserDto } from './dto/create-user.dto';
+import {
+  CreateTransactionDto,
+  CreateUserDto,
+  UpdateUserInfoDto,
+} from './dto/create-user.dto';
 import { Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
@@ -17,7 +21,7 @@ export class UserService {
   private startTime = Date.now();
   constructor(
     private readonly prisma: PrismaService,
-    private notificationGateway: NotificationGateway
+    private notificationGateway: NotificationGateway,
   ) {}
 
   @Cron('* * * * *')
@@ -236,5 +240,42 @@ export class UserService {
   }
   getUserFromAddDescription(des: string): string {
     return des.match(/\d+$/)[0];
+  }
+
+  async getTransactionHistory(username: string) {
+    const data = await this.prisma.transactionHistory.findMany({
+      where: {
+        username: username,
+      },
+      orderBy: {
+        created: 'desc',
+      },
+    });
+    return data;
+  }
+
+  async updateUserInfo(username: string, userInfoUpdate: UpdateUserInfoDto) {
+    return this.prisma.user.update({
+      where: {
+        username: username,
+      },
+      data: {
+        fullName: userInfoUpdate.fullName,
+        bio: userInfoUpdate.bio,
+        address: userInfoUpdate.address,
+        job: userInfoUpdate.job,
+      },
+      select: {
+        id: true,
+        username: true,
+        fullName: true,
+        bio: true,
+        avatar: true,
+        address: true,
+        job: true,
+        level: true,
+        score: true,
+      },
+    });
   }
 }

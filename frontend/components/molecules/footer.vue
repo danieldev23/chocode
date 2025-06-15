@@ -308,7 +308,7 @@
       </div>
     </div>
   </div>
-  <div
+  <!-- <div
     v-if="showPopup"
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
   >
@@ -328,27 +328,27 @@
         Tôi đã hiểu
       </button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
-import nuxtStorage from 'nuxt-storage';
+// import nuxtStorage from 'nuxt-storage';
 
-const showPopup = ref(false)
+// const showPopup = ref(false)
 
-onMounted(() => {
-  const role = nuxtStorage.localStorage.getData('updatedRole')
+// onMounted(() => {
+//   const role = nuxtStorage.localStorage.getData('updatedRole')
   
-  // Nếu chưa có hoặc giá trị không phải "done" => hiện popup
-  if (!role || role !== 'done') {
-    showPopup.value = true
-  }
-})
+//   // Nếu chưa có hoặc giá trị không phải "done" => hiện popup
+//   if (!role || role !== 'done') {
+//     showPopup.value = true
+//   }
+// })
 
-const confirmRoleUpdate = () => {
-  // Giả sử người dùng đã cập nhật role thành công, lưu vào localStorage
-  nuxtStorage.localStorage.setData('updatedRole', 'done')
-  showPopup.value = false
-}
+// const confirmRoleUpdate = () => {
+//   // Giả sử người dùng đã cập nhật role thành công, lưu vào localStorage
+//   nuxtStorage.localStorage.setData('updatedRole', 'done')
+//   showPopup.value = false
+// }
 const mobileMenuOpen = ref(false);
 </script>

@@ -27,6 +27,7 @@ export * from './post-update-response';
 export * from './salary-range-dto';
 export * from './update-job-posting-dto';
 export * from './update-salary-range-dto';
+export * from './update-user-info-dto';
 export * from './upload-avatar-body';
 export * from './user';
 export * from './user-dto';

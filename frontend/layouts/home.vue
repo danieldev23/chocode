@@ -36,15 +36,16 @@
                   >
                 </div>
                 <h1
-                  class="text-4xl md:text-5xl lg:6xl sm:2xl font-bold text-white mb-6 leading-tight"
+                  class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight tracking-wide"
                 >
                   Kết nối với
                   <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400"
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500"
                   >
-                    dự án IT
+                    các dự án IT
                   </span>
-                  <br />hàng đầu Việt Nam
+                  <br />
+                  <span class="block mt-2"> hàng đầu tại Việt Nam </span>
                 </h1>
                 <p
                   class="text-xl md:text-2xl text-blue-100 mb-6 font-light sm:text-nowrap text-wrap"
@@ -412,6 +413,189 @@ const selectQuickTag = (tag: string) => {
 </script>
 
 <style scoped>
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-30px) rotate(1deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translateY(-25px) rotate(-2deg) scale(1.1);
+  }
+  66% {
+    transform: translateY(-15px) rotate(1deg) scale(0.9);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-40px) rotate(3deg);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes gradient-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes gradient-text {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up-delayed {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 25%;
+  }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 10s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+.animate-float-slow {
+  animation: float-slow 12s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+.animate-twinkle {
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.animate-spin-very-slow {
+  animation: spin 30s linear infinite;
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 8s ease-in-out infinite;
+  background-size: 200% 200%;
+}
+
+.animate-gradient-pulse {
+  animation: gradient-pulse 4s ease-in-out infinite;
+}
+
+.animate-gradient-text {
+  animation: gradient-text 3s ease-in-out infinite;
+  background-size: 200% 200%;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out 0.2s both;
+}
+
+.animate-fade-in-up-delayed {
+  animation: fade-in-up-delayed 1s ease-out 0.6s both;
+}
+
+.animate-slide-up {
+  animation: slide-up 1s ease-out 0.8s both;
+}
+
+.animate-progress {
+  animation: progress 3s ease-out infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 /* Modern glassmorphism styles */
 .hero-swiper {
   border-radius: 1rem;

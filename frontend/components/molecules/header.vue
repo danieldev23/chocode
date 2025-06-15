@@ -85,12 +85,25 @@
                       Thông tin tài khoản
                     </NuxtLink>
                   </el-dropdown-item>
+
                   <el-dropdown-item
                     class="!flex !items-center"
                     @click="showBankingModal"
                   >
                     <HandCoins class="w-5 h-5 mr-2" />
                     Nạp coin
+                  </el-dropdown-item>
+
+                  <el-dropdown-item>
+                    <NuxtLink
+                      class="flex"
+                      :to="{
+                        name: 'transaction-history',
+                      }"
+                    >
+                      <History class="w-5 h-5 mr-2" />
+                      Lịch sử giao dịch
+                    </NuxtLink>
                   </el-dropdown-item>
                   <el-dropdown-item class="!flex !items-center" @click="logout">
                     <Lock class="w-5 h-5 mr-2" />
@@ -104,6 +117,7 @@
           <!-- Login Button -->
           <el-button
             v-else
+            type="primary"
             class="!h-9 !px-5 !font-medium !text-sm bg-primary text-white"
             @click="toLogin"
           >
@@ -113,6 +127,7 @@
         <div class="flex items-center space-x-2 lg:hidden mr-[-0.4rem]">
           <el-button
             v-if="!currentUser"
+            type="primary"
             class="!h-9 !px-5 !font-medium !text-sm bg-primary text-white"
             @click="toLogin"
           >
@@ -421,6 +436,17 @@
               <HandCoins class="w-5 h-5 mr-2" />
               Nạp coin
             </button>
+      
+              <NuxtLink
+                class="flex items-center text-gray-600 hover:text-primary text-sm"
+                :to="{
+                  name: 'transaction-history',
+                }"
+              >
+                <History class="w-5 h-5 mr-2" />
+                Lịch sử giao dịch
+              </NuxtLink>
+            
             <button
               class="flex items-center text-gray-600 hover:text-primary text-sm"
               @click="logout"
@@ -468,6 +494,7 @@
 
           <div class="px-4 pt-4" v-if="!currentUser">
             <el-button
+              type="primary"
               class="w-full !h-9 !font-medium !text-sm bg-primary text-white"
               @click="toLogin"
             >
@@ -475,7 +502,7 @@
             </el-button>
           </div>
 
-          <div class="px-4 pt-4">
+          <div class="px-4 pt-4" v-if="currentUser">
             <NuxtLink
               class="w-full bg-primary text-white py-2 px-4 rounded font-medium"
               to="/dang-bai"
@@ -508,9 +535,11 @@ import {
   Building,
   QrCode,
   Lightbulb,
+  History,
 } from "lucide-vue-next";
 useSocketNotification();
 import { ArrowDown } from "@element-plus/icons-vue";
+import { useUserOnlineStore } from "~/store/userOnline";
 const menuOpen = ref(false);
 const dialogBanking = ref(false);
 const toLogin = () => {
@@ -533,6 +562,7 @@ function handleCopy() {
 const token = useCookie("auth.token");
 const serverToken = useCookie("access_token");
 const currentUser = await useCurrentUser();
+const userOnlineStore = useUserOnlineStore();
 const showBankingModal = () => {
   dialogBanking.value = !dialogBanking.value;
 };
@@ -549,7 +579,14 @@ onMounted(() => {
     user: user,
   });
   $socket.on("user-status-changed", (data) => {
-    console.log(data);
+    if (data.online) {
+      userOnlineStore.setUserOnline({
+        isUserOnline: data.online,
+        userId: data.userId,
+        username: data.username,
+      });
+    }
+    console.log(JSON.stringify(data));
   });
   const handleResize = () => {
     if (window.innerWidth >= 1024 && menuOpen.value) {
@@ -585,7 +622,7 @@ const logout = async () => {
 const navItems = [
   { label: "Việc làm IT", icon: Laptop, to: "/viec-lam-it" },
   { label: "Thuê Freelancer", icon: User, to: "/dang-bai" },
-  { label: "Mua bán", icon: Store, to: "/mua-ban" },
+  // { label: "Mua bán", icon: Store, to: "/mua-ban" },
   { label: "Thảo luận", icon: MessageSquare, to: "/thao-luan" },
 ];
 

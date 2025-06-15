@@ -26,6 +26,44 @@
     </div>
 
     <template v-else>
+      <!-- Dialog edit user info  -->
+
+      <el-dialog
+        v-model="dialogVisible"
+        title="Chỉnh sửa thông tin người dùng"
+        width="500px"
+        :before-close="handleClose"
+      >
+        <el-form :model="userForm" label-width="120px">
+          <el-form-item label="Username">
+            <el-input v-model="userForm.username" disabled />
+          </el-form-item>
+
+          <el-form-item label="Họ và tên">
+            <el-input v-model="userForm.fullName" />
+          </el-form-item>
+
+          <el-form-item label="Bio">
+            <el-input type="textarea" v-model="userForm.bio" rows="3" />
+          </el-form-item>
+
+          <el-form-item label="Địa chỉ">
+            <el-input v-model="userForm.address" />
+          </el-form-item>
+
+          <el-form-item label="Công việc">
+            <el-input v-model="userForm.job" />
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <el-button @click="dialogVisible = false">Huỷ</el-button>
+          <el-button type="primary" :loading="loading" @click="submitForm"
+            >Lưu</el-button
+          >
+        </template>
+      </el-dialog>
+
       <!-- Hero Section -->
       <div class="relative bg-white shadow-sm rounded-md">
         <!-- Cover Image -->
@@ -181,10 +219,18 @@
         <div class="lg:col-span-3 space-y-6">
           <!-- About Card -->
           <div class="bg-white rounded-md p-5 shadow-sm">
-            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-              <UserCircle class="w-5 h-5 text-blue-500" />
-              Thông tin
-            </h3>
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                <UserCircle class="w-5 h-5 text-blue-500" />
+                Thông tin
+              </h3>
+              <button
+                @click="dialogVisible = !dialogVisible"
+                class="flex items-center mb-4 text-xs text-secondary"
+              >
+                <SquarePen class="w-4 h-4 mr-1" />Cập nhật
+              </button>
+            </div>
             <div class="space-y-4">
               <div class="flex items-start gap-3 text-gray-600">
                 <MapPin class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
@@ -517,16 +563,28 @@ import {
   Clock,
   IdCard,
   Hash,
+  SquarePen,
 } from "lucide-vue-next";
 import { ElNotification } from "element-plus";
 import DefaultAvatar from "@/assets/images/header/default-avatar.png";
 import { ref, onMounted, watch, computed } from "vue";
-const { $socket } = useNuxtApp();
+import { useUserOnlineStore } from "~/store/userOnline";
+const uerOnlineStore = useUserOnlineStore();
 const route = useRoute();
 const userData = ref(null);
-const activeTab = ref("posts"); // Changed default to posts since the user has posts
+const activeTab = ref("posts");
 const loading = ref(true);
-
+const dialogVisible = ref(false);
+const token = useCookie("auth.token");
+const userForm = ref({
+  id: 5,
+  username: "441884169",
+  fullName: "Huy Dev",
+  active: true,
+  bio: null,
+  address: null,
+  job: null,
+});
 // Check if mobile
 const isMobile = computed(() => {
   if (process.client) {
@@ -537,9 +595,7 @@ const isMobile = computed(() => {
 
 // Add window resize listener for mobile detection
 onMounted(() => {
-  $socket.on("connect", (user) => {
-    console.log(user);
-  });
+  console.log("User online: ", uerOnlineStore.isUserOnline);
   if (process.client) {
     window.addEventListener("resize", handleResize);
   }
@@ -550,12 +606,34 @@ const handleResize = () => {
   // You can add additional responsive logic here if needed
 };
 
-// Clean up event listener
-onUnmounted(() => {
-  if (process.client) {
-    window.removeEventListener("resize", handleResize);
+const submitForm = async () => {
+  try {
+    const payload = {
+      fullName: userForm.value.fullName,
+      bio: userForm.value.bio,
+      address: userForm.value.address,
+      job: userForm.value.job,
+    };
+    await userService.userControllerUpdateUserInfo(payload, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.value}`,
+      },
+    });
+    userData.value = { ...userData.value, ...userForm.value };
+    ElMessage({
+      type: "success",
+      message: "Cập nhật thông tin thành công!",
+    });
+    dialogVisible = false;
+  } catch (error) {
+    console.error("Update failed:", error);
+    // ElMessage({
+    //   type: "error",
+    //   message: "Cập nhật thất bại. Vui lòng thử lại.",
+    // });
   }
-});
+};
 
 // Fetch user data from API
 onMounted(async () => {
@@ -566,6 +644,17 @@ onMounted(async () => {
     );
     userData.value = response.data;
 
+    // Cập nhật userForm từ userData
+    Object.assign(userForm.value, {
+      id: userData.value.id,
+      username: userData.value.username,
+      fullName: userData.value.fullName,
+      active: userData.value.active,
+      bio: userData.value.bio,
+      address: userData.value.address,
+      job: userData.value.job,
+    });
+
     // Switch to posts tab if user has posts but no job postings
     if (
       userData.value?.posts?.length > 0 &&
@@ -575,7 +664,7 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
-    ElNotification({
+    ElMessage({
       type: "error",
       message: "Không thể tải thông tin người dùng",
       duration: 3000,
@@ -587,9 +676,8 @@ onMounted(async () => {
 
 watch(userData, (newData) => {
   if (newData) {
-    useSeoMeta({
+    setupSeoFromSettingObject({
       title: `Trang cá nhân của ${newData.fullName || newData.username}`,
-      ogTitle: `Trang cá nhân ${newData.fullName || newData.username}`,
       description: `Thông tin chi tiết của ${
         newData.fullName || newData.username
       }`,

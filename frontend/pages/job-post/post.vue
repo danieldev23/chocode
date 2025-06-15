@@ -199,6 +199,7 @@
               >Lưu tin</el-button
             >
             <el-button
+              type="primary"
               class="bg-primary submit-btn"
               @click="submitForm"
               :loading="loading"

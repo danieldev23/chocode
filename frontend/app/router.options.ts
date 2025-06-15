@@ -88,17 +88,15 @@ export default <RouterConfig>{
           import("~/pages/forum/detail.vue").then((r) => r.default || r),
         meta: {
           layout: "forum",
-          auth: true,
-          middleware: auth,
         },
       },
-      {
-        name: "marketplace",
-        path: "/mua-ban",
-        alias: ["/marketplace"],
-        component: () =>
-          import("~/pages/market-place.vue").then((r) => r.default || r),
-      },
+      // {
+      //   name: "marketplace",
+      //   path: "/mua-ban",
+      //   alias: ["/marketplace"],
+      //   component: () =>
+      //     import("~/pages/market-place.vue").then((r) => r.default || r),
+      // },
       {
         name: "profile",
         path: "/trang-ca-nhan/:username",
@@ -197,6 +195,20 @@ export default <RouterConfig>{
         alias: ["/ranking/developers"],
         component: () =>
           import("~/pages/ranking/ranking.vue").then((r) => r.default || r),
+      },
+      {
+        name: "transaction-history",
+        path: "/lich-su-giao-dich",
+        alias: ["/transaction-history"],
+        component: () =>
+          import("~/pages/user/transaction-history.vue").then(
+            (r) => r.default || r
+          ),
+        meta: {
+          layout: "post-job",
+          auth: true,
+          middleware: "auth",
+        },
       },
     ];
   },

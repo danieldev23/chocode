@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, MaxLength, IsDateString, IsNumber } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  MaxLength,
+  IsDateString,
+  IsNumber,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty()
@@ -16,6 +22,31 @@ export class CreateUserDto {
 
   @ApiProperty()
   roleId: number;
+}
+
+export class UpdateUserInfoDto {
+  @ApiProperty({ maxLength: 100, description: 'Họ tên người dùng' })
+  @IsString()
+  @MaxLength(100)
+  fullName: string;
+
+  @ApiProperty({ maxLength: 500, description: 'Giới thiệu ngắn (bio)' })
+  @IsString()
+  @MaxLength(500)
+  bio: string;
+
+  @ApiProperty({ maxLength: 255, description: 'Địa chỉ người dùng' })
+  @IsString()
+  @MaxLength(255)
+  address: string;
+
+  @ApiProperty({
+    maxLength: 100,
+    description: 'Nghề nghiệp hoặc vị trí công việc',
+  })
+  @IsString()
+  @MaxLength(100)
+  job: string;
 }
 
 export class CreateTransactionDto {

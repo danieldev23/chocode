@@ -137,9 +137,7 @@
           <div class="flex justify-between">
             <span class="text-gray-600">Mã giao dịch:</span>
             <div class="flex items-center space-x-1">
-              <span class="font-mono text-gray-800">{{
-                transactionRef
-              }}</span>
+              <span class="font-mono text-gray-800">{{ transactionRef }}</span>
               <Copy
                 class="w-3 h-3 text-gray-500 cursor-pointer hover:text-gray-700"
                 @click="copyTransactionId"
@@ -148,9 +146,7 @@
           </div>
           <div class="flex justify-between">
             <span class="text-gray-600">Thời gian:</span>
-            <span class="text-gray-800">{{
-              transactionTime
-            }}</span>
+            <span class="text-gray-800">{{ transactionTime }}</span>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-600">Phương thức:</span>
@@ -192,12 +188,14 @@
         >
           Hoàn tất
         </button>
-        <button
-          @click="viewHistory"
-          class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium text-sm hover:bg-gray-200 transition-colors"
+        <NuxtLink
+          :to="{
+            name: 'transaction-history',
+          }"
+          class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium text-sm hover:bg-gray-200 transition-colors text-center"
         >
           Xem lịch sử
-        </button>
+        </NuxtLink>
       </div>
     </div>
   </el-dialog>
@@ -206,7 +204,6 @@
 <script setup lang="ts">
 import { Coins, CheckCircle, X, ArrowUpRight, Copy } from "lucide-vue-next";
 import { useSocketPayment } from "@/composables/useSocketPayment";
-
 
 // Composables
 const { paymentData } = useSocketPayment();
@@ -229,13 +226,14 @@ const creditPoints = computed(() => {
   return Math.round(creditAmount.value / 1000);
 });
 
-
 const transactionRef = computed(() => {
-  return paymentData.value?.ref_no || 'N/A';
+  return paymentData.value?.ref_no || "N/A";
 });
 
 const transactionTime = computed(() => {
-  return paymentData.value?.transaction_date || new Date().toLocaleString('vi-VN');
+  return (
+    paymentData.value?.transaction_date || new Date().toLocaleString("vi-VN")
+  );
 });
 
 // Methods
@@ -243,13 +241,14 @@ const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("vi-VN").format(amount);
 };
 
-
 const showNotification = (data: any): void => {
   if (!data) return;
 
   ElNotification({
-    title: `💰 Giao dịch từ ${data.username || 'Unknown'}`,
-    message: `${formatCurrency(Number(data.credit_amount || 0))} ${data.currency || 'VNĐ'} - ${data.description || 'Nạp tiền thành công'}`,
+    title: `💰 Giao dịch từ ${data.username || "Unknown"}`,
+    message: `${formatCurrency(Number(data.credit_amount || 0))} ${
+      data.currency || "VNĐ"
+    } - ${data.description || "Nạp tiền thành công"}`,
     type: "success",
     position: "bottom-left",
     duration: 6000,
@@ -258,7 +257,7 @@ const showNotification = (data: any): void => {
 
 const startAnimations = (): void => {
   showConfetti.value = true;
-  
+
   // Delay amount animation for better UX
   setTimeout(() => {
     animateAmount.value = true;
@@ -271,17 +270,17 @@ const resetAnimations = (): void => {
 };
 
 const copyTransactionId = async (): Promise<void> => {
-  if (!transactionRef.value || transactionRef.value === 'N/A') {
-    ElMessage.warning('Không có mã giao dịch để sao chép');
+  if (!transactionRef.value || transactionRef.value === "N/A") {
+    ElMessage.warning("Không có mã giao dịch để sao chép");
     return;
   }
 
   try {
     await navigator.clipboard.writeText(transactionRef.value);
-    ElMessage.success('Đã sao chép mã giao dịch');
+    ElMessage.success("Đã sao chép mã giao dịch");
   } catch (error) {
-    console.error('Copy failed:', error);
-    ElMessage.error('Không thể sao chép mã giao dịch');
+    console.error("Copy failed:", error);
+    ElMessage.error("Không thể sao chép mã giao dịch");
   }
 };
 
@@ -303,22 +302,24 @@ watch(dialogPaymentSuccess, (newVal) => {
   }
 });
 
-watch(paymentData, async (newVal) => {
-  if (!newVal) return;
+watch(
+  paymentData,
+  async (newVal) => {
+    if (!newVal) return;
 
-  try {
-    
-    // Show dialog
-    dialogPaymentSuccess.value = true;
-    
-    // Show notification
-    showNotification(newVal);
-  } catch (error) {
-    console.error('Error handling payment data:', error);
-    ElMessage.error('Có lỗi xảy ra khi xử lý giao dịch');
-  }
-}, { deep: true });
+    try {
+      // Show dialog
+      dialogPaymentSuccess.value = true;
 
+      // Show notification
+      showNotification(newVal);
+    } catch (error) {
+      console.error("Error handling payment data:", error);
+      ElMessage.error("Có lỗi xảy ra khi xử lý giao dịch");
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>

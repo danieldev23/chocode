@@ -65,12 +65,12 @@ export class UserGateway implements OnGatewayConnection, OnGatewayDisconnect {
         lastActive: new Date(),
       };
       this.onlineUsers.push(user);
-      console.log(`✅ User ${JSON.stringify(data)} is online with socket ${client.id}`);
-
-      // Emit tới tất cả client để cập nhật trạng thái online
+      console.log(
+        `✅ User ${JSON.stringify(data)} is online with socket ${client.id}`,
+      );
       this.server.emit('user-status-changed', {
-        userId: user.userId,
-        username: user.username,
+        userId: data.user.userId,
+        username: data.user.username,
         online: true,
       });
     }

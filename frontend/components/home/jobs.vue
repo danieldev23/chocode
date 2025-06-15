@@ -25,7 +25,7 @@
     <!-- Job List or Empty State -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div
-        v-if="jobs.length === 0"
+        v-if="paginatedJobs.length === 0"
         class="text-center text-gray-500 py-2 col-span-full"
       >
         <SearchX class="w-8 h-8 mx-auto text-gray-400 mb-2" />
@@ -33,7 +33,7 @@
       </div>
 
       <div
-        v-for="job in jobs"
+        v-for="job in paginatedJobs"
         :key="job.id"
         class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition duration-300 mb-0"
       >
@@ -127,22 +127,26 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-center mt-6">
+
+    <!-- Pagination Component -->
+    <div v-if="jobs.length > 0" class="flex justify-center mt-6">
       <el-pagination
         v-model:current-page="currentPage"
         v-model:page-size="pageSize"
+        :page-sizes="[6, 12, 18, 24]"
         background
-        layout="prev, pager, next"
-        :total="totalItems"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="jobs.length"
         class="items-center"
-        @current-change="handlePageChange"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ElSkeleton, ElNotification } from "element-plus";
+import { ElSkeleton, ElNotification, ElMessage, ElMessageBox } from "element-plus";
 import {
   User,
   MapPin,
@@ -160,18 +164,21 @@ import {
 } from "lucide-vue-next";
 import { availableTags } from "@/types/tags";
 import type { JobPostingResponseDtoUpdate } from "~/interfaces/job.interface";
+
 const router = useRouter();
-defineProps<{
+
+// Props
+const props = defineProps<{
   jobs: JobPostingResponseDtoUpdate[];
   isLoading: boolean;
   title: string;
 }>();
 
+// Pagination state
+const currentPage = ref(1);
+const pageSize = ref(6); // Mặc định 6 job mỗi trang
 const input = ref("");
 const jobCategories = availableTags;
-const currentPage = ref(1);
-const pageSize = ref(10);
-const totalItems = ref(100);
 
 // Search state with default values
 const state = reactive({
@@ -180,15 +187,38 @@ const state = reactive({
   location: "",
 });
 
+// Computed property để lấy danh sách job theo trang hiện tại
+const paginatedJobs = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return props.jobs.slice(start, end);
+});
+
+// Handle page size change
+const handleSizeChange = (val: number) => {
+  pageSize.value = val;
+  currentPage.value = 1; 
+};
+
+// Handle current page change
+const handleCurrentChange = (val: number) => {
+  currentPage.value = val;
+  // Có thể scroll lên đầu trang khi chuyển trang
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// Legacy function for compatibility
 function handlePageChange(page: number) {
   currentPage.value = page;
-  fetchData();
+  handleCurrentChange(page);
 }
 
 function fetchData() {
   // Gọi API hoặc xử lý data tương ứng page hiện tại
   console.log("Fetching page", currentPage.value);
+  console.log("Page size", pageSize.value);
 }
+
 // Search handler with analytics tracking
 const handleSearch = () => {
   const params = new URLSearchParams();
@@ -200,11 +230,10 @@ const handleSearch = () => {
   if (state.location) params.append("dia-diem", state.location);
 
   router.push(`/tim-kiem-viec-lam?${params.toString()}`);
-
-  // Search logic implementation would go here
 };
 
 const { status } = useAuth();
+
 const formatCurrency = (value: number | null | undefined): string => {
   if (value === null || value === undefined) return "0 đ";
   return new Intl.NumberFormat("vi-VN").format(value * 1) + " đ";
@@ -229,7 +258,7 @@ const applyForJob = (jobId: number, jobTitle: string) => {
   }
   ElMessageBox.confirm(`Bạn chắc chắc muốn apply job ${jobTitle}`, {
     confirmButtonText: "Chắc chắn",
-    cancelButtonText: "Huỷ",
+    cancelButtonText: "Huỷ", 
     type: "warning",
   });
 };
@@ -251,6 +280,13 @@ const saveJob = (jobId: number) => {
   });
   console.log("Job saved:", jobId);
 };
+
+// Watch for jobs change and reset pagination if needed
+watch(() => props.jobs, (newJobs) => {
+  if (newJobs.length > 0 && currentPage.value > Math.ceil(newJobs.length / pageSize.value)) {
+    currentPage.value = 1;
+  }
+});
 </script>
 
 <style>
@@ -261,5 +297,17 @@ const saveJob = (jobId: number) => {
     rgba(0, 163, 217, 1) 51.9%,
     rgba(0, 194, 226, 1) 81%
   );
+}
+
+/* Custom pagination styles */
+.el-pagination {
+  --el-pagination-font-size: 14px;
+  --el-pagination-bg-color: #f4f4f5;
+  --el-pagination-text-color: #606266;
+  --el-pagination-border-radius: 4px;
+  --el-pagination-button-color: #606266;
+  --el-pagination-button-width: 32px;
+  --el-pagination-button-height: 32px;
+  --el-pagination-item-gap: 4px;
 }
 </style>

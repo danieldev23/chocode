@@ -8,9 +8,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     transports: ["websocket"],
   });
 
-  socket.on("connect", () => {
-   
-      console.log("✅ Connected to server");
-  });
+  socket.on("connect", () => {});
   nuxtApp.provide("socket", socket);
 });

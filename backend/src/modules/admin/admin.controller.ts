@@ -8,6 +8,7 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post('create-notification')
+  
   @ApiBody({ type: CreateNotificationDto })
   async createNotification(
     @Body() createNotificationDto: CreateNotificationDto,

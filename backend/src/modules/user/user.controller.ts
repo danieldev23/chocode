@@ -7,12 +7,13 @@ import {
   Request,
   Body,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { AllUsersResponse } from './response/get-users.response';
-import { CreateTransactionDto } from './dto/create-user.dto';
+import { CreateTransactionDto, UpdateUserInfoDto } from './dto/create-user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -22,10 +23,30 @@ export class UserController {
   findAll(): Promise<AllUsersResponse[]> {
     return this.userService.findAll();
   }
+  @Get('transaction-history')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  getTransactionHistory(@Request() req: any) {
+    const username = req.user?.username;
+    if (!username) throw new UnauthorizedException('User not authenticated');
 
+    return this.userService.getTransactionHistory(username);
+  }
   @Post('add-balance')
   addBalance(@Body() transactionDto: CreateTransactionDto) {
-    return this.userService.checkTransactionHistoryAndAddBalanceUser(transactionDto);
+    return this.userService.checkTransactionHistoryAndAddBalanceUser(
+      transactionDto,
+    );
+  }
+
+  @Patch('update/info')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiBody({ type: UpdateUserInfoDto })
+  updateUserInfo(@Request() req, @Body() updateUserInfoDto: UpdateUserInfoDto) {
+    const username = req.user?.username;
+    if (!username) throw new UnauthorizedException('User not authenticated');
+    return this.userService.updateUserInfo(username, updateUserInfoDto);
   }
 
   @Patch('/ban/:id')
