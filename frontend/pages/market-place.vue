@@ -1,187 +1,333 @@
 <template>
-  <div class="bg-gray-50">
-    <div class="min-h-screen bg-gray-50 mx-4 md:mx-16 lg:mx-32 xl:mx-[12rem]">
+  <div class="min-h-screen bg-gray-25 pt-20 pb-8">
+    <div class="mx-[1rem] md:mx-16 lg:mx-32 xl:mx-[12.5rem]">
       <!-- Hero Section -->
-      <div class="relative h-[50vh] bg-gradient-to-r from-gray-900 to-gray-800">
-        <div class="absolute inset-0 opacity-20 rounded-lg">
-          <div
-            class="h-full w-full"
-            style="
-              background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+CiAgPHBhdGggZD0iTTAgMGg2MHY2MEgweiIgZmlsbD0ibm9uZSIvPgogIDxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiIGZpbGw9Im5vbmUiLz4KICA8cGF0aCBkPSJNMzAgMEwwIDMwaDYwTDMwIDB6TTMwIDYwTDAgMzBoNjBMMzAgNjB6IiBmaWxsPSJjdXJyZW50Q29sb3IiLz4KPC9zdmc+');
-              background-repeat: repeat;
-            "
-          ></div>
-        </div>
+      <div
+        class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden mb-8"
+      >
         <div
-          class="absolute inset-0 flex items-center justify-center text-white px-4"
+          class="relative bg-gradient-to-r from-primary to-blue-800 px-6 py-12 sm:px-12 sm:py-16"
         >
-          <div class="text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Code Market Hub</h1>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
-              Discover quality source code, websites, and academic projects
+          <div class="absolute inset-0 bg-blue-900 opacity-10"></div>
+          <div class="relative text-center text-white">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Code Market Hub
+            </h1>
+            <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-8">
+              Khám phá các dự án source code chất lượng cao, website và đồ án
+              học tập
             </p>
-            <el-input
-              v-model="searchQuery"
-              placeholder="Search for projects, source code, or specific technologies..."
-              class="max-w-2xl mx-auto search-dark"
-              :prefix-icon="Search"
-              size="large"
-            />
+
+            <div class="max-w-2xl mx-auto">
+              <div class="relative">
+                <Search
+                  class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-300"
+                />
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  placeholder="Tìm kiếm dự án, source code, công nghệ..."
+                  class="w-full pl-12 pr-4 py-4 bg-white bg-opacity-20 border border-blue-300 rounded-lg text-white placeholder-blue-200 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 backdrop-blur-sm"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Main Content -->
-      <div class="container mx-auto py-8">
-        <!-- Filters -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <el-select
-              v-model="categoryFilter"
-              placeholder="Project Type"
-              size="large"
-              class="w-full"
-            >
-              <el-option label="All Types" value="" />
-              <el-option label="Website Templates" value="website" />
-              <el-option label="Academic Projects" value="academic" />
-              <el-option label="Scripts & Tools" value="scripts" />
-              <el-option label="Mobile Apps" value="mobile" />
-              <el-option label="APIs & Backend" value="backend" />
-            </el-select>
+      <!-- Filters -->
+      <div
+        class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-8"
+      >
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <select
+            v-model="categoryFilter"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Tất cả loại dự án</option>
+            <option value="website">Website Templates</option>
+            <option value="academic">Đồ án học tập</option>
+            <option value="scripts">Scripts & Tools</option>
+            <option value="mobile">Mobile Apps</option>
+            <option value="backend">APIs & Backend</option>
+          </select>
 
-            <el-select
-              v-model="techFilter"
-              placeholder="Technology"
-              size="large"
-              class="w-full"
-            >
-              <el-option label="All Technologies" value="" />
-              <el-option label="PHP" value="php" />
-              <el-option label="Python" value="python" />
-              <el-option label="JavaScript" value="javascript" />
-              <el-option label="Java" value="java" />
-              <el-option label="React" value="react" />
-              <el-option label="Vue.js" value="vue" />
-            </el-select>
+          <select
+            v-model="techFilter"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Tất cả công nghệ</option>
+            <option value="php">PHP</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="java">Java</option>
+            <option value="react">React</option>
+            <option value="vue">Vue.js</option>
+          </select>
 
-            <el-select
-              v-model="priceFilter"
-              placeholder="Price Range"
-              size="large"
-              class="w-full"
-            >
-              <el-option label="All Prices" value="" />
-              <el-option label="Under 500k" value="under_500" />
-              <el-option label="500k - 1M" value="500_1m" />
-              <el-option label="1M - 2M" value="1m_2m" />
-              <el-option label="Over 2M" value="over_2m" />
-            </el-select>
+          <select
+            v-model="priceFilter"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Tất cả mức giá</option>
+            <option value="under_500">Dưới 500k</option>
+            <option value="500_1m">500k - 1M</option>
+            <option value="1m_2m">1M - 2M</option>
+            <option value="over_2m">Trên 2M</option>
+          </select>
 
-            <el-select
-              v-model="sortBy"
-              placeholder="Sort By"
-              size="large"
-              class="w-full"
+          <select
+            v-model="sortBy"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="newest">Mới nhất</option>
+            <option value="popular">Phổ biến nhất</option>
+            <option value="price_asc">Giá: Thấp đến Cao</option>
+            <option value="price_desc">Giá: Cao đến Thấp</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="flex items-center justify-between mb-6">
+        <p class="text-gray-600">
+          Tìm thấy
+          <span class="font-semibold text-gray-900">{{
+            filteredProjects.length
+          }}</span>
+          dự án
+        </p>
+        <div class="flex items-center space-x-2">
+          <button
+            @click="viewMode = 'grid'"
+            class="p-2 rounded-lg transition-colors"
+            :class="
+              viewMode === 'grid'
+                ? 'bg-blue-100 text-primary'
+                : 'text-gray-400 hover:text-gray-600'
+            "
+          >
+            <Grid3x3 class="w-5 h-5" />
+          </button>
+          <button
+            @click="viewMode = 'list'"
+            class="p-2 rounded-lg transition-colors"
+            :class="
+              viewMode === 'list'
+                ? 'bg-blue-100 text-primary'
+                : 'text-gray-400 hover:text-gray-600'
+            "
+          >
+            <List class="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Project Grid/List -->
+      <div
+        v-if="viewMode === 'grid'"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+      >
+        <div
+          v-for="project in filteredProjects"
+          :key="project.id"
+          class="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+        >
+          <!-- Project Preview -->
+          <div class="relative h-48">
+            <img
+              :src="project.image"
+              :alt="project.title"
+              class="w-full h-full object-cover"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
             >
-              <el-option label="Newest" value="newest" />
-              <el-option label="Most Popular" value="popular" />
-              <el-option label="Price: Low to High" value="price_asc" />
-              <el-option label="Price: High to Low" value="price_desc" />
-            </el-select>
+              <div class="absolute bottom-3 left-3 right-3">
+                <div class="flex flex-wrap gap-1 mb-2">
+                  <span
+                    v-for="tech in project.technologies"
+                    :key="tech"
+                    class="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium"
+                  >
+                    {{ tech }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hot Badge -->
+            <div v-if="project.isHot" class="absolute top-3 right-3">
+              <span
+                class="inline-flex items-center px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full"
+              >
+                <Flame class="w-3 h-3 mr-1" />
+                Hot
+              </span>
+            </div>
+          </div>
+
+          <!-- Project Content -->
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex-1">
+                <h3
+                  class="text-lg font-semibold text-gray-900 line-clamp-2 mb-1"
+                >
+                  {{ project.title }}
+                </h3>
+                <p class="text-sm text-gray-600">{{ project.type }}</p>
+              </div>
+              <div class="text-right ml-3">
+                <span class="text-xl font-bold text-primary">
+                  {{ formatPrice(project.price) }}
+                </span>
+              </div>
+            </div>
+
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+              {{ project.description }}
+            </p>
+
+            <!-- Project Stats -->
+            <div
+              class="flex items-center justify-between text-sm text-gray-500 mb-4"
+            >
+              <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                  <Download class="w-4 h-4 mr-1" />
+                  <span>{{ project.downloads }}+</span>
+                </div>
+                <div class="flex items-center">
+                  <Star class="w-4 h-4 mr-1 text-yellow-400" />
+                  <span>{{ project.rating }}</span>
+                  <span class="ml-1">({{ project.reviews }})</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-2">
+              <button
+                @click="viewProject(project)"
+                class="flex-1 bg-primary hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                Xem chi tiết
+              </button>
+              <button
+                @click="previewDemo(project)"
+                class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <ExternalLink class="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Project Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div
-            v-for="project in filteredProjects"
-            :key="project.id"
-            class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-          >
-            <!-- Project Preview -->
-            <div class="relative h-56">
+      <!-- List View -->
+      <div v-else class="space-y-4 mb-8">
+        <div
+          v-for="project in filteredProjects"
+          :key="project.id"
+          class="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow p-6"
+        >
+          <div class="flex flex-col sm:flex-row gap-6">
+            <!-- Project Image -->
+            <div
+              class="relative w-full sm:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0"
+            >
               <img
                 :src="project.image"
                 :alt="project.title"
                 class="w-full h-full object-cover"
               />
-              <div
-                class="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"
-              >
-                <div class="absolute bottom-4 left-4 right-4">
-                  <div class="flex gap-2 mb-2">
-                    <span
-                      v-for="tech in project.technologies"
-                      :key="tech"
-                      class="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white"
-                    >
-                      {{ tech }}
-                    </span>
-                  </div>
-                </div>
+              <div v-if="project.isHot" class="absolute top-2 right-2">
+                <span
+                  class="inline-flex items-center px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full"
+                >
+                  <Flame class="w-3 h-3 mr-1" />
+                  Hot
+                </span>
               </div>
             </div>
 
-            <div class="p-6">
-              <div class="flex items-start justify-between mb-4">
+            <!-- Project Info -->
+            <div class="flex-1">
+              <div class="flex items-start justify-between mb-3">
                 <div>
-                  <h3 class="text-lg font-semibold mb-1 line-clamp-2">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-1">
                     {{ project.title }}
                   </h3>
-                  <p class="text-gray-500 text-sm">{{ project.type }}</p>
+                  <p class="text-gray-600">{{ project.type }}</p>
                 </div>
-                <span class="text-xl font-bold text-blue-600">{{
-                  formatPrice(project.price)
-                }}</span>
-              </div>
-
-              <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                {{ project.description }}
-              </p>
-
-              <div class="border-t pt-4">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <el-icon><Download /></el-icon>
-                    <span class="text-sm text-gray-500"
-                      >{{ project.downloads }}+ downloads</span
-                    >
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <el-rate
-                      v-model="project.rating"
-                      disabled
-                      size="small"
-                      text-color="#ff9900"
-                    />
-                    <span class="text-sm text-gray-500"
-                      >({{ project.reviews }})</span
-                    >
-                  </div>
+                <div class="text-right">
+                  <span class="text-2xl font-bold text-primary">
+                    {{ formatPrice(project.price) }}
+                  </span>
                 </div>
               </div>
 
-              <div class="flex gap-2 mt-4">
-                <el-button
-                  type="primary"
-                  @click="viewProject(project)"
-                  class="flex-1"
+              <p class="text-gray-600 mb-4">{{ project.description }}</p>
+
+              <!-- Technologies -->
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span
+                  v-for="tech in project.technologies"
+                  :key="tech"
+                  class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-md"
                 >
-                  View Details
-                </el-button>
-                <el-button @click="previewDemo(project)"> Live Demo </el-button>
+                  {{ tech }}
+                </span>
+              </div>
+
+              <!-- Stats and Actions -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <div class="flex items-center">
+                    <Download class="w-4 h-4 mr-1" />
+                    <span>{{ project.downloads }}+ downloads</span>
+                  </div>
+                  <div class="flex items-center">
+                    <Star class="w-4 h-4 mr-1 text-yellow-400" />
+                    <span
+                      >{{ project.rating }} ({{
+                        project.reviews
+                      }}
+                      reviews)</span
+                    >
+                  </div>
+                </div>
+
+                <div class="flex gap-2">
+                  <button
+                    @click="previewDemo(project)"
+                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center"
+                  >
+                    <ExternalLink class="w-4 h-4 mr-2" />
+                    Demo
+                  </button>
+                  <button
+                    @click="viewProject(project)"
+                    class="px-6 py-2 bg-primary hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                  >
+                    Xem chi tiết
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Load More -->
-        <div class="text-center mt-8">
-          <el-button type="primary" plain size="large" @click="loadMore">
-            Load More Projects
-          </el-button>
-        </div>
+      <!-- Load More -->
+      <div class="text-center">
+        <button
+          @click="loadMore"
+          class="px-8 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+        >
+          Tải thêm dự án
+        </button>
       </div>
     </div>
   </div>
@@ -189,13 +335,22 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { Search, Download } from "@element-plus/icons-vue";
+import {
+  Search,
+  Download,
+  Star,
+  ExternalLink,
+  Flame,
+  Grid3x3,
+  List,
+} from "lucide-vue-next";
 
 const searchQuery = ref("");
 const categoryFilter = ref("");
 const techFilter = ref("");
 const priceFilter = ref("");
 const sortBy = ref("newest");
+const viewMode = ref("grid");
 
 const projects = ref([
   {
@@ -210,6 +365,7 @@ const projects = ref([
     description:
       "Complete e-commerce solution with inventory management, order processing, and customer management.",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
+    isHot: true,
   },
   {
     id: 2,
@@ -223,6 +379,7 @@ const projects = ref([
     description:
       "Comprehensive student management system with attendance, grades, and course management.",
     image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
+    isHot: false,
   },
   {
     id: 3,
@@ -236,6 +393,7 @@ const projects = ref([
     description:
       "Feature-rich real estate website with property listing, search, and agent management.",
     image: "https://images.unsplash.com/photo-1522542550221-31fd19575a2d",
+    isHot: true,
   },
   {
     id: 4,
@@ -249,6 +407,7 @@ const projects = ref([
     description:
       "Complete HMS with patient records, appointment scheduling, and billing system.",
     image: "https://images.unsplash.com/photo-1537432376769-00f5c2f4c8d2",
+    isHot: false,
   },
   {
     id: 5,
@@ -262,6 +421,7 @@ const projects = ref([
     description:
       "Modern LMS with course creation, student progress tracking, and assessment tools.",
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+    isHot: true,
   },
   {
     id: 6,
@@ -275,6 +435,7 @@ const projects = ref([
     description:
       "Complete inventory system with barcode scanning, stock alerts, and reporting.",
     image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4",
+    isHot: false,
   },
 ]);
 

@@ -1,276 +1,432 @@
 <template>
-  <div
-    class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
-  >
-    <!-- Hero Section with Animated Background -->
-    <section class="relative overflow-hidden">
-      <div class="absolute inset-0">
-        <div
-          class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 mix-blend-overlay"
-        ></div>
-        <div
-          class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iLjAyIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"
-        ></div>
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"
-        ></div>
-      </div>
-      <div class="relative container mx-auto px-4 py-20">
-        <div class="max-w-4xl mx-auto text-center">
-          <h1
-            class="text-5xl md:text-7xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 animate-gradient"
-          >
-            Code Masters
-          </h1>
-          <p class="text-xl md:text-2xl text-gray-300 mb-8">
-            Discover the elite developers shaping our community's future
-          </p>
-          <div class="flex flex-wrap justify-center gap-4 mb-12">
-            <span
-              class="px-6 py-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center backdrop-blur-sm hover:bg-blue-500/20 transition-all duration-300"
+  <div class="min-h-screen bg-gray-25 pt-20 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Hero Section -->
+      <div
+        class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 sm:p-8 mb-8"
+      >
+        <div class="text-center max-w-4xl mx-auto">
+          <div class="flex items-center justify-center mb-6">
+            <div
+              class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center mr-4"
             >
-              <AwardIcon class="mr-2 h-5 w-5" /> Top Performers
-            </span>
-            <span
-              class="px-6 py-3 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center backdrop-blur-sm hover:bg-purple-500/20 transition-all duration-300"
-            >
-              <UsersIcon class="mr-2 h-5 w-5" /> Community Leaders
-            </span>
-            <span
-              class="px-6 py-3 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center backdrop-blur-sm hover:bg-pink-500/20 transition-all duration-300"
-            >
-              <StarIcon class="mr-2 h-5 w-5" /> Rising Stars
-            </span>
+              <AwardIcon class="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                Bảng xếp hạng Developer
+              </h1>
+              <p class="text-lg text-gray-600">
+                Khám phá những developer xuất sắc trong cộng đồng ChoCode
+              </p>
+            </div>
           </div>
+
+          <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <div
+              class="flex items-center px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg"
+            >
+              <AwardIcon class="w-5 h-5 text-blue-600 mr-2" />
+              <span class="text-blue-700 font-medium">Top Performers</span>
+            </div>
+            <div
+              class="flex items-center px-4 py-2 bg-purple-50 border border-purple-200 rounded-lg"
+            >
+              <UsersIcon class="w-5 h-5 text-purple-600 mr-2" />
+              <span class="text-purple-700 font-medium">Community Leaders</span>
+            </div>
+            <div
+              class="flex items-center px-4 py-2 bg-pink-50 border border-pink-200 rounded-lg"
+            >
+              <StarIcon class="w-5 h-5 text-pink-600 mr-2" />
+              <span class="text-pink-700 font-medium">Rising Stars</span>
+            </div>
+          </div>
+
           <button
             @click="showNewUserDialog = true"
-            class="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl font-semibold text-white shadow-lg hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-colors flex items-center mx-auto"
           >
-            <div
-              class="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"
-            ></div>
-            <div class="relative flex items-center">
-              <UserPlusIcon class="mr-2 h-5 w-5" /> Nominate a Developer
-            </div>
+            <UserPlusIcon class="w-5 h-5 mr-2" />
+            Đề cử Developer
           </button>
         </div>
       </div>
-    </section>
 
-    <!-- Advanced Search and Filters -->
-    <section class="container mx-auto px-4 -mt-8 mb-8">
+      <!-- Search and Filters -->
       <div
-        class="bg-gray-800/50 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-gray-700/50"
+        class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-8"
       >
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Search -->
           <div class="relative">
+            <Search
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+            />
             <input
               v-model="searchQuery"
-              placeholder="Search developers..."
-              class="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-900/50 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <SearchIcon
-              class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+              placeholder="Tìm kiếm developer..."
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
           <!-- Tag Filter -->
-          <div class="relative">
-            <select
-              v-model="filterTag"
-              class="w-full px-4 py-2 rounded-xl bg-gray-900/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Tags</option>
-              <option v-for="tag in uniqueTags" :key="tag" :value="tag">
-                {{ tag }}
-              </option>
-            </select>
-          </div>
+          <select
+            v-model="filterTag"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Tất cả tags</option>
+            <option v-for="tag in uniqueTags" :key="tag" :value="tag">
+              {{ tag }}
+            </option>
+          </select>
 
           <!-- Sort By -->
-          <div class="relative">
-            <select
-              v-model="sortBy"
-              class="w-full px-4 py-2 rounded-xl bg-gray-900/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="score">Sort by Score</option>
-              <option value="solutions">Sort by Solutions</option>
-              <option value="achievements">Sort by Achievements</option>
-              <option value="rankChange">Sort by Rank Change</option>
-            </select>
-          </div>
+          <select
+            v-model="sortBy"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="score">Sắp xếp theo điểm</option>
+            <option value="solutions">Sắp xếp theo số bài giải</option>
+            <option value="achievements">Sắp xếp theo thành tích</option>
+            <option value="rankChange">Sắp xếp theo thay đổi hạng</option>
+          </select>
 
           <!-- Sort Order -->
-          <div class="relative">
-            <select
-              v-model="sortOrder"
-              class="w-full px-4 py-2 rounded-xl bg-gray-900/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="desc">Highest First</option>
-              <option value="asc">Lowest First</option>
-            </select>
-          </div>
+          <select
+            v-model="sortOrder"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="desc">Cao nhất trước</option>
+            <option value="asc">Thấp nhất trước</option>
+          </select>
         </div>
 
         <!-- Active Filters -->
         <div v-if="hasActiveFilters" class="mt-4 flex flex-wrap gap-2">
           <div
             v-if="searchQuery"
-            class="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm flex items-center"
+            class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm flex items-center"
           >
-            Search: {{ searchQuery }}
-            <button @click="searchQuery = ''" class="ml-2 hover:text-blue-300">
-              <XIcon class="h-4 w-4" />
+            Tìm kiếm: {{ searchQuery }}
+            <button @click="searchQuery = ''" class="ml-2 hover:text-blue-900">
+              <X class="w-4 h-4" />
             </button>
           </div>
           <div
             v-if="filterTag"
-            class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm flex items-center"
+            class="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm flex items-center"
           >
             Tag: {{ filterTag }}
-            <button @click="filterTag = ''" class="ml-2 hover:text-purple-300">
-              <XIcon class="h-4 w-4" />
+            <button @click="filterTag = ''" class="ml-2 hover:text-purple-900">
+              <X class="w-4 h-4" />
             </button>
           </div>
           <button
             @click="clearFilters"
-            class="px-3 py-1 rounded-full bg-gray-700/50 text-gray-300 text-sm hover:bg-gray-700/70 transition-colors"
+            class="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-sm hover:bg-gray-200 transition-colors"
           >
-            Clear All
+            Xóa tất cả
           </button>
         </div>
       </div>
-    </section>
 
-    <!-- Developer List -->
-    <section class="container mx-auto px-4 pb-20">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Top 3 Rankings -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div
-          v-for="developer in filteredAndSortedDevelopers"
+          v-for="(developer, index) in topThreeDevelopers"
           :key="developer.id"
-          class="group bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300"
+          class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 text-center relative overflow-hidden"
+          :class="{
+            'ring-2 ring-yellow-400': index === 0,
+            'ring-2 ring-gray-400': index === 1,
+            'ring-2 ring-orange-400': index === 2,
+          }"
         >
-          <div class="flex items-center gap-4">
-            <div class="relative">
-              <img
-                :src="developer.avatar || 'https://via.placeholder.com/64'"
-                :alt="developer.fullName"
-                class="w-16 h-16 rounded-full object-cover border-2 border-gray-700 group-hover:border-blue-500/50 transition-colors"
-              />
-              <div
-                class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold"
-              >
-                {{ developer.rank }}
-              </div>
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-lg font-semibold text-white truncate">
-                {{ developer.fullName }}
-              </h3>
-              <p class="text-sm text-gray-400">{{ developer.username }}</p>
-              <div class="flex flex-wrap gap-2 mt-2">
-                <span
-                  v-for="tag in developer.tags"
-                  :key="tag"
-                  class="px-2 py-1 text-xs rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                >
-                  {{ tag }}
-                </span>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-2xl font-bold text-white">{{ developer.score }}</p>
-              <p class="text-sm text-gray-400">points</p>
+          <!-- Rank Badge -->
+          <div
+            class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
+            :class="{
+              'bg-yellow-500': index === 0,
+              'bg-gray-500': index === 1,
+              'bg-orange-500': index === 2,
+            }"
+          >
+            {{ index + 1 }}
+          </div>
+
+          <!-- Avatar -->
+          <div class="relative mx-auto mb-4">
+            <img
+              :src="developer.avatar || 'https://via.placeholder.com/96'"
+              :alt="developer.fullName"
+              class="w-20 h-20 rounded-full object-cover border-4 mx-auto"
+              :class="{
+                'border-yellow-400': index === 0,
+                'border-gray-400': index === 1,
+                'border-orange-400': index === 2,
+              }"
+            />
+            <div
+              v-if="index === 0"
+              class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center"
+            >
+              <Crown class="w-4 h-4 text-white" />
             </div>
           </div>
-          <div class="mt-4 pt-4 border-t border-gray-700/50">
-            <div class="flex justify-between items-center text-sm">
-              <div class="flex items-center gap-2">
-                <CodeIcon class="w-4 h-4 text-green-400" />
-                <span class="text-gray-300"
-                  >{{ developer.solutions }} solutions</span
-                >
-              </div>
-              <div class="flex items-center gap-2">
-                <StarIcon class="w-4 h-4 text-yellow-400" />
-                <span class="text-gray-300"
-                  >{{ developer.achievements }} achievements</span
-                >
-              </div>
-              <div
-                class="flex items-center gap-2"
+
+          <!-- Developer Info -->
+          <h3 class="text-lg font-bold text-gray-900 mb-1">
+            {{ developer.fullName }}
+          </h3>
+          <p class="text-gray-600 text-sm mb-3">@{{ developer.username }}</p>
+
+          <!-- Score -->
+          <div class="mb-4">
+            <p class="text-3xl font-bold text-gray-900 mb-1">
+              {{ developer.score || "0" }}
+            </p>
+            <p class="text-gray-500 text-sm">điểm</p>
+          </div>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap justify-center gap-1 mb-4">
+            <span
+              v-for="tag in (developer.tags || ['Frontend']).slice(0, 2)"
+              :key="tag"
+              class="px-2 py-1 text-xs rounded-md bg-blue-100 text-blue-700"
+            >
+              {{ tag }}
+            </span>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-2 text-center text-xs">
+            <div>
+              <p class="font-semibold text-gray-900">
+                {{ developer.solutions || 0 }}
+              </p>
+              <p class="text-gray-500">Bài giải</p>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-900">
+                {{ developer.achievements || 0 }}
+              </p>
+              <p class="text-gray-500">Thành tích</p>
+            </div>
+            <div>
+              <p
+                class="font-semibold"
                 :class="{
-                  'text-green-400': developer.rankChange > 0,
-                  'text-red-400': developer.rankChange < 0,
-                  'text-gray-400': developer.rankChange === 0,
+                  'text-green-600': (developer.rankChange || 0) > 0,
+                  'text-red-600': (developer.rankChange || 0) < 0,
+                  'text-gray-600': (developer.rankChange || 0) === 0,
                 }"
               >
-                <TrendingUpIcon class="w-4 h-4" />
-                <span
-                  >{{ developer.rankChange > 0 ? "+" : ""
-                  }}{{ developer.rankChange }}</span
-                >
-              </div>
+                {{ (developer.rankChange || 0) > 0 ? "+" : ""
+                }}{{ developer.rankChange || 0 }}
+              </p>
+              <p class="text-gray-500">Thay đổi</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- No Results -->
+      <!-- Developer List -->
       <div
-        v-if="filteredAndSortedDevelopers.length === 0"
-        class="text-center py-12"
+        class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden"
       >
-        <div class="text-gray-400 text-lg mb-4">No developers found</div>
-        <button
-          @click="clearFilters"
-          class="px-4 py-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors"
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Tất cả Developers</h2>
+        </div>
+
+        <div class="divide-y divide-gray-200">
+          <div
+            v-for="(developer, index) in paginatedDevelopers"
+            :key="developer.id"
+            class="p-6 hover:bg-gray-50 transition-colors"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <!-- Rank -->
+                <div class="text-2xl font-bold text-gray-400 w-8 text-center">
+                  {{ index + 4 }}
+                </div>
+
+                <!-- Avatar -->
+                <div class="relative">
+                  <img
+                    :src="developer.avatar || 'https://via.placeholder.com/64'"
+                    :alt="developer.fullName"
+                    class="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                  />
+                  <div
+                    v-if="developer.active"
+                    class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"
+                  ></div>
+                </div>
+
+                <!-- Developer Info -->
+                <div class="flex-1">
+                  <h3 class="text-lg font-semibold text-gray-900">
+                    {{ developer.fullName }}
+                  </h3>
+                  <p class="text-gray-600">@{{ developer.username }}</p>
+
+                  <!-- Bio -->
+                  <p
+                    v-if="developer.bio"
+                    class="text-sm text-gray-500 mt-1 line-clamp-1"
+                  >
+                    {{ developer.bio }}
+                  </p>
+
+                  <!-- Tags -->
+                  <div class="flex flex-wrap gap-2 mt-2">
+                    <span
+                      v-for="tag in (developer.tags || ['Developer']).slice(
+                        0,
+                        3
+                      )"
+                      :key="tag"
+                      class="px-2 py-1 text-xs rounded-md bg-blue-100 text-blue-700"
+                    >
+                      {{ tag }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stats -->
+              <div class="text-right">
+                <p class="text-2xl font-bold text-gray-900">
+                  {{ developer.score || "0" }}
+                </p>
+                <p class="text-sm text-gray-500">điểm</p>
+
+                <div
+                  class="flex items-center justify-end space-x-4 mt-2 text-sm"
+                >
+                  <div class="flex items-center text-gray-600">
+                    <Code class="w-4 h-4 mr-1" />
+                    <span>{{ developer.solutions || 0 }}</span>
+                  </div>
+                  <div class="flex items-center text-gray-600">
+                    <StarIcon class="w-4 h-4 mr-1" />
+                    <span>{{ developer.achievements || 0 }}</span>
+                  </div>
+                  <div
+                    class="flex items-center"
+                    :class="{
+                      'text-green-600': (developer.rankChange || 0) > 0,
+                      'text-red-600': (developer.rankChange || 0) < 0,
+                      'text-gray-600': (developer.rankChange || 0) === 0,
+                    }"
+                  >
+                    <TrendingUp class="w-4 h-4 mr-1" />
+                    <span>
+                      {{ (developer.rankChange || 0) > 0 ? "+" : ""
+                      }}{{ developer.rankChange || 0 }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="px-6 py-4 border-t border-gray-200">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-700">
+              Hiển thị {{ (currentPage - 1) * pageSize + 1 }} đến
+              {{ Math.min(currentPage * pageSize, remainingDevelopers.length) }}
+              trong tổng số {{ remainingDevelopers.length }} developers
+            </p>
+            <div class="flex space-x-2">
+              <button
+                @click="currentPage > 1 && currentPage--"
+                :disabled="currentPage === 1"
+                class="px-3 py-2 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Trước
+              </button>
+              <button
+                @click="currentPage < totalPages && currentPage++"
+                :disabled="currentPage === totalPages"
+                class="px-3 py-2 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Sau
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Results -->
+        <div
+          v-if="filteredAndSortedDevelopers.length === 0"
+          class="text-center py-12"
         >
-          Clear Filters
-        </button>
+          <UserX class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">
+            Không tìm thấy developer
+          </h3>
+          <p class="text-gray-500 mb-4">
+            Thử thay đổi tiêu chí tìm kiếm hoặc bộ lọc
+          </p>
+          <button
+            @click="clearFilters"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Xóa bộ lọc
+          </button>
+        </div>
       </div>
-    </section>
+    </div>
 
     <!-- New User Dialog -->
     <el-dialog
       v-model="showNewUserDialog"
-      title="Nominate a Developer"
+      title="Đề cử Developer"
       width="500px"
-      class="ranking-dialog"
+      class="evergreen-dialog"
     >
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1"
-            >Developer Name</label
-          >
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Tên Developer
+          </label>
           <input
             type="text"
             v-model="newUser.name"
-            class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Nhập tên developer"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1"
-            >Username</label
-          >
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Username
+          </label>
           <input
             type="text"
             v-model="newUser.username"
-            class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Nhập username"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1"
-            >Tags</label
-          >
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Tags
+          </label>
           <el-select
             v-model="newUser.tags"
             multiple
             filterable
             allow-create
             default-first-option
-            placeholder="Select or create tags"
+            placeholder="Chọn hoặc tạo tags"
             class="w-full"
           >
             <el-option
@@ -282,10 +438,11 @@
           </el-select>
         </div>
       </div>
+
       <template #footer>
-        <div class="flex justify-end gap-3">
-          <el-button @click="showNewUserDialog = false">Cancel</el-button>
-          <el-button type="primary" @click="submitNewUser">Submit</el-button>
+        <div class="flex justify-end space-x-3">
+          <el-button @click="showNewUserDialog = false">Hủy</el-button>
+          <el-button type="primary" @click="submitNewUser">Gửi đề cử</el-button>
         </div>
       </template>
     </el-dialog>
@@ -299,11 +456,12 @@ import {
   UsersIcon,
   StarIcon,
   UserPlusIcon,
-  SearchIcon,
-  CodeIcon,
-  TrendingUpIcon,
-  CrownIcon,
-  XIcon,
+  Search,
+  Code,
+  TrendingUp,
+  Crown,
+  UserX,
+  X,
 } from "lucide-vue-next";
 
 // State
@@ -312,138 +470,49 @@ const searchQuery = ref("");
 const filterTag = ref("");
 const sortBy = ref("score");
 const sortOrder = ref("desc");
+const currentPage = ref(1);
+const pageSize = ref(10);
 
-// Mock data - Replace with actual API calls
+// Transform existing developers data to match new structure
 const developers = ref([
   {
     id: 1,
     username: "305955602",
     fullName: "Huy Đặng Quốc",
     active: true,
-    score: "20.000",
+    score: "20000",
     level: null,
     avatar:
       "https://lh3.googleusercontent.com/a/ACg8ocIPZmtqHKB3G1sXJIeblWjNN0m-QTPxD9AeNJgd31oAGjE6AA8=s96-c",
     bio: null,
+    tags: ["Frontend", "React"],
+    solutions: 45,
+    achievements: 12,
+    rankChange: 2,
+    rank: 1,
     created_at: "2025-05-21T16:04:43.381Z",
     updated_at: "2025-05-25T18:17:32.854Z",
   },
-  {
-    id: 5,
-    username: "441884169",
-    fullName: "Đặng Quốc Huy",
+  // Transform other developers similarly
+  ...Array.from({ length: 9 }, (_, i) => ({
+    id: i + 2,
+    username: `developer${i + 2}`,
+    fullName: `Developer ${i + 2}`,
     active: true,
-    score: null,
+    score: `${Math.floor(Math.random() * 15000) + 1000}`,
     level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocJ2tsNly6pKGxhoXGZQXlO2OiA-JkPFVh8avFFMyFYgKCoTkA_a=s96-c",
-    bio: "Là 1 thằng Coder thích code mọi thứ trên đời 🐧",
-    created_at: "2025-05-24T06:16:44.530Z",
-    updated_at: "2025-06-16T15:14:23.850Z",
-  },
-  {
-    id: 6,
-    username: "420314974056174",
-    fullName: "Đặng Quốc Huy",
-    active: true,
-    score: null,
-    level: null,
-    avatar: null,
-    bio: null,
-    created_at: "2025-05-24T21:00:00.736Z",
-    updated_at: "2025-05-24T21:00:00.736Z",
-  },
-  {
-    id: 7,
-    username: "382729337",
-    fullName: "Đặng Quốc Huy",
-    active: true,
-    score: null,
-    level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocL-ZcyFDa3dySGN3Cr-CLyGrONcIs12kT8Ue21WT7iJxVSZTRaV=s96-c",
-    bio: null,
-    created_at: "2025-05-25T17:47:16.937Z",
-    updated_at: "2025-05-26T17:01:00.753Z",
-  },
-  {
-    id: 8,
-    username: "574038891",
-    fullName: "Đặng Quốc Huy",
-    active: true,
-    score: null,
-    level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocK8fgrE5ODLQkq_sYZfXz38gyIPRY39u8U18nTD15adiS_Qzem8=s96-c",
-    bio: null,
-    created_at: "2025-06-07T08:45:36.645Z",
-    updated_at: "2025-06-07T08:45:36.645Z",
-  },
-  {
-    id: 9,
-    username: "517497901",
-    fullName: "Huy Hacker",
-    active: true,
-    score: null,
-    level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocIJObxTJqC60Byg3jxoa8wDgk-PhrgxK8600RbZfrXsZWrfT7M=s96-c",
-    bio: null,
-    created_at: "2025-06-07T10:31:42.951Z",
-    updated_at: "2025-06-07T10:31:42.951Z",
-  },
-  {
-    id: 10,
-    username: "537985618",
-    fullName: "Thu Hiền",
-    active: true,
-    score: null,
-    level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocLwtcsyNh9wB5_MQTa70SDxFqGe-qhLQ73QJznjMyYIq3_nBQ=s96-c",
-    bio: null,
-    created_at: "2025-06-13T15:11:32.076Z",
-    updated_at: "2025-06-13T15:11:32.076Z",
-  },
-  {
-    id: 11,
-    username: "978397161",
-    fullName: "Thanh Sương",
-    active: true,
-    score: null,
-    level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocJlKDX4TkwF6yym7on7WDdeMwTmpn2-l_-cgXvMbsD2X6Qrbg=s96-c",
-    bio: null,
-    created_at: "2025-06-13T15:16:03.775Z",
-    updated_at: "2025-06-13T15:16:03.775Z",
-  },
-  {
-    id: 12,
-    username: "836528259",
-    fullName: "Quyet Chien",
-    active: true,
-    score: null,
-    level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocKJ0rOUogT9dSK6FYJzDJCQAj8ExlO8uF2eIhn_4DCuh_nYzA=s96-c",
-    bio: null,
-    created_at: "2025-06-13T15:20:26.940Z",
-    updated_at: "2025-06-13T15:20:26.940Z",
-  },
-  {
-    id: 13,
-    username: "40255802",
-    fullName: "ngoc Hieu",
-    active: true,
-    score: null,
-    level: null,
-    avatar:
-      "https://lh3.googleusercontent.com/a/ACg8ocKEmLQy1lkQXuBqR6r4shvirypS4D-7lZtR9FRGXM0Ywk9i9w=s96-c",
-    bio: null,
-    created_at: "2025-06-13T15:26:03.589Z",
-    updated_at: "2025-06-15T07:35:15.239Z",
-  },
+    avatar: `https://via.placeholder.com/96?text=Dev${i + 2}`,
+    bio: `Passionate developer with expertise in modern technologies`,
+    tags: ["Frontend", "Backend", "Full Stack"][Math.floor(Math.random() * 3)]
+      ? ["Frontend", "React"]
+      : ["Backend", "Node.js"],
+    solutions: Math.floor(Math.random() * 50) + 5,
+    achievements: Math.floor(Math.random() * 20) + 1,
+    rankChange: Math.floor(Math.random() * 10) - 5,
+    rank: i + 2,
+    created_at: "2025-05-21T16:04:43.381Z",
+    updated_at: "2025-05-25T18:17:32.854Z",
+  })),
 ]);
 
 const newUser = ref({
@@ -456,19 +525,35 @@ const availableTags = [
   "Frontend",
   "Backend",
   "Full Stack",
-  "Mobile",
+  "React",
+  "Vue",
+  "Angular",
+  "Node.js",
+  "Python",
+  "Java",
   "DevOps",
+  "Mobile",
   "AI/ML",
   "Blockchain",
 ];
 
 // Computed
+const uniqueTags = computed(() => {
+  const tags = new Set();
+  developers.value.forEach((dev) => {
+    if (dev.tags) {
+      dev.tags.forEach((tag) => tags.add(tag));
+    }
+  });
+  return Array.from(tags);
+});
+
 const hasActiveFilters = computed(() => {
   return searchQuery.value || filterTag.value;
 });
 
 const filteredAndSortedDevelopers = computed(() => {
-  let filtered = developers.value;
+  let filtered = [...developers.value];
 
   // Apply search filter
   if (searchQuery.value) {
@@ -477,19 +562,42 @@ const filteredAndSortedDevelopers = computed(() => {
       (dev) =>
         dev.fullName.toLowerCase().includes(query) ||
         dev.username.toLowerCase().includes(query) ||
-        dev.tags.some((tag) => tag.toLowerCase().includes(query))
+        (dev.tags && dev.tags.some((tag) => tag.toLowerCase().includes(query)))
     );
   }
 
   // Apply tag filter
   if (filterTag.value) {
-    filtered = filtered.filter((dev) => dev.tags.includes(filterTag.value));
+    filtered = filtered.filter(
+      (dev) => dev.tags && dev.tags.includes(filterTag.value)
+    );
   }
 
   // Apply sorting
   filtered = [...filtered].sort((a, b) => {
-    const aValue = a[sortBy.value];
-    const bValue = b[sortBy.value];
+    let aValue, bValue;
+
+    switch (sortBy.value) {
+      case "score":
+        aValue = parseInt(a.score || "0");
+        bValue = parseInt(b.score || "0");
+        break;
+      case "solutions":
+        aValue = a.solutions || 0;
+        bValue = b.solutions || 0;
+        break;
+      case "achievements":
+        aValue = a.achievements || 0;
+        bValue = b.achievements || 0;
+        break;
+      case "rankChange":
+        aValue = a.rankChange || 0;
+        bValue = b.rankChange || 0;
+        break;
+      default:
+        aValue = parseInt(a.score || "0");
+        bValue = parseInt(b.score || "0");
+    }
 
     if (sortOrder.value === "asc") {
       return aValue - bValue;
@@ -500,16 +608,40 @@ const filteredAndSortedDevelopers = computed(() => {
   return filtered;
 });
 
+const topThreeDevelopers = computed(() => {
+  return filteredAndSortedDevelopers.value.slice(0, 3);
+});
+
+const remainingDevelopers = computed(() => {
+  return filteredAndSortedDevelopers.value.slice(3);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(remainingDevelopers.value.length / pageSize.value);
+});
+
+const paginatedDevelopers = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return remainingDevelopers.value.slice(start, end);
+});
+
 // Methods
 const clearFilters = () => {
   searchQuery.value = "";
   filterTag.value = "";
   sortBy.value = "score";
   sortOrder.value = "desc";
+  currentPage.value = 1;
 };
 
 const submitNewUser = () => {
-  // Add API call here
+  if (!newUser.value.name || !newUser.value.username) {
+    ElMessage.warning("Vui lòng điền đầy đủ thông tin");
+    return;
+  }
+
+  ElMessage.success("Đã gửi đề cử thành công!");
   showNewUserDialog.value = false;
   newUser.value = {
     name: "",
@@ -517,59 +649,100 @@ const submitNewUser = () => {
     tags: [],
   };
 };
+
+// SEO Meta
+useSeoMeta({
+  title: "Bảng xếp hạng Developer - ChoCode",
+  description:
+    "Khám phá những developer xuất sắc nhất trong cộng đồng ChoCode. Xem bảng xếp hạng, thành tích và đóng góp của các thành viên.",
+});
 </script>
 
 <style scoped>
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 8s ease infinite;
+/* Custom background */
+.bg-gray-25 {
+  background-color: #fafafa;
 }
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform,
+    box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Line clamp utility */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Focus styles */
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: none;
+}
+
+/* Dialog customization */
+:deep(.evergreen-dialog) {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+:deep(.evergreen-dialog .el-dialog__header) {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 1.5rem;
+}
+
+:deep(.evergreen-dialog .el-dialog__title) {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+:deep(.evergreen-dialog .el-dialog__body) {
+  padding: 1.5rem;
+}
+
+:deep(.evergreen-dialog .el-dialog__footer) {
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 1rem 1.5rem;
+}
+
+/* Element Plus Select styling */
+:deep(.el-select) {
+  width: 100%;
+}
+
+:deep(.el-select .el-input__wrapper) {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+}
+
+:deep(.el-select .el-input__wrapper.is-focus) {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+:deep(.el-tag) {
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  50% {
-    background-position: 100% 50%;
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-:deep(.ranking-dialog) {
-  @apply bg-gray-900 border border-gray-700 rounded-2xl;
-}
-
-:deep(.ranking-dialog .el-dialog__header) {
-  @apply border-b border-gray-700 p-4;
-}
-
-:deep(.ranking-dialog .el-dialog__title) {
-  @apply text-white text-lg font-semibold;
-}
-
-:deep(.ranking-dialog .el-dialog__body) {
-  @apply p-6;
-}
-
-:deep(.ranking-dialog .el-dialog__footer) {
-  @apply border-t border-gray-700 p-4;
-}
-
-:deep(.ranking-dialog .el-select) {
-  @apply w-full;
-}
-
-:deep(.ranking-dialog .el-select .el-input__wrapper) {
-  @apply bg-gray-800 border-gray-700;
-}
-
-:deep(.ranking-dialog .el-select .el-input__inner) {
-  @apply text-white;
-}
-
-:deep(.ranking-dialog .el-tag) {
-  @apply bg-blue-500/10 border-blue-500/20 text-blue-400;
 }
 </style>

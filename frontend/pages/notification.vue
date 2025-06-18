@@ -1,180 +1,227 @@
 <!-- pages/notifications.vue -->
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <div class="container mx-auto px-4 py-8 mt-14">
+  <div class="min-h-screen bg-gray-25 pt-16">
+    <div class="mx-[1rem] md:mx-16 lg:mx-32 xl:mx-[12rem]">
       <!-- Header -->
-      <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+      <div class="mb-6">
+        <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">
+          Thông báo
+        </h1>
         <div
-          class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4"
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0"
         >
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900">Thông báo</h1>
-            <p class="text-gray-600 mt-1">
-              {{ unreadCount }} thông báo chưa đọc
-            </p>
-          </div>
-          <div class="flex items-center gap-3">
-            <el-button
-              :icon="CheckCheck"
-              size="default"
+          <p class="text-gray-600 text-sm sm:text-base">
+            {{ unreadCount }} thông báo chưa đọc
+          </p>
+          <div class="flex items-center space-x-3">
+            <button
               @click="markAllAsRead"
               :disabled="unreadCount === 0"
+              class="inline-flex items-center px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Đánh dấu tất cả
-            </el-button>
-            <el-button :icon="Settings" size="default" circle />
+              <CheckCheck class="w-4 h-4 mr-2" />
+              <span class="hidden sm:inline">Đánh dấu tất cả</span>
+              <span class="sm:hidden">Đánh dấu</span>
+            </button>
+            <button
+              class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+            >
+              <Settings class="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Filter Options -->
-      <div class="bg-white rounded-xl shadow-sm border p-4 mb-6">
-        <div class="flex flex-wrap gap-2">
-          <el-button
-            v-for="filter in filterOptions"
-            :key="filter.value"
-            :type="activeFilter === filter.value ? 'primary' : ''"
-            size="small"
-            @click="activeFilter = filter.value"
-            class="transition-all duration-200"
+      <!-- Filter Tabs -->
+      <div
+        class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6 overflow-hidden"
+      >
+        <!-- Mobile Filter Dropdown -->
+        <div class="sm:hidden px-4 py-3 border-b border-gray-200">
+          <select
+            v-model="activeFilter"
+            class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            {{ filter.label }}
-          </el-button>
+            <option
+              v-for="filter in filterOptions"
+              :key="filter.value"
+              :value="filter.value"
+            >
+              {{ filter.label }}
+              {{
+                filter.value === "unread" && unreadCount > 0
+                  ? `(${unreadCount})`
+                  : ""
+              }}
+            </option>
+          </select>
         </div>
-      </div>
 
-      <!-- Notifications List -->
-      <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+        <!-- Desktop Filter Tabs -->
+        <div class="hidden sm:block px-6 py-4 border-b border-gray-200">
+          <nav class="flex flex-wrap gap-1" role="tablist">
+            <button
+              v-for="filter in filterOptions"
+              :key="filter.value"
+              @click="activeFilter = filter.value"
+              class="px-3 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap"
+              :class="
+                activeFilter === filter.value
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              "
+            >
+              {{ filter.label }}
+              <span
+                v-if="filter.value === 'unread' && unreadCount > 0"
+                class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-medium text-white bg-red-500 rounded-full"
+              >
+                {{ unreadCount }}
+              </span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Notifications List -->
         <div class="divide-y divide-gray-100">
           <div
             v-for="notification in filteredNotifications"
             :key="notification.id"
-            class="p-6 hover:bg-gray-50 transition-colors duration-200 cursor-pointer"
+            class="relative p-4 sm:p-6 hover:bg-gray-50 transition-colors cursor-pointer"
             :class="{
-              'bg-blue-50 border-l-4 border-l-blue-500': notification.unread,
+              'bg-blue-25 border-l-4 border-l-blue-500': notification.unread,
             }"
             @click="markAsRead(notification.id)"
           >
-            <div class="flex gap-4">
-              <!-- Avatar with Status -->
-              <div class="flex-shrink-0 relative">
+            <!-- Unread indicator -->
+            <div
+              v-if="notification.unread"
+              class="absolute top-4 sm:top-6 right-4 sm:right-6 w-2 h-2 bg-blue-500 rounded-full"
+            ></div>
+
+            <div class="flex space-x-3 sm:space-x-4">
+              <!-- Avatar -->
+              <div class="relative flex-shrink-0">
                 <img
                   :src="notification.avatar"
                   :alt="notification.name"
-                  class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+                  class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover"
                   loading="lazy"
                 />
                 <div
                   v-if="notification.online"
-                  class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"
+                  class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 border-2 border-white rounded-full"
                 ></div>
               </div>
 
               <!-- Content -->
-              <div class="flex-1 min-w-0">
+              <div class="flex-1 min-w-0 pr-4 sm:pr-0">
+                <!-- Header -->
                 <div
-                  class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2"
+                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 sm:mb-1"
                 >
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="font-semibold text-gray-900">{{
-                        notification.name
-                      }}</span>
-                      <span class="text-gray-600">{{
-                        notification.action
-                      }}</span>
-                      <span
-                        v-if="notification.target"
-                        class="font-medium text-blue-600"
-                      >
-                        {{ notification.target }}
-                      </span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm">
-                      <Clock class="w-4 h-4 text-gray-400" />
-                      <span class="text-gray-500">{{
-                        notification.timestamp
-                      }}</span>
-                    </div>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <el-tag
-                      :type="getNotificationTypeTag(notification.type)"
-                      size="small"
-                      class="hidden sm:block"
+                  <div
+                    class="flex flex-col sm:flex-row sm:items-center sm:space-x-2 mb-2 sm:mb-0"
+                  >
+                    <span
+                      class="font-medium text-gray-900 text-sm sm:text-base"
                     >
-                      {{ getNotificationTypeLabel(notification.type) }}
-                    </el-tag>
-                    <div
-                      v-if="notification.unread"
-                      class="w-2 h-2 rounded-full bg-blue-500"
-                    ></div>
+                      {{ notification.name }}
+                    </span>
+                    <span class="text-gray-600 text-sm">
+                      {{ notification.action }}
+                    </span>
+                    <span
+                      v-if="notification.target"
+                      class="font-medium text-blue-600 text-sm break-words"
+                    >
+                      {{ notification.target }}
+                    </span>
                   </div>
+                  <span
+                    class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium self-start sm:self-auto"
+                    :class="getNotificationTypeStyle(notification.type)"
+                  >
+                    {{ getNotificationTypeLabel(notification.type) }}
+                  </span>
+                </div>
+
+                <!-- Timestamp -->
+                <div
+                  class="flex items-center space-x-1 text-xs sm:text-sm text-gray-500 mb-3"
+                >
+                  <Clock class="w-3 h-3" />
+                  <span>{{ notification.timestamp }}</span>
                 </div>
 
                 <!-- Comment Content -->
                 <div
                   v-if="notification.comment"
-                  class="bg-gray-100 rounded-lg p-4 mb-3 text-gray-700"
+                  class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-3"
                 >
-                  <MessageSquare class="w-4 h-4 text-gray-500 inline mr-2" />
-                  {{ notification.comment }}
+                  <div class="flex items-start space-x-2">
+                    <MessageSquare
+                      class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"
+                    />
+                    <p
+                      class="text-gray-700 text-sm leading-relaxed break-words"
+                    >
+                      {{ notification.comment }}
+                    </p>
+                  </div>
                 </div>
 
                 <!-- File Attachment -->
                 <div
                   v-if="notification.file"
-                  class="flex items-center gap-3 p-4 bg-gray-100 rounded-lg mb-3"
+                  class="flex items-center space-x-3 p-3 bg-gray-50 border border-gray-200 rounded-lg mb-3"
                 >
-                  <div class="flex-shrink-0">
-                    <div
-                      class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"
-                    >
-                      <FileText class="w-5 h-5 text-white" />
-                    </div>
+                  <div
+                    class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0"
+                  >
+                    <FileText class="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                   </div>
                   <div class="flex-1 min-w-0">
-                    <div class="font-medium text-gray-900 truncate">
+                    <p class="font-medium text-gray-900 text-sm truncate">
                       {{ notification.file.name }}
-                    </div>
-                    <div class="text-sm text-gray-500">
+                    </p>
+                    <p class="text-xs text-gray-500">
                       {{ notification.file.size }}
-                    </div>
+                    </p>
                   </div>
-                  <el-button :icon="Download" size="small" circle />
+                  <button
+                    class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+                  >
+                    <Download class="w-4 h-4" />
+                  </button>
                 </div>
 
                 <!-- Action Buttons -->
                 <div
                   v-if="notification.type === 'invitation'"
-                  class="flex gap-2 mt-4"
+                  class="flex flex-col sm:flex-row gap-2 sm:space-x-2 mt-3"
                 >
-                  <el-button
-                    size="small"
+                  <button
                     @click.stop="declineInvitation(notification.id)"
+                    class="px-3 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium w-full sm:w-auto"
                   >
                     Từ chối
-                  </el-button>
-                  <el-button
-                    type="primary"
-                    size="small"
+                  </button>
+                  <button
                     @click.stop="acceptInvitation(notification.id)"
+                    class="px-3 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium w-full sm:w-auto"
                   >
                     Chấp nhận
-                  </el-button>
+                  </button>
                 </div>
 
-                <div
-                  v-if="notification.type === 'follow'"
-                  class="flex gap-2 mt-4"
-                >
-                  <el-button
-                    type="primary"
-                    size="small"
+                <div v-if="notification.type === 'follow'" class="mt-3">
+                  <button
                     @click.stop="followBack(notification.id)"
+                    class="px-3 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium w-full sm:w-auto"
                   >
                     Theo dõi lại
-                  </el-button>
+                  </button>
                 </div>
               </div>
             </div>
@@ -183,24 +230,45 @@
           <!-- Empty State -->
           <div
             v-if="filteredNotifications.length === 0"
-            class="p-12 text-center"
+            class="p-8 sm:p-12 text-center"
           >
-            <Bell class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">
+            <div
+              class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
+            >
+              <Bell class="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" />
+            </div>
+            <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">
               Không có thông báo
             </h3>
-            <p class="text-gray-500">
-              Chưa có thông báo nào phù hợp với bộ lọc hiện tại.
+            <p class="text-gray-500 max-w-sm mx-auto text-sm sm:text-base">
+              {{
+                activeFilter === "all"
+                  ? "Bạn chưa có thông báo nào."
+                  : "Không có thông báo nào phù hợp với bộ lọc hiện tại."
+              }}
             </p>
           </div>
         </div>
-      </div>
 
-      <!-- Load More Button -->
-      <div v-if="filteredNotifications.length > 0" class="text-center mt-6">
-        <el-button @click="loadMore" :loading="loading">
-          Tải thêm thông báo
-        </el-button>
+        <!-- Load More -->
+        <div
+          v-if="filteredNotifications.length > 0"
+          class="p-4 sm:p-6 border-t border-gray-200"
+        >
+          <div class="text-center">
+            <button
+              @click="loadMore"
+              :disabled="loading"
+              class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 w-full sm:w-auto justify-center"
+            >
+              <div
+                v-if="loading"
+                class="w-4 h-4 mr-2 border-2 border-gray-300 border-t-gray-700 rounded-full animate-spin"
+              ></div>
+              {{ loading ? "Đang tải..." : "Tải thêm thông báo" }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -216,7 +284,13 @@ import {
   MessageSquare,
   Bell,
 } from "lucide-vue-next";
-import { ElMessage, ElNotification } from "element-plus";
+import { ElMessage } from "element-plus";
+
+// SEO Meta
+useSeoMeta({
+  title: "Thông báo - Chocode",
+  description: "Quản lý thông báo và cập nhật mới nhất",
+});
 
 interface NotificationFile {
   name: string;
@@ -237,11 +311,9 @@ interface Notification {
   file?: NotificationFile;
   type: "comment" | "follow" | "invitation" | "file" | "like" | "mention";
 }
+
 const activeFilter = ref("all");
 const loading = ref(false);
-
-
-
 
 const filterOptions = [
   { label: "Tất cả", value: "all" },
@@ -330,6 +402,7 @@ const notifications = ref<Notification[]>([
   },
 ]);
 
+// Computed properties
 const unreadCount = computed(
   () => notifications.value.filter((n) => n.unread).length
 );
@@ -344,20 +417,21 @@ const filteredNotifications = computed(() => {
   return notifications.value.filter((n) => n.type === activeFilter.value);
 });
 
-const getNotificationTypeTag = (type: string) => {
-  const typeMap: Record<string, string> = {
-    comment: "primary",
-    follow: "success",
-    invitation: "warning",
-    file: "info",
-    like: "danger",
-    mention: "primary",
+// Methods
+const getNotificationTypeStyle = (type: string) => {
+  const styles = {
+    comment: "bg-blue-100 text-blue-700",
+    follow: "bg-green-100 text-green-700",
+    invitation: "bg-orange-100 text-orange-700",
+    file: "bg-purple-100 text-purple-700",
+    like: "bg-red-100 text-red-700",
+    mention: "bg-yellow-100 text-yellow-700",
   };
-  return typeMap[type] || "";
+  return styles[type as keyof typeof styles] || "bg-gray-100 text-gray-700";
 };
 
 const getNotificationTypeLabel = (type: string) => {
-  const labelMap: Record<string, string> = {
+  const labels = {
     comment: "Bình luận",
     follow: "Theo dõi",
     invitation: "Lời mời",
@@ -365,53 +439,22 @@ const getNotificationTypeLabel = (type: string) => {
     like: "Thích",
     mention: "Nhắc đến",
   };
-  return labelMap[type] || type;
+  return labels[type as keyof typeof labels] || type;
 };
 
 const markAsRead = (id: number) => {
   const notification = notifications.value.find((n) => n.id === id);
-  if (notification) {
+  if (notification && notification.unread) {
     notification.unread = false;
   }
 };
 
 const markAllAsRead = () => {
+  const unreadNotifications = notifications.value.filter((n) => n.unread);
+  if (unreadNotifications.length === 0) return;
+
   notifications.value.forEach((n) => (n.unread = false));
   ElMessage.success("Đã đánh dấu tất cả thông báo là đã đọc");
-};
-
-// Custom notification with smooth animations
-const showCustomNotification = (data: any, newNotification: Notification) => {
-  const typeConfig = {
-    INFO: {
-      type: "info" as const,
-      iconClass: "text-blue-500",
-      bgClass: "bg-gradient-to-r from-blue-50 to-blue-100",
-      borderClass: "border-l-blue-500",
-    },
-    SUCCESS: {
-      type: "success" as const,
-      iconClass: "text-green-500",
-      bgClass: "bg-gradient-to-r from-green-50 to-green-100",
-      borderClass: "border-l-green-500",
-    },
-    WARNING: {
-      type: "warning" as const,
-      iconClass: "text-yellow-500",
-      bgClass: "bg-gradient-to-r from-yellow-50 to-yellow-100",
-      borderClass: "border-l-yellow-500",
-    },
-    ERROR: {
-      type: "error" as const,
-      iconClass: "text-red-500",
-      bgClass: "bg-gradient-to-r from-red-50 to-red-100",
-      borderClass: "border-l-red-500",
-    },
-  };
-
-  const config =
-    typeConfig[data.type as keyof typeof typeConfig] || typeConfig.INFO;
-
 };
 
 const acceptInvitation = (id: number) => {
@@ -447,262 +490,111 @@ const loadMore = () => {
         unread: false,
         type: "comment" as const,
       },
+      {
+        id: notifications.value.length + 2,
+        name: "Mai Thị Hương",
+        avatar: `https://randomuser.me/api/portraits/women/${Math.floor(
+          Math.random() * 50
+        )}.jpg`,
+        action: "đã thích dự án",
+        target: "Website E-commerce",
+        timestamp: "4 ngày trước",
+        online: true,
+        unread: false,
+        type: "like" as const,
+      },
     ];
     notifications.value.push(...newNotifications);
     loading.value = false;
+    ElMessage.success("Đã tải thêm thông báo");
   }, 1000);
 };
-
-// Generate random Vietnamese names
-const getRandomVietnameseName = () => {
-  const firstNames = [
-    "Nguyễn",
-    "Trần",
-    "Lê",
-    "Phạm",
-    "Hoàng",
-    "Huỳnh",
-    "Phan",
-    "Vũ",
-    "Võ",
-    "Đặng",
-    "Bùi",
-    "Đỗ",
-    "Hồ",
-    "Ngô",
-    "Dương",
-  ];
-  const middleNames = [
-    "Văn",
-    "Thị",
-    "Minh",
-    "Thu",
-    "Quang",
-    "Hữu",
-    "Đức",
-    "Thanh",
-    "Tuấn",
-    "Anh",
-  ];
-  const lastNames = [
-    "An",
-    "Bình",
-    "Cường",
-    "Dũng",
-    "Hà",
-    "Hùng",
-    "Linh",
-    "Mai",
-    "Nam",
-    "Phong",
-    "Quân",
-    "Sơn",
-    "Tâm",
-    "Thành",
-    "Vy",
-  ];
-
-  const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-  const middleName =
-    middleNames[Math.floor(Math.random() * middleNames.length)];
-  const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-
-  return `${firstName} ${middleName} ${lastName}`;
-};
-
-// Convert socket notification to internal format
-const convertSocketNotification = (socketData: any) => {
-  const typeMapping: Record<string, any> = {
-    INFO: { action: "đã gửi thông báo", type: "mention" },
-    WARNING: { action: "đã cảnh báo về", type: "mention" },
-    ERROR: { action: "đã báo lỗi trong", type: "mention" },
-    SUCCESS: { action: "đã hoàn thành", type: "like" },
-  };
-
-  const mapping = typeMapping[socketData.type] || {
-    action: "đã thông báo",
-    type: "mention",
-  };
-
-  return {
-    id: Date.now() + Math.random(), // Unique ID
-    name: getRandomVietnameseName(),
-    avatar: `https://randomuser.me/api/portraits/${
-      Math.random() > 0.5 ? "men" : "women"
-    }/${Math.floor(Math.random() * 99)}.jpg`,
-    action: mapping.action,
-    target: socketData.target !== "ALL" ? socketData.target : undefined,
-    timestamp: "Vừa xong",
-    online: Math.random() > 0.3, // 70% chance online
-    unread: true,
-    comment: socketData.message,
-    type: mapping.type,
-  };
-};
-
-// Cleanup socket listeners on unmount
-
-// Set page meta
-useHead({
-  title: "Thông báo",
-  meta: [{ name: "description", content: "Quản lý thông báo của bạn" }],
-});
 </script>
 
 <style scoped>
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+/* Custom gray background */
+.bg-gray-25 {
+  background-color: #fafafa;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
+.bg-blue-25 {
+  background-color: #f8faff;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform,
+    box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+/* Focus styles for accessibility */
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
-/* Custom notification styles */
-:global(.custom-notification) {
-  border-radius: 12px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
-  border: 1px solid rgba(0, 0, 0, 0.05) !important;
-  backdrop-filter: blur(10px) !important;
-  animation: slideInRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-}
-
-:global(.custom-notification .el-notification__content) {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-:global(.custom-notification .el-notification__title) {
-  font-weight: 600 !important;
-  font-size: 16px !important;
-  color: #1f2937 !important;
-  margin-bottom: 8px !important;
-}
-
-:global(.custom-notification .el-notification__closeBtn) {
-  color: #6b7280 !important;
-  font-size: 18px !important;
-  right: 12px !important;
-  top: 12px !important;
-}
-
-:global(.custom-notification .el-notification__closeBtn:hover) {
-  color: #374151 !important;
-}
-
-/* Notification animations */
-@keyframes slideInRight {
-  0% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@keyframes slideOutRight {
-  0% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
-/* Highlight animation for clicked notification */
-.highlight-notification {
-  animation: highlightPulse 2s ease-in-out;
-  transform: scale(1.02);
-}
-
-@keyframes highlightPulse {
-  0%,
-  100% {
-    background-color: transparent;
-    transform: scale(1);
-  }
-  50% {
-    background-color: rgba(59, 130, 246, 0.1);
-    transform: scale(1.02);
-  }
-}
-
-/* Enhanced notification item animations */
-.notification-item {
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  overflow: hidden;
-}
-
-.notification-item::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.8),
-    transparent
-  );
-  transition: left 0.5s;
-}
-
-.notification-item:hover::before {
-  left: 100%;
-}
-
-.notification-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
-
-/* Custom notification content styles */
-.notification-content {
-  width: 100%;
-}
-
-.notification-content img {
-  transition: transform 0.3s ease;
-}
-
-.notification-content:hover img {
-  transform: scale(1.05);
-}
-
-/* Element Plus customizations */
-:deep(.el-button) {
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-:deep(.el-tag) {
-  border-radius: 6px;
-  font-size: 12px;
-}
-
-/* Responsive adjustments */
+/* Mobile specific adjustments */
 @media (max-width: 640px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  /* Ensure text wrapping on mobile */
+  .break-words {
+    word-wrap: break-word;
+    word-break: break-word;
   }
+
+  /* Better touch targets */
+  button {
+    min-height: 44px;
+  }
+
+  /* Improved spacing for mobile */
+  .notification-content {
+    padding: 1rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .notification-item {
+    padding: 1.25rem;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  .notification-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Ensure proper text truncation */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Custom select styling for mobile */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
 }
 </style>

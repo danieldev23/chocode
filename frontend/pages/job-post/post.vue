@@ -1,214 +1,312 @@
 <template>
-  <div class="my-6">
-    <div class="bg-white rounded-md shadow-md p-6">
-      <h1 class="text-2xl font-bold text-gray-800 mb-6">
-        Đăng bài tìm kiếm developer
-      </h1>
+  <div class="my-6 bg-gray-25">
+    <div class="w-full mx-auto">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-2xl font-semibold text-gray-900 mb-2">
+          Đăng dự án mới
+        </h1>
+        <p class="text-gray-600">
+          Tạo dự án và tìm kiếm freelancer phù hợp cho công việc của bạn
+        </p>
+      </div>
 
-      <el-form ref="formRef" :model="form" label-position="top" :rules="rules">
-        <!-- Tiêu đề tuyển dụng -->
-        <el-form-item label="Tiêu đề tuyển dụng" prop="title" class="my-2">
-          <el-input
-            v-model="form.title"
-            clearable
-            placeholder="Ví dụ: Viết phần mềm quản lý khách sạn"
-          />
-        </el-form-item>
-
-        <!-- Thông tin chung -->
-        <div>
-          <el-form-item
-            label="Ngân sách (VNĐ)"
-            prop="salary"
-            class="font-medium text-gray-700"
+      <!-- Form Card -->
+      <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div class="p-6 sm:p-8">
+          <el-form
+            ref="formRef"
+            :model="form"
+            label-position="top"
+            :rules="rules"
+            class="evergreen-form"
           >
-            <div class="flex items-center gap-4">
-              <el-input
-                v-model="form.salary.min"
-                type="text"
-                placeholder="Từ"
-                class="w-full rounded-lg"
-                :min="0"
-              />
-              <span class="text-gray-500">-</span>
-              <el-input
-                v-model="form.salary.max"
-                type="text"
-                placeholder="Đến"
-                class="w-full rounded-lg"
-                :min="form.salary.min || 0"
-              />
-              <span class="text-gray-500">VNĐ</span>
+            <!-- Project Title -->
+            <div class="mb-6">
+              <el-form-item label="Tiêu đề dự án" prop="title">
+                <el-input
+                  v-model="form.title"
+                  placeholder="Ví dụ: Phát triển website thương mại điện tử"
+                  class="evergreen-input"
+                  size="large"
+                />
+              </el-form-item>
             </div>
-          </el-form-item>
-        </div>
 
-        <el-form-item label="Địa điểm" prop="location">
-          <el-select
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            v-model="form.location"
-            placeholder="Chọn địa điểm"
-            class="w-full"
-          >
-            <el-option
-              v-for="(location, index) in locations"
-              :key="index"
-              :label="location"
-              :value="location"
-            />
-          </el-select>
-        </el-form-item>
+            <!-- Budget -->
+            <div class="mb-6">
+              <el-form-item label="Ngân sách (VNĐ)" prop="salary">
+                <div class="grid grid-cols-2 gap-4">
+                  <el-input
+                    v-model="form.salary.min"
+                    placeholder="Từ"
+                    class="evergreen-input"
+                    size="large"
+                    @input="formatSalaryInput('min')"
+                  >
+                    <template #suffix>
+                      <span class="text-gray-500 text-sm">VNĐ</span>
+                    </template>
+                  </el-input>
+                  <el-input
+                    v-model="form.salary.max"
+                    placeholder="Đến"
+                    class="evergreen-input"
+                    size="large"
+                    @input="formatSalaryInput('max')"
+                  >
+                    <template #suffix>
+                      <span class="text-gray-500 text-sm">VNĐ</span>
+                    </template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
 
-        <!-- Hạn nộp hồ sơ -->
-        <el-form-item label="Hạn nộp hồ sơ" prop="deadline">
-          <el-date-picker
-            v-model="form.deadline"
-            type="date"
-            placeholder="Chọn ngày"
-            format="DD/MM/YYYY"
-            value-format="DD/MM/YYYY"
-            class="w-full"
-          />
-        </el-form-item>
+            <!-- Location and Deadline -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <el-form-item label="Địa điểm làm việc" prop="location">
+                <el-select
+                  v-model="form.location"
+                  multiple
+                  filterable
+                  placeholder="Chọn địa điểm"
+                  class="w-full evergreen-select"
+                  size="large"
+                  popper-class="evergreen-popper"
+                >
+                  <el-option
+                    v-for="location in locations"
+                    :key="location"
+                    :label="location"
+                    :value="location"
+                  />
+                </el-select>
+              </el-form-item>
 
-        <!-- Chuyên môn -->
-        <el-form-item label="Chuyên môn" prop="tags">
-          <el-tag
-            v-for="tag in form.tags"
-            :key="tag"
-            closable
-            @close="handleTagClose(tag)"
-            class="mr-2 mb-2"
-          >
-            {{ tag }}
-          </el-tag>
-          <el-select
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            v-if="tagInputVisible"
-            ref="tagSelectRef"
-            v-model="tagInputValue"
-            placeholder="Thêm chuyên môn"
-            @change="handleTagConfirm"
-            @blur="tagInputVisible = false"
-            class="w-48"
-          >
-            <el-option
-              v-for="tag in availableTags"
-              :key="tag"
-              :label="tag"
-              :value="tag"
-            />
-          </el-select>
-          <el-button v-else class="button-new-tag" @click="showTagInput"
-            >+ Thêm chuyên môn</el-button
-          >
-        </el-form-item>
+              <el-form-item label="Hạn nộp hồ sơ" prop="deadline">
+                <el-date-picker
+                  v-model="form.deadline"
+                  type="date"
+                  placeholder="Chọn ngày"
+                  format="DD/MM/YYYY"
+                  value-format="DD/MM/YYYY"
+                  class="w-full evergreen-date"
+                  size="large"
+                />
+              </el-form-item>
+            </div>
 
-        <!-- Công nghệ -->
-        <el-form-item label="Công nghệ" prop="technologies">
-          <el-tag
-            v-for="tech in form.technologies"
-            :key="tech"
-            closable
-            @close="handleTechClose(tech)"
-            class="mr-2 mb-2"
-            type="success"
-          >
-            {{ tech }}
-          </el-tag>
-          <el-select
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            v-if="techInputVisible"
-            ref="techSelectRef"
-            v-model="techInputValue"
-            placeholder="Thêm công nghệ"
-            @change="handleTechConfirm"
-            @blur="techInputVisible = false"
-            class="w-48"
-          >
-            <el-option
-              v-for="tech in availableTechs"
-              :key="tech"
-              :label="tech"
-              :value="tech"
-            />
-          </el-select>
-          <el-button v-else class="button-new-tag" @click="showTechInput"
-            >+ Thêm công nghệ</el-button
-          >
-        </el-form-item>
+            <!-- Categories -->
+            <div class="mb-6">
+              <el-form-item label="Lĩnh vực" prop="tags">
+                <div class="space-y-3">
+                  <div v-if="form.tags.length > 0" class="flex flex-wrap gap-2">
+                    <span
+                      v-for="tag in form.tags"
+                      :key="tag"
+                      class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-md"
+                    >
+                      {{ tag }}
+                      <button
+                        @click="handleTagClose(tag)"
+                        class="ml-2 text-blue-500 hover:text-blue-700"
+                      >
+                        <X class="w-3 h-3" />
+                      </button>
+                    </span>
+                  </div>
 
-        <!-- Mô tả công việc -->
+                  <el-select
+                    v-if="tagInputVisible"
+                    ref="tagSelectRef"
+                    v-model="tagInputValue"
+                    multiple
+                    filterable
+                    placeholder="Chọn lĩnh vực"
+                    @change="handleTagConfirm"
+                    @blur="tagInputVisible = false"
+                    class="w-full evergreen-select"
+                    size="large"
+                    popper-class="evergreen-popper"
+                  >
+                    <el-option
+                      v-for="tag in availableTags"
+                      :key="tag"
+                      :label="tag"
+                      :value="tag"
+                    />
+                  </el-select>
 
-        <el-form-item prop="jobDescription" label="Mô tả công việc">
-          <client-only>
-            <Editor
-              v-model="form.jobDescription"
-              :init="getTinyMCEConfig()"
-              :tinymce-script-src="getTinyMCEScriptSrc()"
-            />
-          </client-only>
-        </el-form-item>
+                  <button
+                    v-else
+                    @click="showTagInput"
+                    class="inline-flex items-center px-3 py-2 border border-gray-300 text-gray-700 bg-white rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    <Plus class="w-4 h-4 mr-2" />
+                    Thêm lĩnh vực
+                  </button>
+                </div>
+              </el-form-item>
+            </div>
 
-        <!-- Ảnh minh họa -->
-        <el-form-item label="Ảnh minh họa" prop="image" class="w-full">
-          <el-upload
-            class="upload-demo w-full"
-            drag
-            name="file"
-            action="http://localhost:3001/api/upload/image"
-            :headers="uploadHeaders"
-            :on-success="handleUploadSuccess"
-            :before-upload="beforeUpload"
-            :limit="1"
-          >
-            <div v-if="!form.image" class="p-8">
-              <el-icon class="text-3xl"><Upload /></el-icon>
-              <div class="mt-2">
-                Kéo thả file hoặc <em>click để tải lên</em>
+            <!-- Technologies -->
+            <div class="mb-6">
+              <el-form-item label="Công nghệ yêu cầu" prop="technologies">
+                <div class="space-y-3">
+                  <div
+                    v-if="form.technologies.length > 0"
+                    class="flex flex-wrap gap-2"
+                  >
+                    <span
+                      v-for="tech in form.technologies"
+                      :key="tech"
+                      class="inline-flex items-center px-3 py-1 bg-green-50 text-green-700 text-sm font-medium rounded-md"
+                    >
+                      {{ tech }}
+                      <button
+                        @click="handleTechClose(tech)"
+                        class="ml-2 text-green-500 hover:text-green-700"
+                      >
+                        <X class="w-3 h-3" />
+                      </button>
+                    </span>
+                  </div>
+
+                  <el-select
+                    v-if="techInputVisible"
+                    ref="techSelectRef"
+                    v-model="techInputValue"
+                    multiple
+                    filterable
+                    placeholder="Chọn công nghệ"
+                    @change="handleTechConfirm"
+                    @blur="techInputVisible = false"
+                    class="w-full evergreen-select"
+                    size="large"
+                    popper-class="evergreen-popper"
+                  >
+                    <el-option
+                      v-for="tech in availableTechs"
+                      :key="tech"
+                      :label="tech"
+                      :value="tech"
+                    />
+                  </el-select>
+
+                  <button
+                    v-else
+                    @click="showTechInput"
+                    class="inline-flex items-center px-3 py-2 border border-gray-300 text-gray-700 bg-white rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    <Plus class="w-4 h-4 mr-2" />
+                    Thêm công nghệ
+                  </button>
+                </div>
+              </el-form-item>
+            </div>
+
+            <!-- Job Description -->
+            <div class="mb-6">
+              <el-form-item
+                label="Mô tả dự án"
+                class="w-full"
+                prop="jobDescription"
+              >
+                <div class="border w-full border-gray-300 rounded-lg">
+                  <client-only>
+                    <Editor
+                      v-model="form.jobDescription"
+                      :init="getTinyMCEConfig()"
+                      :tinymce-script-src="getTinyMCEScriptSrc()"
+                    />
+                  </client-only>
+                </div>
+              </el-form-item>
+            </div>
+
+            <!-- Project Image -->
+            <div class="mb-8">
+              <el-form-item label="Ảnh minh họa (tùy chọn)" prop="image">
+                <div class="w-full">
+                  <el-upload
+                    class="evergreen-upload w-full"
+                    drag
+                    name="file"
+                    action="http://localhost:3001/api/upload/image"
+                    :headers="uploadHeaders"
+                    :on-success="handleUploadSuccess"
+                    :before-upload="beforeUpload"
+                    :limit="1"
+                  >
+                    <div v-if="!form.image" class="py-12 px-6 text-center">
+                      <div
+                        class="w-12 h-12 mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center"
+                      >
+                        <Upload class="w-6 h-6 text-gray-400" />
+                      </div>
+                      <div class="text-gray-600 mb-2">
+                        Kéo thả ảnh vào đây hoặc
+                        <span class="text-primary font-medium"
+                          >click để chọn file</span
+                        >
+                      </div>
+                      <div class="text-sm text-gray-500">
+                        PNG, JPG, GIF tối đa 5MB
+                      </div>
+                    </div>
+                    <div v-else class="flex items-center justify-center p-4">
+                      <div class="relative">
+                        <img :src="form.image" class="max-h-32 rounded-lg" />
+                        <button
+                          @click.stop="form.image = ''"
+                          class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                        >
+                          <X class="w-3 h-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </el-upload>
+                </div>
+              </el-form-item>
+            </div>
+
+            <!-- Form Actions -->
+            <div
+              class="flex flex-col sm:flex-row gap-3 sm:justify-between pt-6 border-t border-gray-200"
+            >
+              <button
+                @click="resetForm"
+                :disabled="loading"
+                class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              >
+                Làm mới
+              </button>
+
+              <div class="flex gap-3">
+                <button
+                  @click="saveDraft"
+                  :disabled="loading"
+                  class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                >
+                  Lưu nháp
+                </button>
+                <button
+                  @click="submitForm"
+                  :disabled="loading"
+                  class="px-6 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                >
+                  <div
+                    v-if="loading"
+                    class="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"
+                  ></div>
+                  {{ loading ? "Đang đăng..." : "Đăng dự án" }}
+                </button>
               </div>
             </div>
-            <div v-else class="flex items-center justify-center p-2">
-              <img :src="form.image" class="max-h-40" />
-            </div>
-          </el-upload>
-        </el-form-item>
-
-        <!-- Buttons -->
-        <div class="flex justify-between mt-6">
-          <el-button
-            @click="resetForm"
-            :disabled="loading"
-            class="bg-secondary-gradient text-white reset"
-            >Nhập lại</el-button
-          >
-          <div>
-            <el-button
-              @click="saveDraft"
-              class="mr-2 bg-white text-black"
-              :disabled="loading"
-              >Lưu tin</el-button
-            >
-            <el-button
-              type="primary"
-              class="bg-primary submit-btn"
-              @click="submitForm"
-              :loading="loading"
-            >
-              {{ loading ? "Đang đăng tin..." : "Đăng tuyển ngay" }}
-            </el-button>
-          </div>
+          </el-form>
         </div>
-      </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -216,13 +314,14 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, nextTick } from "vue";
 import { ElMessage } from "element-plus";
-import { Upload } from "@element-plus/icons-vue";
+import { Upload, Plus, X } from "lucide-vue-next";
 import Editor from "@tinymce/tinymce-vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { availableTags } from "@/types/tags";
+
 // SEO Meta
 useSeoMeta({
-  title: "Đăng dự án - Chợ Code",
+  title: "Đăng dự án - Chocode",
 });
 
 // Type definitions
@@ -260,7 +359,15 @@ const form = reactive<JobForm>({
 });
 
 const locations = [
+  "Remote",
   "Toàn Quốc",
+  "Hà Nội",
+  "TP Hồ Chí Minh",
+  "Đà Nẵng",
+  "Cần Thơ",
+  "Hải Phòng",
+  "Bình Dương",
+  "Đồng Nai",
   "An Giang",
   "Bà Rịa - Vũng Tàu",
   "Bạc Liêu",
@@ -268,26 +375,20 @@ const locations = [
   "Bắc Kạn",
   "Bắc Ninh",
   "Bến Tre",
-  "Bình Dương",
   "Bình Định",
   "Bình Phước",
   "Bình Thuận",
   "Cà Mau",
   "Cao Bằng",
-  "Cần Thơ",
-  "Đà Nẵng",
   "Đắk Lắk",
   "Đắk Nông",
   "Điện Biên",
-  "Đồng Nai",
   "Đồng Tháp",
   "Gia Lai",
   "Hà Giang",
   "Hà Nam",
-  "Hà Nội",
   "Hà Tĩnh",
   "Hải Dương",
-  "Hải Phòng",
   "Hậu Giang",
   "Hòa Bình",
   "Hưng Yên",
@@ -318,7 +419,6 @@ const locations = [
   "Thanh Hóa",
   "Thừa Thiên Huế",
   "Tiền Giang",
-  "TP Hồ Chí Minh",
   "Trà Vinh",
   "Tuyên Quang",
   "Vĩnh Long",
@@ -331,7 +431,7 @@ const rules = reactive<FormRules>({
   title: [
     {
       required: true,
-      message: "Vui lòng nhập tiêu đề tuyển dụng",
+      message: "Vui lòng nhập tiêu đề dự án",
       trigger: "blur",
     },
   ],
@@ -362,7 +462,7 @@ const rules = reactive<FormRules>({
   jobDescription: [
     {
       required: true,
-      message: "Vui lòng nhập mô tả công việc",
+      message: "Vui lòng nhập mô tả dự án",
       trigger: "blur",
     },
   ],
@@ -377,37 +477,32 @@ const tagSelectRef = ref<HTMLElement | null>(null);
 const techInputVisible = ref(false);
 const techInputValue = ref<string[]>([]);
 const techSelectRef = ref<HTMLElement | null>(null);
+
 const availableTechs = [
   // Frontend
   "HTML",
   "CSS",
-  "SASS",
-  "SCSS",
-  "Tailwind CSS",
-  "Bootstrap",
-  "Vue.js",
-  "Nuxt2",
-  "Nuxt3",
+  "JavaScript",
+  "TypeScript",
   "React",
-  "Next.js",
+  "Vue.js",
   "Angular",
   "Svelte",
+  "Next.js",
+  "Nuxt.js",
+  "Tailwind CSS",
+  "Bootstrap",
+  "SASS",
+  "SCSS",
   "Element Plus",
-  "TinyMCE",
-  "Quill.js",
-  "TypeScript",
-  "JavaScript",
+  "Ant Design",
 
   // Backend
   "Node.js",
   "Express",
   "NestJS",
-  "HapiJS",
-  "KoaJS",
-  "Fastify",
   "PHP",
   "Laravel",
-  "Symfony",
   "Python",
   "Django",
   "Flask",
@@ -418,32 +513,23 @@ const availableTechs = [
   "Go",
   "ASP.NET",
   "C#",
-  "C++",
 
   // Databases
   "MongoDB",
   "MySQL",
   "PostgreSQL",
   "SQLite",
-  "MariaDB",
   "Redis",
-  "Firebase Realtime DB",
+  "Firebase",
   "Firestore",
-  "Cassandra",
   "ElasticSearch",
 
   // DevOps & Tools
   "Docker",
   "Kubernetes",
-  "Nginx",
-  "Apache",
   "Git",
   "GitHub Actions",
   "Jenkins",
-  "CI/CD",
-  "Shell Script",
-  "Linux",
-  "Ubuntu",
   "AWS",
   "Azure",
   "Google Cloud",
@@ -451,48 +537,39 @@ const availableTechs = [
   "Netlify",
   "DigitalOcean",
 
-  // Testing
-  "Jest",
-  "Mocha",
-  "Chai",
-  "Cypress",
-  "Playwright",
-  "Selenium",
-
-  // Mobile & Desktop
+  // Mobile & Others
   "Flutter",
   "React Native",
   "Ionic",
-  "Capacitor",
-  "Electron",
-
-  // Others
-  "Prisma",
   "GraphQL",
   "REST API",
   "WebSocket",
-  "gRPC",
   "JWT",
   "OAuth2",
-  "OpenAPI",
-  "Swagger",
+  "Prisma",
   "Figma",
-  "Postman",
-  "Zod",
-  "Yup",
 ];
 
-// Form reference
+// Form reference and state
 const formRef = ref<FormInstance>();
 const loading = ref(false);
 const token = useCookie("auth.token");
+
+// Utility functions
+const formatSalaryInput = (type: "min" | "max") => {
+  const value = form.salary[type];
+  if (typeof value === "string") {
+    // Remove non-numeric characters and format with thousands separator
+    const numericValue = value.replace(/\D/g, "");
+    form.salary[type] = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+};
 
 // Methods
 const showTagInput = () => {
   tagInputVisible.value = true;
   nextTick(() => {
     if (tagSelectRef.value) {
-      // Use as any to bypass TypeScript errors with Element Plus components
       (tagSelectRef.value as any).focus();
     }
   });
@@ -518,7 +595,6 @@ const showTechInput = () => {
   techInputVisible.value = true;
   nextTick(() => {
     if (techSelectRef.value) {
-      // Use as any to bypass TypeScript errors with Element Plus components
       (techSelectRef.value as any).focus();
     }
   });
@@ -540,11 +616,9 @@ const handleTechConfirm = () => {
   techInputValue.value = [];
 };
 
-const uploadHeaders = () => {
-  return {
-    Authorization: token.value ? `Bearer ${token.value}` : "",
-  };
-};
+const uploadHeaders = () => ({
+  Authorization: token.value ? `Bearer ${token.value}` : "",
+});
 
 const handleUploadSuccess = (response: any) => {
   form.image = response.url || response.data?.url;
@@ -553,12 +627,16 @@ const handleUploadSuccess = (response: any) => {
 
 const beforeUpload = (file: File) => {
   const isImage = file.type.startsWith("image/");
+  const isLt5M = file.size / 1024 / 1024 < 5;
 
   if (!isImage) {
     ElMessage.error("Chỉ có thể tải lên file ảnh!");
     return false;
   }
-
+  if (!isLt5M) {
+    ElMessage.error("Kích thước ảnh không được vượt quá 5MB!");
+    return false;
+  }
   return true;
 };
 
@@ -570,7 +648,7 @@ const resetForm = () => {
 };
 
 const saveDraft = () => {
-  ElMessage.success("Đã lưu tin tuyển dụng");
+  ElMessage.success("Đã lưu nháp");
 };
 
 const submitForm = async () => {
@@ -581,15 +659,12 @@ const submitForm = async () => {
       loading.value = true;
 
       try {
-        // Fix date format issue: ensure we're passing correctly formatted date
         const formatDate = (dateString: string) => {
           if (!dateString) return "";
-
           try {
             if (dateString.includes("/")) {
               const [day, month, year] = dateString.split("/");
-              // Return ISO-like format or your API expected format
-              return `${year}-${month}-${day}`; // Changed to YYYY-MM-DD format
+              return `${year}-${month}-${day}`;
             }
             return dateString;
           } catch (e) {
@@ -598,7 +673,6 @@ const submitForm = async () => {
           }
         };
 
-        // Convert location to array if it's a string
         const locationValue =
           typeof form.location === "string" ? [form.location] : form.location;
 
@@ -617,7 +691,6 @@ const submitForm = async () => {
           status: "published",
         };
 
-        // Use the correct method name from your job posting service
         const response = await jobPostingService.jobPostControllerCreate(
           jobPostingData,
           {
@@ -629,23 +702,20 @@ const submitForm = async () => {
         );
 
         if (response.status === 201) {
+          ElMessage({
+            message: "Đăng dự án thành công!",
+            type: "success",
+          });
           setTimeout(() => {
-            ElMessage({
-              message: "Đăng job thành công!",
-              type: "success",
-            });
-            // Navigate to jobs page after successful submission
             navigateTo("/");
-          }, 2000);
+          }, 1500);
         }
       } catch (error: any) {
         console.error("Error posting job:", error);
-
-        // Display more detailed error message
         const errorMessage =
           error.response?.data?.message ||
           error.message ||
-          "Đã xảy ra lỗi khi đăng tin!";
+          "Đã xảy ra lỗi khi đăng dự án!";
         ElMessage.error("Lỗi: " + errorMessage);
       } finally {
         loading.value = false;
@@ -663,10 +733,10 @@ const formatSalary = (value: string | number) => {
   }
   return value;
 };
-// Initialize date if empty
+
+// Initialize form
 onMounted(() => {
   if (!form.deadline) {
-    // Set default deadline to 30 days from now
     const date = new Date();
     date.setDate(date.getDate() + 30);
     const day = date.getDate().toString().padStart(2, "0");
@@ -675,30 +745,137 @@ onMounted(() => {
     form.deadline = `${day}/${month}/${year}`;
   }
 
-  // Set default location if empty
   if (Array.isArray(form.location) && form.location.length === 0) {
-    form.location = ["Toàn Quốc"];
+    form.location = ["Remote"];
   }
 });
 </script>
 
 <style scoped>
-.button-new-tag {
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
+/* Custom gray background */
+.bg-gray-25 {
+  background-color: #fafafa;
 }
-button.el-button.mr-2.bg-white.text-black {
-  color: #333;
+
+/* Evergreen Form Styles */
+:deep(.evergreen-form .el-form-item__label) {
+  color: #374151 !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  margin-bottom: 6px !important;
 }
-button.el-button.button-new-tag {
-  color: #333;
+
+/* Evergreen Input Styles */
+:deep(.evergreen-input .el-input__wrapper) {
+  box-shadow: none !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  background: white !important;
+  padding: 0 12px !important;
+  transition: border-color 0.2s ease !important;
 }
-button.el-button.bg-secondary-gradient.text-white.reset {
-  color: white;
+
+:deep(.evergreen-input .el-input__wrapper:hover) {
+  border-color: #9ca3af !important;
 }
-button.el-button.bg-primary.submit-btn {
-  color: white;
+
+:deep(.evergreen-input .el-input__wrapper.is-focus) {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+:deep(.evergreen-input .el-input__inner) {
+  color: #111827 !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  height: 40px !important;
+  line-height: 40px !important;
+}
+
+/* Evergreen Select Styles */
+:deep(.evergreen-select .el-input__wrapper) {
+  box-shadow: none !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  background: white !important;
+  padding: 0 12px !important;
+  transition: border-color 0.2s ease !important;
+}
+
+:deep(.evergreen-select .el-input__wrapper:hover) {
+  border-color: #9ca3af !important;
+}
+
+:deep(.evergreen-select .el-input__wrapper.is-focus) {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Evergreen Date Picker */
+:deep(.evergreen-date .el-input__wrapper) {
+  box-shadow: none !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  background: white !important;
+  padding: 0 12px !important;
+  transition: border-color 0.2s ease !important;
+}
+
+/* Evergreen Upload */
+:deep(.evergreen-upload .el-upload-dragger) {
+  border: 2px dashed #d1d5db !important;
+  border-radius: 8px !important;
+  background: #fafafa !important;
+  transition: all 0.2s ease !important;
+}
+
+:deep(.evergreen-upload .el-upload-dragger:hover) {
+  border-color: #3b82f6 !important;
+  background: #f8faff !important;
+}
+
+/* Evergreen Popper */
+:deep(.evergreen-popper) {
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 4px !important;
+  background: white !important;
+}
+
+:deep(.evergreen-popper .el-select-dropdown__item) {
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  margin: 2px 0 !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  transition: all 0.15s ease !important;
+  color: #374151 !important;
+}
+
+:deep(.evergreen-popper .el-select-dropdown__item:hover) {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+:deep(.evergreen-popper .el-select-dropdown__item.selected) {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  font-weight: 500 !important;
+}
+
+/* Animations and transitions */
+* {
+  transition-property: color, background-color, border-color, transform,
+    box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 </style>

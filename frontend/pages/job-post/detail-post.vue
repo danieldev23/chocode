@@ -1,521 +1,416 @@
 <template>
-  <div class="min-h-screen my-4">
-    <!-- Navigation Breadcrumb -->
-    <div class="border-primary-500 mb-2">
-      <div class="container mx-auto py-3">
-        <div class="flex flex-wrap items-center text-sm text-primary">
-          <div class="flex items-center mr-2 mb-1">
-            <NuxtLink to="/" class="hover:underline">Trang chủ</NuxtLink>
-            <ChevronRight class="w-4 h-4 mx-1" />
-          </div>
-          <div class="flex items-center mr-2 mb-1">
-            <NuxtLink
-              to="/tim-viec-lam-nhan-vien-kinh-doanh"
-              class="hover:underline"
-              >Việc làm Freelance</NuxtLink
-            >
-            <ChevronRight class="w-4 h-4 mx-1" />
-          </div>
-          <div class="mb-1">
-            <span class="text-gray-600 break-words">{{
-              jobDetail?.title
-            }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Dialog -->
+  <div class="min-h-screen bg-gray-25 pt-2 pb-8">
+    <div>
+      <!-- Breadcrumb -->
+      <nav class="bg-white rounded-lg border border-gray-200 shadow-sm p-4 mb-6" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-sm">
+          <li>
+            <NuxtLink to="/" class="text-gray-600 hover:text-primary transition-colors">
+              Trang chủ
+            </NuxtLink>
+          </li>
+          <ChevronRight class="w-4 h-4 text-gray-400" />
+          <li>
+            <NuxtLink to="/job-post" class="text-gray-600 hover:text-primary transition-colors">
+              Việc làm Freelance
+            </NuxtLink>
+          </li>
+          <ChevronRight class="w-4 h-4 text-gray-400" />
+          <li class="text-gray-900 font-medium truncate max-w-xs">
+            {{ jobDetail?.title }}
+          </li>
+        </ol>
+      </nav>
 
-    <el-dialog
-      v-model="dialogOverflowVisible"
-      title="Tips"
-      width="500"
-      draggable
-      overflow
-    >
-      <span>It's a overflow draggable Dialog</span>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="dialogOverflowVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogOverflowVisible = false">
-            Confirm
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
-    <!-- Main Content -->
-    <div class="container">
+      <!-- Main Content Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Column (Job Details) -->
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-2 space-y-6">
           <!-- Job Main Info Card -->
-          <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-6">
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
               {{ jobDetail?.title }}
             </h1>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div class="flex items-center">
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3"
-                >
-                  <DollarSign class="w-5 h-5 text-primary" />
+            <!-- Job Meta Information Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <DollarSign class="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <div class="text-gray-500 text-sm">Ngân sách</div>
-                  <div class="font-semibold">
-                    {{ formatCurrency(jobDetail?.salaryMin) }} -
-                    {{ formatCurrency(jobDetail?.salaryMax) }}
-                  </div>
+                  <p class="text-sm font-medium text-gray-900">Ngân sách</p>
+                  <p class="text-gray-600">
+                    {{ formatCurrency(jobDetail?.salaryMin) }} - {{ formatCurrency(jobDetail?.salaryMax) }}
+                  </p>
                 </div>
               </div>
 
-              <div class="flex items-center">
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3"
-                >
+              <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <MapPin class="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <div class="text-gray-500 text-sm">Địa điểm</div>
-                  <div class="font-semibold">Toàn Quốc</div>
+                  <p class="text-sm font-medium text-gray-900">Địa điểm</p>
+                  <p class="text-gray-600">Toàn Quốc</p>
                 </div>
               </div>
 
-              <div class="flex items-center">
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3"
-                >
-                  <Award class="w-5 h-5 text-primary" />
+              <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Award class="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <div class="text-gray-500 text-sm">Kinh nghiệm</div>
-                  <div class="font-semibold">1 năm</div>
+                  <p class="text-sm font-medium text-gray-900">Kinh nghiệm</p>
+                  <p class="text-gray-600">1 năm</p>
                 </div>
               </div>
             </div>
 
-            <div class="flex items-center mb-6">
-              <Clock class="w-5 h-5 text-gray-500 mr-2" />
-              <span class="text-gray-600"
-                >Hạn nộp hồ sơ: {{ formatDeadline(jobDetail?.deadline) }}</span
-              >
+            <!-- Deadline Info -->
+            <div class="flex items-center mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+              <Clock class="w-5 h-5 text-orange-600 mr-3" />
+              <span class="text-orange-800 font-medium">
+                Hạn nộp hồ sơ: {{ formatDeadline(jobDetail?.deadline) }}
+              </span>
             </div>
 
-            <div class="flex space-x-3">
-              <el-button
-                type="primary"
-                class="w-full flex justify-center items-center bg-primary"
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button
                 @click="handleApplyClick"
                 :loading="loading"
                 :disabled="formatDeadline(jobDetail?.deadline) === 'Đã hết hạn'"
+                class="flex-1 bg-primary hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center"
               >
                 <Send class="w-4 h-4 mr-2" />
-                Ứng tuyển ngay
-              </el-button>
-              <el-tooltip content="Lưu" placement="top" effect="light">
-                <el-button
-                  @click="save"
-                  class="w-full md:w-auto flex items-center border bg-white text-black"
-                  :disabled="
-                    formatDeadline(jobDetail?.deadline) === 'Đã hết hạn'
-                  "
-                >
-                  <Bookmark class="w-4 h-4 mr-2" />
-                  Lưu tin
-                </el-button>
-              </el-tooltip>
+                {{ loading ? 'Đang xử lý...' : 'Ứng tuyển ngay' }}
+              </button>
+              
+              <button
+                @click="save"
+                :disabled="formatDeadline(jobDetail?.deadline) === 'Đã hết hạn'"
+                class="flex-1 sm:flex-initial bg-white hover:bg-gray-50 disabled:bg-gray-100 border border-gray-300 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center"
+              >
+                <Bookmark class="w-4 h-4 mr-2" />
+                Lưu tin
+              </button>
             </div>
-
-            <!-- Balance Check Modal -->
-            <el-dialog
-              v-model="dialogVisible"
-              :title="modalState.title"
-              width="440px"
-              :close-on-click-modal="false"
-              :show-close="modalState.showClose"
-              class="modern-dialog"
-            >
-              <!-- Loading State -->
-              <div
-                v-if="modalState.status === 'loading'"
-                class="status-container"
-              >
-                <div class="loading-animation">
-                  <el-progress
-                    type="circle"
-                    :percentage="loadingProgress"
-                    :stroke-width="6"
-                    :width="110"
-                    :color="'#0089FF'"
-                  />
-                </div>
-                <p class="status-text">Đang kiểm tra số dư...</p>
-              </div>
-
-              <!-- Success State -->
-              <div
-                v-else-if="modalState.status === 'success'"
-                class="status-container"
-              >
-                <div class="status-icon success">
-                  <CheckCircle class="icon" />
-                </div>
-
-                <h3 class="status-title success-title">
-                  Đủ điều kiện nhận job này!
-                </h3>
-
-                <div class="balance-info">
-                  <span>Số dư tài khoản:</span>
-                  <div class="balance-value">
-                    {{ userBalance }}
-                    <el-tooltip
-                      placement="top"
-                      content="<strong>Code Points (CP)</strong><br>Là đơn vị tiền tệ tại <em>Chocode</em><br>1 CP = 1.000 VNĐ"
-                      raw-content
-                    >
-                      <span class="cp-label">CP</span>
-                    </el-tooltip>
-                  </div>
-                </div>
-
-                <div class="user-info-card">
-                  <h4 class="section-title">Thông tin khách hàng</h4>
-                  <div class="user-info-row">
-                    <span class="label">Họ tên:</span>
-                    <span class="value">{{ jobDetail?.user?.fullName }}</span>
-                  </div>
-                  <div class="user-info-row">
-                    <span class="label">Email:</span>
-                    <span class="value">huydq.@gmail.com</span>
-                  </div>
-                  <div class="user-info-row">
-                    <span class="label">SĐT:</span>
-                    <span class="value">03498453984980</span>
-                  </div>
-                </div>
-
-                <button
-                  class="action-button confirm bg-primary"
-                  @click="confirmApply"
-                >
-                  Xác nhận ứng tuyển
-                </button>
-              </div>
-
-              <!-- Error State -->
-              <div
-                v-else-if="modalState.status === 'error'"
-                class="status-container"
-              >
-                <div class="status-icon error">
-                  <AlertCircle class="icon" />
-                </div>
-
-                <h3 class="status-title error-title">Không đủ số dư</h3>
-
-                <div class="balance-comparison">
-                  <div class="balance-row">
-                    <span>Số dư hiện tại:</span>
-                    <span class="value">{{ userBalance }} CP</span>
-                  </div>
-                  <div class="balance-row required">
-                    <span>Số dư cần thiết:</span>
-                    <span class="value">6 CP</span>
-                  </div>
-                </div>
-
-                <div class="action-buttons">
-                  <button
-                    class="action-button recharge bg-secondary-gradient"
-                    @click="goToRecharge"
-                  >
-                    Nạp tiền ngay
-                  </button>
-                  <button class="action-button cancel" @click="closeDialog">
-                    Đóng
-                  </button>
-                </div>
-              </div>
-            </el-dialog>
           </div>
 
           <!-- Job Details Card -->
-          <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-              <div class="w-1 h-6 bg-primary mr-3"></div>
-              Chi tiết tin tuyển dụng
-            </h2>
-
-            <!-- <div class="flex flex-wrap gap-2 mb-6">
-              <el-tag v-for="(id, tag) in jobDetail?.tags" size="large">{{ tag.name }}</el-tag>
-              
-            </div> -->
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-              <img
-                :src="jobDetail?.image || CompanyImage"
-                alt="Company image"
-                class="rounded-md w-full cursor-pointer"
-                @click="centerDialogVisible = true"
-              />
-              <el-dialog v-model="centerDialogVisible" fullscreen align-center>
-                <img
-                  :src="jobDetail?.image || CompanyImage"
-                  alt="Company image"
-                  class="rounded-md w-full"
-                />
-              </el-dialog>
-              <!-- <div class="relative rounded-lg overflow-hidden">
-                <img src="https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/employer_medias/bead6bd6028cf85ab6b2f76f88759de9-67ca5114134ea.jpg" alt="Additional photo" class="rounded-lg">
-                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white font-bold text-xl">
-                  +1
-                </div>
-              </div> -->
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center mb-6">
+              <div class="w-1 h-6 bg-primary mr-3 rounded-full"></div>
+              <h2 class="text-xl font-semibold text-gray-900">Chi tiết tin tuyển dụng</h2>
             </div>
 
-            <!-- <div class="mb-6">
-              <h3 class="text-lg font-bold mb-3">Mô tả công việc</h3>
-              <ul class="space-y-2 list-inside text-gray-700">
-                <li class="flex">
-                  <span class="mr-2">-</span>
-                  <span>Đánh giá và phân tích nhu cầu của khách hàng</span>
-                </li>
-                <li class="flex">
-                  <span class="mr-2">-</span>
-                  <span>Tư vấn sản phẩm Thiết kế - Xây dựng - Nội Thất</span>
-                </li>
-                <li class="flex">
-                  <span class="mr-2">-</span>
-                  <span>Đàm phán và ký hợp đồng</span>
-                </li>
-                <li class="flex">
-                  <span class="mr-2">-</span>
-                  <span>Duy trì các khách hàng tiềm năng.</span>
-                </li>
-              </ul>
-            </div> -->
-            <div
-              class="mb-6 text-base"
-              v-html="jobDetail?.jobDescription"
-            ></div>
-            <!-- <div>
-              <h3 class="text-lg font-bold mb-3">Yêu cầu ứng viên</h3>
-              <ul class="space-y-2 list-inside text-gray-700">
-                <li class="flex">
-                  <span class="mr-2">•</span>
-                  <span>Có kinh nghiệm trong lĩnh vực thiết kế, xây dựng.</span>
-                </li>
-                <li class="flex">
-                  <span class="mr-2">•</span>
-                  <span>Đam mê tư vấn, bán hàng.</span>
-                </li>
-                <li class="flex">
-                  <span class="mr-2">•</span>
-                  <span
-                    >Kỹ năng giao tiếp, thuyết trình, thuyết phục tốt. (Sẽ được
-                    đào tạo thêm).</span
-                  >
-                </li>
-              </ul>
-            </div> -->
+            <!-- Project Images -->
+            <div v-if="jobDetail?.image" class="mb-6">
+              <img
+                :src="jobDetail?.image || CompanyImage"
+                alt="Project image"
+                class="w-full max-w-md rounded-lg border border-gray-200 cursor-pointer hover:shadow-md transition-shadow"
+                @click="centerDialogVisible = true"
+              />
+            </div>
+
+            <!-- Job Description -->
+            <div class="job-description prose prose-gray max-w-none" v-html="jobDetail?.jobDescription"></div>
           </div>
         </div>
 
-        <!-- Right Column (Company Info) -->
-        <div class="lg:col-span-1">
+        <!-- Right Column (Company & Info) -->
+        <div class="lg:col-span-1 space-y-6">
           <!-- Company Card -->
-          <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <div class="flex flex-col items-center mb-6">
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <div class="text-center mb-6">
               <img
-                :src="`${jobDetail?.user?.avatar}`"
-                alt="UY VU Logo"
-                class="w-20 h-20 mb-3 rounded-full border-primary border"
+                :src="jobDetail?.user?.avatar"
+                :alt="jobDetail?.user?.fullName"
+                class="w-20 h-20 rounded-full object-cover mx-auto border-4 border-blue-100 mb-3"
               />
               <NuxtLink
                 :to="`/trang-ca-nhan/${jobDetail?.user?.username}`"
-                class="text-lg font-bold text-center"
+                class="text-lg font-semibold text-gray-900 hover:text-primary transition-colors"
               >
                 {{ jobDetail?.user?.fullName }}
               </NuxtLink>
             </div>
 
-            <div class="space-y-4">
-              <h3 class="font-semibold">Thông tin dự án</h3>
-              <div class="flex">
-                <IdCard class="w-5 h-5 text-gray-500 mr-3 flex-shrink-0 mt-1" />
+            <div class="space-y-4 mb-6">
+              <h3 class="font-semibold text-gray-900">Thông tin dự án</h3>
+              
+              <div class="flex items-start space-x-3">
+                <IdCard class="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <div class="text-gray-500 text-sm">ID Dự án:</div>
-                  <div>{{ jobDetail?.id }}</div>
+                  <p class="text-sm font-medium text-gray-900">ID Dự án</p>
+                  <p class="text-gray-600">{{ jobDetail?.id }}</p>
                 </div>
               </div>
 
-              <div class="flex">
-                <CalendarCheck
-                  class="w-5 h-5 text-gray-500 mr-3 flex-shrink-0 mt-1"
-                />
+              <div class="flex items-start space-x-3">
+                <CalendarCheck class="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <div class="text-gray-500 text-sm">Ngày đăng:</div>
-                  <div>
-                    {{
-                      jobDetail?.createdAt
-                        ? formatPostDate(jobDetail.createdAt.toString())
-                        : "Đang tải"
-                    }}
-                  </div>
+                  <p class="text-sm font-medium text-gray-900">Ngày đăng</p>
+                  <p class="text-gray-600">
+                    {{ jobDetail?.createdAt ? formatPostDate(jobDetail.createdAt.toString()) : "Đang tải" }}
+                  </p>
                 </div>
               </div>
 
-              <div class="flex">
-                <MapPin class="w-5 h-5 text-gray-500 mr-3 flex-shrink-0 mt-1" />
+              <div class="flex items-start space-x-3">
+                <MapPin class="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <div class="text-gray-500 text-sm">Đến từ:</div>
-                  <div>Đà Nẵng</div>
+                  <p class="text-sm font-medium text-gray-900">Đến từ</p>
+                  <p class="text-gray-600">Đà Nẵng</p>
                 </div>
               </div>
             </div>
 
-            <div class="mt-6">
-              <NuxtLink
-                :to="`/trang-ca-nhan/${jobDetail?.user?.username}`"
-                class="w-full flex items-center justify-center bg-primary text-white rounded-[3px] py-[5px]"
-              >
-                <ExternalLink class="w-4 h-4 mr-2" />
-                Ghé thăm trang cá nhân
-              </NuxtLink>
-            </div>
+            <NuxtLink
+              :to="`/trang-ca-nhan/${jobDetail?.user?.username}`"
+              class="w-full bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+            >
+              <ExternalLink class="w-4 h-4 mr-2" />
+              Ghé thăm trang cá nhân
+            </NuxtLink>
           </div>
 
           <!-- General Information Card -->
-          <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h3 class="text-lg font-bold mb-4">Thông tin chung</h3>
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Thông tin chung</h3>
 
             <div class="space-y-4">
-              <div class="flex">
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3"
-                >
+              <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <UserCheck class="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <div class="text-gray-500 text-sm">Cấp bậc</div>
-                  <div class="font-medium">Nhân viên</div>
+                  <p class="text-sm font-medium text-gray-900">Cấp bậc</p>
+                  <p class="text-gray-600">Nhân viên</p>
                 </div>
               </div>
 
-              <div class="flex">
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3"
-                >
-                  <GraduationCap class="w-5 h-5 text-primary" />
+              <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <GraduationCap class="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <div class="text-gray-500 text-sm">Học vấn</div>
-                  <div class="font-medium">Trung cấp trở lên</div>
+                  <p class="text-sm font-medium text-gray-900">Học vấn</p>
+                  <p class="text-gray-600">Trung cấp trở lên</p>
                 </div>
               </div>
 
-              <div class="flex">
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3"
-                >
-                  <Users class="w-5 h-5 text-primary" />
+              <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Users class="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <div class="text-gray-500 text-sm">Số lượng tuyển</div>
-                  <div class="font-medium">3 người</div>
+                  <p class="text-sm font-medium text-gray-900">Số lượng tuyển</p>
+                  <p class="text-gray-600">3 người</p>
                 </div>
               </div>
 
-              <div class="flex">
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center mr-3"
-                >
-                  <Clock class="w-5 h-5 text-primary" />
+              <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Clock class="w-5 h-5 text-orange-600" />
                 </div>
                 <div>
-                  <div class="text-gray-500 text-sm">Hình thức làm việc</div>
-                  <div class="font-medium">Làm online</div>
+                  <p class="text-sm font-medium text-gray-900">Hình thức làm việc</p>
+                  <p class="text-gray-600">Làm online</p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Related Jobs Category Card -->
-          <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h3 class="text-lg font-bold mb-4">Danh mục Nghề liên quan</h3>
-
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Danh mục nghề liên quan</h3>
+            
             <div class="flex flex-wrap gap-2">
-              <el-tag size="large">Kinh doanh/Bán hàng</el-tag>
-              <el-tag size="large">Bất động sản/Xây dựng</el-tag>
-              <el-tag size="large">Sales Bất động sản/Xây dựng</el-tag>
-              <el-tag size="large">Kinh doanh nội thất</el-tag>
+              <span class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
+                Kinh doanh/Bán hàng
+              </span>
+              <span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
+                Bất động sản/Xây dựng
+              </span>
+              <span class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full">
+                Sales Bất động sản
+              </span>
+              <span class="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-700 text-sm font-medium rounded-full">
+                Kinh doanh nội thất
+              </span>
             </div>
           </div>
 
           <!-- Location Card -->
-          <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <h3 class="text-lg font-bold mb-4">Khu vực</h3>
-
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Khu vực</h3>
+            
             <div class="flex flex-wrap gap-2">
-              <el-tag size="large">Đà Nẵng</el-tag>
-              <el-tag size="large">Cẩm Lệ</el-tag>
+              <span class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
+                Đà Nẵng
+              </span>
+              <span class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
+                Cẩm Lệ
+              </span>
             </div>
           </div>
 
-          <div class="bg-white rounded-lg shadow-sm p-6">
-            <h3 class="text-lg font-bold mb-4">Gợi ý việc làm phù hợp</h3>
-            <el-popover
-              placement="left"
-              width="550"
-              trigger="hover"
-              teleported
-              class="custom-popover"
-            >
-              <template #reference>
-                <div class="border border-gray-200 rounded-md">
-                  <div class="flex justify-start gap-2 p-2">
-                    <NuxtLink to="">
-                      <img
-                        src="https://cdn-new.topcv.vn/unsafe/150x/https://static.topcv.vn/company_logos/Ub1FnI8OO8XFJrryvrVSD0vq9gQ3gb7x_1723602274____24eb1708168fa261fc0535d74dddcaa2.jpg"
-                        class="w-20 h-20 border border-gray-100 cursor-pointer rounded-full"
-                      />
-                    </NuxtLink>
-                    <div class="flex flex-col">
-                      <NuxtLink class="text-sm cursor-pointer mb-1"
-                        >Senior NodeJS</NuxtLink
-                      >
-                      <NuxtLink class="text-xs text-gray-custom cursor-pointer"
-                        >CHOCODE SOFTWARE CO,. LTD</NuxtLink
-                      >
-                    </div>
-                  </div>
-                  <div class="p-2 flex items-center justify-between">
-                    <div class="flex items-center text-xs gap-x-2 font-thin">
-                      <NuxtLink
-                        class="rounded-full bg-gray-100 py-1 px-3 cursor-pointer"
-                        >Thoả thuận</NuxtLink
-                      >
-                      <NuxtLink
-                        class="rounded-full bg-gray-100 py-1 px-3 cursor-pointer"
-                        >Đà Nẵng</NuxtLink
-                      >
-                    </div>
-                    <el-tooltip content="Lưu" placement="top" effect="light">
-                      <Heart
-                        @click="save"
-                        class="w-5 h-5 hover:text-red-500 cursor-pointer"
-                      />
-                    </el-tooltip>
+          <!-- Suggested Jobs Card -->
+          <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Gợi ý việc làm phù hợp</h3>
+            
+            <div class="border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+              <div class="flex items-start space-x-3 p-4">
+                <img
+                  src="https://cdn-new.topcv.vn/unsafe/150x/https://static.topcv.vn/company_logos/Ub1FnI8OO8XFJrryvrVSD0vq9gQ3gb7x_1723602274____24eb1708168fa261fc0535d74dddcaa2.jpg"
+                  alt="Company logo"
+                  class="w-12 h-12 rounded-lg object-cover border border-gray-200"
+                />
+                <div class="flex-1 min-w-0">
+                  <NuxtLink class="text-sm font-medium text-gray-900 hover:text-primary transition-colors line-clamp-1">
+                    Senior NodeJS Developer
+                  </NuxtLink>
+                  <NuxtLink class="text-xs text-gray-600 hover:text-primary transition-colors">
+                    CHOCODE SOFTWARE CO,. LTD
+                  </NuxtLink>
+                </div>
+              </div>
+              
+              <div class="px-4 pb-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-md">
+                    Thỏa thuận
+                  </span>
+                  <span class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-md">
+                    Đà Nẵng
+                  </span>
+                </div>
+                
+                <button
+                  @click="save"
+                  class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <Heart class="w-4 h-4 text-gray-500 hover:text-red-500" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Modal -->
+      <div v-if="dialogVisible" class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+          <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" @click="closeDialog"></div>
+
+          <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-6 py-4 border-b border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-900">{{ modalState.title }}</h3>
+            </div>
+
+            <div class="bg-white px-6 py-6">
+              <!-- Loading State -->
+              <div v-if="modalState.status === 'loading'" class="text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                  <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <p class="text-gray-600">Đang kiểm tra số dư...</p>
+              </div>
+
+              <!-- Success State -->
+              <div v-else-if="modalState.status === 'success'" class="text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                  <CheckCircle class="w-8 h-8 text-green-600" />
+                </div>
+                
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Đủ điều kiện nhận job này!</h3>
+                
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                  <div class="flex items-center justify-between text-sm">
+                    <span class="text-gray-600">Số dư tài khoản:</span>
+                    <span class="font-semibold text-gray-900">{{ userBalance }} CP</span>
                   </div>
                 </div>
-              </template>
 
-              <!-- Nội dung popover -->
-              <JobBoxDetail />
-            </el-popover>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                  <h4 class="font-medium text-blue-900 mb-3">Thông tin khách hàng</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span class="text-blue-700">Họ tên:</span>
+                      <span class="text-blue-900 font-medium">{{ jobDetail?.user?.fullName }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-blue-700">Email:</span>
+                      <span class="text-blue-900 font-medium">contact@chocode.dev</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-blue-700">SĐT:</span>
+                      <span class="text-blue-900 font-medium">0349 845 3984</span>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  @click="confirmApply"
+                  class="w-full bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                >
+                  Xác nhận ứng tuyển
+                </button>
+              </div>
+
+              <!-- Error State -->
+              <div v-else-if="modalState.status === 'error'" class="text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                  <AlertCircle class="w-8 h-8 text-red-600" />
+                </div>
+                
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Không đủ số dư</h3>
+                
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span class="text-red-700">Số dư hiện tại:</span>
+                      <span class="font-semibold text-red-900">{{ userBalance }} CP</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-red-700">Số dư cần thiết:</span>
+                      <span class="font-semibold text-red-900">6 CP</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-3">
+                  <button
+                    @click="goToRecharge"
+                    class="w-full bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+                  >
+                    Nạp tiền ngay
+                  </button>
+                  <button
+                    @click="closeDialog"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors"
+                  >
+                    Đóng
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Image Modal -->
+      <div v-if="centerDialogVisible" class="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-90" @click="centerDialogVisible = false">
+        <div class="flex items-center justify-center min-h-screen p-4">
+          <img
+            :src="jobDetail?.image || CompanyImage"
+            alt="Project image"
+            class="max-w-full max-h-full rounded-lg"
+            @click.stop
+          />
         </div>
       </div>
     </div>
@@ -532,7 +427,6 @@ import {
   Send,
   Bookmark,
   Users,
-  Briefcase,
   ExternalLink,
   UserCheck,
   GraduationCap,
@@ -544,94 +438,77 @@ import {
 } from "lucide-vue-next";
 
 import CompanyImage from "/images/header/banner2.gif";
+
+// Reactive state
 const { status } = useAuth();
 const dialogVisible = ref(false);
 const loading = ref(false);
-const loadingProgress = ref(0);
 const userBalance = ref<number>(0);
-const dialogOverflowVisible = ref(false);
-import type { JobPostingResponseDtoUpdate } from "~/interfaces/job.interface";
-import type { AxiosResponse } from "axios";
-interface UserBalanceResponse {
-  ballance: number;
-}
 const centerDialogVisible = ref(false);
+
 // Modal state management
 const modalState = reactive({
   status: "loading", // 'loading', 'success', 'error'
   title: "Kiểm tra số dư",
   showClose: false,
 });
+
 const currentUser = await useCurrentUser();
 const token = useCookie("auth.token");
-// Progress bar animation
-const animateLoading = () => {
-  loadingProgress.value = 0;
-  const interval = setInterval(() => {
-    loadingProgress.value += 10;
-    if (loadingProgress.value >= 100) {
-      clearInterval(interval);
-    }
-  }, 150);
-};
 
 // Handle apply click
 const handleApplyClick = async () => {
   loading.value = true;
+  
   if (status.value === "unauthenticated") {
     ElMessage.warning("Bạn cần phải đăng nhập để nhận job này!");
     loading.value = false;
-  } else {
-    try {
-      dialogVisible.value = true;
-      modalState.status = "loading";
-      modalState.title = "Kiểm tra số dư";
-      modalState.showClose = false;
+    return;
+  }
 
-      // Animate loading
-      animateLoading();
+  try {
+    dialogVisible.value = true;
+    modalState.status = "loading";
+    modalState.title = "Kiểm tra số dư";
+    modalState.showClose = false;
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      const response = await userService.userControllerGetBallance(
-        currentUser.value?.username as string,
-        {
-          headers: {
-            Authorization: `Bearer ${token.value}`,
-          },
-        }
-      );
-      userBalance.value = (
-        response.data as unknown as { balance: number }
-      ).balance;
-
-      // Wait a bit before showing result
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      if (userBalance.value >= 6) {
-        modalState.status = "success";
-        modalState.title = "Kết quả kiểm tra";
-        modalState.showClose = true;
-      } else {
-        modalState.status = "error";
-        modalState.title = "Kết quả kiểm tra";
-        modalState.showClose = true;
+    const response = await userService.userControllerGetBallance(
+      currentUser.value?.username as string,
+      {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
       }
-    } catch (error) {
-      console.error("Error checking balance:", error);
-      modalState.status = "error";
-      modalState.title = "Lỗi kiểm tra";
+    );
+    
+    userBalance.value = (response.data as unknown as { balance: number }).balance;
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    if (userBalance.value >= 6) {
+      modalState.status = "success";
+      modalState.title = "Kết quả kiểm tra";
       modalState.showClose = true;
-    } finally {
-      loading.value = false;
+    } else {
+      modalState.status = "error";
+      modalState.title = "Kết quả kiểm tra";
+      modalState.showClose = true;
     }
+  } catch (error) {
+    console.error("Error checking balance:", error);
+    modalState.status = "error";
+    modalState.title = "Lỗi kiểm tra";
+    modalState.showClose = true;
+  } finally {
+    loading.value = false;
   }
 };
 
 // Confirm application submission
 const confirmApply = async () => {
   try {
-    // Here you would call your API to submit the application
     ElMessage({
       message: "Ứng tuyển thành công!",
       type: "success",
@@ -648,9 +525,6 @@ const confirmApply = async () => {
 
 // Navigate to recharge page
 const goToRecharge = () => {
-  // In a real app, you would use router.push or navigateTo
-  console.log("Navigating to recharge page");
-  // navigateTo('/payment/recharge');
   ElMessage({
     message: "Chuyển hướng đến trang nạp tiền",
     type: "info",
@@ -662,42 +536,49 @@ const closeDialog = () => {
   dialogVisible.value = false;
 };
 
+// Save job
 const save = () => {
   if (status.value === "unauthenticated") {
     ElMessage.warning("Bạn cần phải đăng nhập để lưu job này!");
-    loading.value = false;
-  } else {
-    ElNotification({
-      title: "Thành công",
-      message: "Lưu việc làm thành công",
-      type: "success",
-    });
+    return;
   }
+  
+  ElNotification({
+    title: "Thành công",
+    message: "Lưu việc làm thành công",
+    type: "success",
+  });
 };
+
+// Get job details
 const route = useRoute();
 const slug = route.params.slug as string;
 const jobDetail = ref<JobPostingResponseDtoUpdate | undefined>(undefined);
 
 const response = await jobPostingService.jobPostControllerFindOne(slug);
 jobDetail.value = response.data as JobPostingResponseDtoUpdate;
+
+// SEO Meta
 watchEffect(() => {
   if (!jobDetail.value) return;
 
   useSeoMeta({
-    title: `${jobDetail.value.title} | Việc làm IT`,
-    description:
-      jobDetail.value.jobDescription?.slice(0, 150) || "Mô tả việc làm",
+    title: `${jobDetail.value.title} | Việc làm Freelance - ChoCode`,
+    description: jobDetail.value.jobDescription?.slice(0, 150) || "Cơ hội việc làm freelance tuyệt vời tại ChoCode",
     ogTitle: jobDetail.value.title,
     ogDescription: jobDetail.value.jobDescription?.slice(0, 150),
-    ogImage: "https://yourdomain.com/default-image.jpg",
-    ogUrl: `https://yourdomain.com/viec-lam/${slug}`,
+    ogImage: jobDetail.value.image || "https://chocode.dev/default-job-image.jpg",
+    ogUrl: `https://chocode.dev/job-post/${slug}`,
     twitterCard: "summary_large_image",
   });
 });
+
+// Helper functions
 const formatCurrency = (value: number | null | undefined): string => {
   if (value === null || value === undefined) return "0 đ";
-  return new Intl.NumberFormat("vi-VN").format(value * 1) + " đ";
+  return new Intl.NumberFormat("vi-VN").format(value) + " đ";
 };
+
 const formatDeadline = (deadline: Date | string | null | undefined): string => {
   if (!deadline) return "Không có hạn";
   const target = new Date(deadline);
@@ -719,10 +600,6 @@ const formatDeadline = (deadline: Date | string | null | undefined): string => {
   return result.trim();
 };
 
-const toProfile = (username: string) => {
-  navigateTo(`/trang-ca-nhan/${username}`);
-};
-
 const formatPostDate = (date: string) => {
   return new Date(date)
     .toLocaleString("vi-VN", {
@@ -737,218 +614,92 @@ const formatPostDate = (date: string) => {
 };
 </script>
 
-<style>
-.modern-dialog :deep(.el-dialog__header) {
-  padding: 16px 20px;
-  border-bottom: 1px solid #eaeaea;
-  margin-right: 0;
+<style scoped>
+/* Custom background */
+.bg-gray-25 {
+  background-color: #fafafa;
 }
 
-.modern-dialog :deep(.el-dialog__body) {
-  padding: 0;
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
-.modern-dialog :deep(.el-dialog__title) {
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
+/* Line clamp utility */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.status-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 28px 24px;
+/* Job description styling */
+.job-description {
+  @apply text-gray-700 leading-relaxed;
 }
 
-.loading-animation {
-  margin-bottom: 20px;
+.job-description :deep(p) {
+  @apply mb-4;
 }
 
-.status-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
+.job-description :deep(strong) {
+  @apply font-semibold text-gray-900;
 }
 
-.status-icon.success {
-  background-color: rgba(0, 200, 83, 0.1);
+.job-description :deep(ul),
+.job-description :deep(ol) {
+  @apply ml-6 mb-4;
 }
 
-.status-icon.error {
-  background-color: rgba(255, 71, 87, 0.1);
+.job-description :deep(ul) {
+  @apply list-disc;
 }
 
-.icon {
-  width: 40px;
-  height: 40px;
+.job-description :deep(ol) {
+  @apply list-decimal;
 }
 
-.status-icon.success .icon {
-  color: #00c853;
+.job-description :deep(h1),
+.job-description :deep(h2),
+.job-description :deep(h3) {
+  @apply font-bold mb-3 mt-6 text-gray-900;
 }
 
-.status-icon.error .icon {
-  color: #ff4757;
+.job-description :deep(h1) {
+  @apply text-xl;
 }
 
-.status-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  color: #333;
+.job-description :deep(h2) {
+  @apply text-lg;
 }
 
-.status-text {
-  font-size: 16px;
-  color: #666;
+.job-description :deep(h3) {
+  @apply text-base;
 }
 
-.balance-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  margin-bottom: 24px;
+/* Focus styles */
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
-.balance-value {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  color: #333;
-}
-
-.cp-label {
-  color: #0089ff;
-  margin-left: 4px;
-  cursor: help;
-}
-
-.user-info-card {
-  width: 100%;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-}
-
-.section-title {
-  color: #0089ff;
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-
-.user-info-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.user-info-row:last-child {
-  margin-bottom: 0;
-}
-
-.label {
-  color: #666;
-}
-
-.value {
-  font-weight: 500;
-  color: #333;
-}
-
-.balance-comparison {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.balance-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-}
-
-.balance-row.required .value {
-  color: #ff4757;
-  font-weight: 600;
-}
-
-.action-buttons {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.action-button {
-  width: 100%;
-  height: 48px;
-  border-radius: 100rem;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-}
-
-.action-button.confirm {
-  color: white;
-}
-
-.action-button.confirm:hover {
-  background-color: #0072d6;
-}
-
-.action-button.recharge {
-  color: white;
-}
-
-.action-button.recharge:hover {
-  background-color: #0072d6;
-}
-
-.action-button.cancel {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  color: #666;
-}
-
-.action-button.cancel:hover {
-  background-color: #eaeaea;
-}
-.el-button--success {
-  background-color: #10b981;
-}
-@media (max-width: 768px) {
-  .custom-popover {
-    width: 90% !important;
-    max-width: 320px !important;
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
-button.el-button.w-full.md\:w-auto.flex.items-center.border.bg-white.text-black.el-tooltip__trigger.el-tooltip__trigger {
-  color: #333;
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
-.el-button.custom-color {
-  color: black;
-  align-items: center;
-  display: inline-flex;
-}
-button.el-button.flex.items-center.border-none.bg-transparent.el-tooltip__trigger.el-tooltip__trigger {
-  border: none;
-  color: #ff7979;
-  padding: 0;
-  margin-bottom: 1px;
-}
-button.el-button.flex.items-center.border-none.bg-transparent.el-tooltip__trigger.el-tooltip__trigger:hover {
-  background: transparent;
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .grid {
+    gap: 1rem;
+  }
 }
 </style>

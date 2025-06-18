@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <!-- Search Section with semantic HTML -->
-
-    <!-- Header-->
-    <div class="flex justify-between items-center mt-6 mb-3">
-      <h1 class="text-xl font-semibold text-gray-800 flex items-center">
+  <div class="my-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg font-semibold text-gray-900">
         {{ title }}
-      </h1>
+      </h2>
       <NuxtLink
-        class="text-primary text-base font-medium hover:text-primary transition flex items-center"
+        class="text-primary text-sm font-medium hover:text-blue-700 transition-colors flex items-center"
         to="/viec-lam-freelance"
       >
         Xem thêm
@@ -17,136 +15,180 @@
     </div>
 
     <!-- Skeleton Loading -->
-    <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <el-skeleton :rows="6" animated class="w-full" />
-      <el-skeleton :rows="6" animated class="w-full" />
-    </div>
-
-    <!-- Job List or Empty State -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div v-if="isLoading" class="space-y-4">
       <div
-        v-if="paginatedJobs.length === 0"
-        class="text-center text-gray-500 py-2 col-span-full"
+        v-for="i in 3"
+        :key="i"
+        class="bg-white rounded-lg border border-gray-200 p-6"
       >
-        <SearchX class="w-8 h-8 mx-auto text-gray-400 mb-2" />
-        Hiện tại chưa có việc làm nào.
-      </div>
-
-      <div
-        v-for="job in paginatedJobs"
-        :key="job.id"
-        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition duration-300 mb-0"
-      >
-        <!-- Job Header -->
-        <div
-          class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4"
-        >
-          <div class="flex items-center mb-3 sm:mb-0">
-            <NuxtImg
-              :src="job.user?.avatar"
-              loading="lazy"
-              class="w-16 h-16 rounded-full object-cover mr-4"
-              alt="Avatar"
-            />
-            <div>
-              <NuxtLink
-                :to="`/viec-freelance/${job.slug}`"
-                class="text-base font-semibold cursor-pointer line-clamp-1 hover:underline hover:text-primary"
-              >
-                {{ job.title || "Chưa có tiêu đề" }}
-              </NuxtLink>
-              <div
-                class="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-sm text-gray-600 mt-1"
-              >
-                <NuxtLink
-                  :to="`/trang-ca-nhan/${job.user?.username || 'unknown'}`"
-                  class="flex items-center"
-                >
-                  <User class="w-4 h-4 mr-1 text-gray-500" />
-                  {{ job.user?.fullName || job.userId || "Không xác định" }}
-                </NuxtLink>
-                <div class="flex items-center">
-                  <MapPin class="w-4 h-4 mr-1 text-gray-500" />
-                  {{ job.location || "Remote" }}
-                </div>
-              </div>
+        <div class="animate-pulse">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+            <div class="space-y-2 flex-1">
+              <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="h-3 bg-gray-200 rounded"></div>
+            <div class="h-3 bg-gray-200 rounded w-2/3"></div>
+            <div class="flex space-x-2">
+              <div class="h-6 bg-gray-200 rounded-full w-16"></div>
+              <div class="h-6 bg-gray-200 rounded-full w-20"></div>
             </div>
           </div>
         </div>
-
-        <!-- Salary and Deadline -->
-        <div
-          class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4"
-        >
-          <div class="text-primary font-medium text-base mb-2 sm:mb-0">
-            <DollarSign class="w-4 h-4 inline mr-1" />
-            {{ formatCurrency(job.salaryMin) }} -
-            {{ formatCurrency(job.salaryMax) }}
-          </div>
-          <div class="text-gray-600 text-sm">
-            <Calendar class="w-4 h-4 inline mr-1" />
-            Hạn nhận hồ sơ: {{ formatDeadline(job.deadline) }}
-          </div>
-        </div>
-
-        <!-- Tags and Technologies -->
-        <div class="flex flex-wrap gap-2 mb-4">
-          <NuxtLink
-            v-if="job.tags?.length"
-            class="bg-blue-100 text-primary text-xs font-medium px-2.5 py-1 rounded-full"
-            :to="`/tim-kiem-viec-lam?danh-muc=${job.tags[0]}`"
-          >
-            {{ job.tags[0] }}
-          </NuxtLink>
-          <NuxtLink
-            v-for="(tech, index) in job.technologies"
-            :key="index"
-            class="bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded-full"
-            :to="`/tim-kiem-viec-lam?q=${tech}`"
-          >
-            {{ tech }}
-          </NuxtLink>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex justify-between items-center">
-          <button
-            @click="applyForJob(job.id, job.title)"
-            class="bg-primary text-white text-sm font-medium py-2 px-4 rounded-full hover:bg-blue-700 transition duration-150 flex items-center"
-          >
-            Nhận job ngay!
-            <Send class="w-4 h-4 ml-1" />
-          </button>
-          <button
-            @click="saveJob(job.id)"
-            class="text-red-500 hover:text-red-600 p-2 rounded-full transition duration-150"
-            aria-label="Lưu công việc'"
-          >
-            <Heart class="w-5 h-5" />
-          </button>
-        </div>
       </div>
     </div>
 
-    <!-- Pagination Component -->
-    <div v-if="jobs.length > 0" class="flex justify-center mt-6">
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[6, 12, 18, 24]"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="jobs.length"
-        class="items-center"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+    <!-- Job List -->
+    <div
+      v-else-if="paginatedJobs.length > 0"
+      class="grid grid-cols-1 md:grid-cols-2 gap-4"
+    >
+      <article
+        v-for="job in paginatedJobs"
+        :key="job.id"
+        class="bg-white rounded-lg border border-gray-200 p-6 hover:border-gray-300 hover:shadow-sm transition-all duration-200"
+      >
+        <!-- Job Header -->
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-start space-x-3 flex-1 min-w-0">
+            <NuxtImg
+              :src="job.user?.avatar"
+              loading="lazy"
+              class="w-10 h-10 rounded-full object-cover shrink-0"
+              alt="Avatar"
+            />
+            <div class="min-w-0 flex-1">
+              <NuxtLink
+                :to="`/viec-freelance/${job.slug}`"
+                class="font-medium text-gray-900 hover:text-primary transition-colors line-clamp-2 leading-snug"
+              >
+                {{ job.title || "Chưa có tiêu đề" }}
+              </NuxtLink>
+              <div class="flex items-center space-x-4 mt-1">
+                <NuxtLink
+                  :to="`/trang-ca-nhan/${job.user?.username || 'unknown'}`"
+                  class="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  {{ job.user?.fullName || job.userId || "Không xác định" }}
+                </NuxtLink>
+                <span class="text-sm text-gray-500 flex items-center">
+                  <MapPin class="w-3 h-3 mr-1" />
+                  {{ job.location || "Remote" }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            @click="saveJob(job.id)"
+            class="p-2 text-gray-400 hover:text-red-500 hover:bg-gray-50 rounded-md transition-colors shrink-0"
+            aria-label="Lưu công việc"
+          >
+            <Heart class="w-4 h-4" />
+          </button>
+        </div>
+
+        <!-- Job Details -->
+        <div class="space-y-3">
+          <!-- Salary and Deadline -->
+          <div class="flex flex-wrap items-center gap-4 text-sm">
+            <div class="font-medium text-gray-900">
+              {{ formatCurrency(job.salaryMin) }} -
+              {{ formatCurrency(job.salaryMax) }}
+            </div>
+            <div class="text-gray-600 flex items-center">
+              <Calendar class="w-4 h-4 mr-1" />
+              {{ formatDeadline(job.deadline) }}
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-2">
+            <NuxtLink
+              v-if="job.tags?.length"
+              class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-medium rounded-md hover:bg-blue-100 transition-colors"
+              :to="`/tim-kiem-viec-lam?danh-muc=${job.tags[0]}`"
+            >
+              {{ job.tags[0] }}
+            </NuxtLink>
+            <NuxtLink
+              v-for="(tech, index) in job.technologies?.slice(0, 3)"
+              :key="index"
+              class="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-200 transition-colors"
+              :to="`/tim-kiem-viec-lam?q=${tech}`"
+            >
+              {{ tech }}
+            </NuxtLink>
+            <span
+              v-if="job.technologies && job.technologies.length > 3"
+              class="inline-flex items-center px-2.5 py-1 text-gray-500 text-xs"
+            >
+              +{{ job.technologies.length - 3 }} thêm
+            </span>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center justify-between pt-2">
+            <button
+              @click="applyForJob(job.id, job.title)"
+              class="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Ứng tuyển ngay
+              <Send class="w-4 h-4 ml-1.5" />
+            </button>
+
+            <span class="text-xs text-gray-500">
+              {{ getTimeAgo(job.createdAt) }}
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Empty State -->
+    <div v-else class="text-center py-12">
+      <div
+        class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
+      >
+        <SearchX class="w-8 h-8 text-gray-400" />
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">
+        Chưa có việc làm nào
+      </h3>
+      <p class="text-gray-500 max-w-sm mx-auto">
+        Hiện tại chưa có việc làm phù hợp. Hãy thử tìm kiếm với từ khóa khác
+        hoặc quay lại sau.
+      </p>
+    </div>
+
+    <!-- Pagination -->
+    <div v-if="jobs.length > 0" class="flex justify-center mt-8">
+      <div class="evergreen-pagination">
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[6, 12, 18, 24]"
+          background
+          layout="total, sizes, prev, pager, next"
+          :total="jobs.length"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ElSkeleton, ElNotification, ElMessage, ElMessageBox } from "element-plus";
+import {
+  ElSkeleton,
+  ElNotification,
+  ElMessage,
+  ElMessageBox,
+} from "element-plus";
 import {
   User,
   MapPin,
@@ -176,62 +218,36 @@ const props = defineProps<{
 
 // Pagination state
 const currentPage = ref(1);
-const pageSize = ref(6); // Mặc định 6 job mỗi trang
+const pageSize = ref(6);
 const input = ref("");
 const jobCategories = availableTags;
 
-// Search state with default values
+// Search state
 const state = reactive({
   q: "",
   jobCategory: "",
   location: "",
 });
 
-// Computed property để lấy danh sách job theo trang hiện tại
+// Computed property for paginated jobs
 const paginatedJobs = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
   const end = start + pageSize.value;
   return props.jobs.slice(start, end);
 });
 
-// Handle page size change
+// Pagination handlers
 const handleSizeChange = (val: number) => {
   pageSize.value = val;
-  currentPage.value = 1; 
+  currentPage.value = 1;
 };
 
-// Handle current page change
 const handleCurrentChange = (val: number) => {
   currentPage.value = val;
-  // Có thể scroll lên đầu trang khi chuyển trang
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-// Legacy function for compatibility
-function handlePageChange(page: number) {
-  currentPage.value = page;
-  handleCurrentChange(page);
-}
-
-function fetchData() {
-  // Gọi API hoặc xử lý data tương ứng page hiện tại
-  console.log("Fetching page", currentPage.value);
-  console.log("Page size", pageSize.value);
-}
-
-// Search handler with analytics tracking
-const handleSearch = () => {
-  const params = new URLSearchParams();
-
-  if (input.value) {
-    params.append("q", input.value);
-  }
-  if (state.jobCategory) params.append("danh-muc", state.jobCategory);
-  if (state.location) params.append("dia-diem", state.location);
-
-  router.push(`/tim-kiem-viec-lam?${params.toString()}`);
-};
-
+// Utility functions
 const { status } = useAuth();
 
 const formatCurrency = (value: number | null | undefined): string => {
@@ -246,68 +262,191 @@ const formatDeadline = (deadline: Date | string | null | undefined): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 };
 
+const getTimeAgo = (date: Date | string | null | undefined): string => {
+  if (!date) return "";
+  const now = new Date();
+  const past = new Date(date);
+  const diffInMs = now.getTime() - past.getTime();
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+  if (diffInDays === 0) return "Hôm nay";
+  if (diffInDays === 1) return "Hôm qua";
+  if (diffInDays < 7) return `${diffInDays} ngày trước`;
+  if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} tuần trước`;
+  return `${Math.floor(diffInDays / 30)} tháng trước`;
+};
+
 const applyForJob = (jobId: number, jobTitle: string) => {
   if (status.value === "unauthenticated") {
     ElMessage({
-      message: "Bạn cần đăng nhập để apply job!",
+      message: "Bạn cần đăng nhập để ứng tuyển!",
       type: "warning",
       duration: 3000,
       showClose: true,
     });
-    return navigateTo("/trang-chu");
+    return navigateTo("/dang-nhap");
   }
-  ElMessageBox.confirm(`Bạn chắc chắc muốn apply job ${jobTitle}`, {
-    confirmButtonText: "Chắc chắn",
-    cancelButtonText: "Huỷ", 
-    type: "warning",
-  });
+
+  ElMessageBox.confirm(
+    `Bạn có chắc chắn muốn ứng tuyển công việc "${jobTitle}"?`,
+    "Xác nhận ứng tuyển",
+    {
+      confirmButtonText: "Ứng tuyển",
+      cancelButtonText: "Hủy",
+      type: "info",
+    }
+  )
+    .then(() => {
+      ElNotification({
+        title: "Thành công",
+        message: "Ứng tuyển thành công!",
+        type: "success",
+      });
+    })
+    .catch(() => {
+      // User cancelled
+    });
 };
 
 const saveJob = (jobId: number) => {
   if (status.value === "unauthenticated") {
     ElMessage({
-      message: "Bạn cần đăng nhập để lưu job này!",
+      message: "Bạn cần đăng nhập để lưu công việc!",
       type: "warning",
       duration: 3000,
       showClose: true,
     });
-    return navigateTo("/trang-chu");
+    return navigateTo("/dang-nhap");
   }
+
   ElNotification({
-    title: "Thành công",
-    message: "Lưu việc làm thành công",
+    title: "Đã lưu",
+    message: "Công việc đã được lưu vào danh sách yêu thích",
     type: "success",
   });
-  console.log("Job saved:", jobId);
 };
 
-// Watch for jobs change and reset pagination if needed
-watch(() => props.jobs, (newJobs) => {
-  if (newJobs.length > 0 && currentPage.value > Math.ceil(newJobs.length / pageSize.value)) {
-    currentPage.value = 1;
+// Watch for jobs change and reset pagination
+watch(
+  () => props.jobs,
+  (newJobs) => {
+    if (
+      newJobs.length > 0 &&
+      currentPage.value > Math.ceil(newJobs.length / pageSize.value)
+    ) {
+      currentPage.value = 1;
+    }
   }
-});
+);
 </script>
 
-<style>
-.hero-section {
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(0, 105, 148, 1) 15.6%,
-    rgba(0, 163, 217, 1) 51.9%,
-    rgba(0, 194, 226, 1) 81%
-  );
+<style scoped>
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Custom pagination styles */
-.el-pagination {
+/* Evergreen Pagination Styles */
+:deep(.evergreen-pagination) {
   --el-pagination-font-size: 14px;
-  --el-pagination-bg-color: #f4f4f5;
-  --el-pagination-text-color: #606266;
-  --el-pagination-border-radius: 4px;
-  --el-pagination-button-color: #606266;
+  --el-pagination-bg-color: white;
+  --el-pagination-text-color: #374151;
+  --el-pagination-border-radius: 6px;
+  --el-pagination-button-color: #6b7280;
   --el-pagination-button-width: 32px;
   --el-pagination-button-height: 32px;
   --el-pagination-item-gap: 4px;
+  --el-pagination-hover-color: #f3f4f6;
+  --el-color-primary: #3b82f6;
+}
+
+:deep(.evergreen-pagination .el-pagination) {
+  gap: 8px;
+}
+
+:deep(.evergreen-pagination .el-pagination__total) {
+  color: #6b7280;
+  font-weight: 400;
+}
+
+:deep(.evergreen-pagination .el-pagination__sizes .el-select) {
+  --el-select-input-focus-border-color: #3b82f6;
+}
+
+:deep(.evergreen-pagination .el-pagination__sizes .el-input__wrapper) {
+  box-shadow: none !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  padding: 0 8px !important;
+}
+
+:deep(.evergreen-pagination .el-pager li) {
+  border-radius: 6px !important;
+  border: 1px solid #e5e7eb !important;
+  background: white !important;
+  color: #374151 !important;
+  font-weight: 400 !important;
+  margin: 0 2px !important;
+}
+
+:deep(.evergreen-pagination .el-pager li:hover) {
+  background: #f3f4f6 !important;
+  border-color: #d1d5db !important;
+}
+
+:deep(.evergreen-pagination .el-pager li.is-active) {
+  background: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  color: white !important;
+  font-weight: 500 !important;
+}
+
+:deep(.evergreen-pagination .btn-prev, .evergreen-pagination .btn-next) {
+  border-radius: 6px !important;
+  border: 1px solid #e5e7eb !important;
+  background: white !important;
+  color: #374151 !important;
+  font-weight: 400 !important;
+  margin: 0 2px !important;
+}
+
+:deep(
+    .evergreen-pagination .btn-prev:hover,
+    .evergreen-pagination .btn-next:hover
+  ) {
+  background: #f3f4f6 !important;
+  border-color: #d1d5db !important;
+}
+
+:deep(
+    .evergreen-pagination .btn-prev:disabled,
+    .evergreen-pagination .btn-next:disabled
+  ) {
+  background: #f9fafb !important;
+  border-color: #e5e7eb !important;
+  color: #d1d5db !important;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform,
+    box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Accessibility improvements */
+article:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 </style>

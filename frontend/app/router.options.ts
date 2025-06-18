@@ -90,13 +90,13 @@ export default <RouterConfig>{
           layout: "forum",
         },
       },
-      // {
-      //   name: "marketplace",
-      //   path: "/mua-ban",
-      //   alias: ["/marketplace"],
-      //   component: () =>
-      //     import("~/pages/market-place.vue").then((r) => r.default || r),
-      // },
+      {
+        name: "marketplace",
+        path: "/mua-ban",
+        alias: ["/marketplace"],
+        component: () =>
+          import("~/pages/market-place.vue").then((r) => r.default || r),
+      },
       {
         name: "profile",
         path: "/trang-ca-nhan/:username",

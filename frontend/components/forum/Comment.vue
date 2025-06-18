@@ -1,7 +1,6 @@
-<!-- CommentItem.vue -->
 <template>
   <div
-    class="bg-white rounded-md"
+    class="bg-white rounded-lg border border-gray-200"
     :class="{
       'ml-4 sm:ml-8': level > 0,
       'ml-2 sm:ml-4': level > 2,
@@ -10,111 +9,130 @@
   >
     <div class="p-3 sm:p-4">
       <!-- Comment Header -->
-      <div class="flex items-center justify-between">
-        <div class="flex gap-2 sm:gap-3 mb-2">
-          <img
-            :src="comment.user.avatar"
-            :alt="comment.user.fullName"
-            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0"
-          />
+      <div class="flex items-start justify-between">
+        <div class="flex gap-2 sm:gap-3 mb-2 flex-1">
+          <div class="relative flex-shrink-0">
+            <img
+              :src="comment.user.avatar"
+              :alt="comment.user.fullName"
+              class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover"
+            />
+            <div
+              v-if="comment.user.online"
+              class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"
+            ></div>
+          </div>
+          
           <div class="flex-1 min-w-0">
-            <div class="flex flex-col">
+            <div class="flex items-center flex-wrap gap-2 mb-1">
               <NuxtLink
                 :to="`/trang-ca-nhan/${comment.user.username}`"
-                class="font-medium text-sm sm:text-base text-gray-900 truncate flex items-center hover:text-primary"
+                class="font-medium text-sm sm:text-base text-gray-900 hover:text-blue-600 transition-colors"
               >
                 {{ comment.user.fullName }}
-                <div v-if="comment.user.id === props.postUserId" class="inline-flex items-center text-xs text-gray-500 p-1 border-primary "><PencilLine class="w-4 h-4 ml-2 mr-1 items-center"/>Tác giả</div>
               </NuxtLink>
-              <span class="text-xs text-gray-500 flex items-center">
-                <Clock class="w-3 h-3 mr-1" />
-                {{ formatTimestamp(comment.createdAt) }}
+              
+              <span
+                v-if="comment.user.id === props.postUserId"
+                class="inline-flex items-center px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-md"
+              >
+                <PencilLine class="w-3 h-3 mr-1" />
+                Tác giả
               </span>
+            </div>
+            
+            <div class="flex items-center text-xs text-gray-500">
+              <Clock class="w-3 h-3 mr-1" />
+              <span>{{ formatTimestamp(comment.createdAt) }}</span>
             </div>
           </div>
         </div>
 
         <button
-          class="mb-8"
           v-if="currentUser?.id === comment.user.id"
           @click="deleteComment(Number(comment.id), comment.comment)"
+          class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors flex-shrink-0"
         >
-          <Trash class="w-4 h-4 text-gray-600" />
+          <Trash class="w-4 h-4" />
         </button>
       </div>
 
       <!-- Comment Content -->
-      <div class="mb-3 ml-10 sm:ml-13 px-3">
-        <p class="text-sm sm:text-base text-gray-800 leading-relaxed">
+      <div class="ml-10 sm:ml-13 mb-3">
+        <p class="text-sm sm:text-base text-gray-800 leading-relaxed whitespace-pre-wrap">
           {{ comment.comment }}
         </p>
       </div>
 
       <!-- Comment Actions -->
-      <div class="flex items-center gap-4 sm:gap-6 ml-10 sm:ml-13 text-sm px-3">
+      <div class="flex items-center gap-4 sm:gap-6 ml-10 sm:ml-13 text-sm">
         <button
           @click="toggleLike"
-          class="flex items-center gap-1 hover:text-red-500 transition-colors"
+          class="flex items-center gap-1.5 hover:text-red-500 transition-colors rounded-md px-2 py-1 hover:bg-red-50"
           :class="{ 'text-red-500': isLiked, 'text-gray-500': !isLiked }"
         >
-          <ThumbsUp class="w-4 h-4" :class="{ 'fill-current': isLiked }" />
-          <span>{{ likesCount }}</span>
+          <Heart class="w-4 h-4" :class="{ 'fill-current': isLiked }" />
+          <span class="font-medium">{{ likesCount }}</span>
         </button>
 
         <button
           v-if="level < maxLevel"
           @click="toggleReply"
-          class="flex items-center gap-1 text-gray-500 hover:text-blue-500 transition-colors"
+          class="flex items-center gap-1.5 text-gray-500 hover:text-blue-500 transition-colors rounded-md px-2 py-1 hover:bg-blue-50"
         >
           <MessageCircle class="w-4 h-4" />
-          <span class="hidden sm:inline">Trả lời</span>
-          <span class="sm:hidden">Reply</span>
+          <span class="hidden sm:inline font-medium">Trả lời</span>
+          <span class="sm:hidden font-medium">Reply</span>
         </button>
 
         <!-- Show replies toggle for mobile -->
         <button
           v-if="comment.replies && comment.replies.length > 0"
           @click="toggleShowReplies"
-          class="sm:hidden flex items-center gap-1 text-gray-500 hover:text-blue-500 transition-colors"
+          class="sm:hidden flex items-center gap-1.5 text-gray-500 hover:text-blue-500 transition-colors rounded-md px-2 py-1 hover:bg-blue-50"
         >
           <ChevronDown
             class="w-4 h-4 transition-transform"
             :class="{ 'rotate-180': !showReplies }"
           />
-          <span
-            >{{ comment.replies.length }}
-            {{ comment.replies.length > 1 ? "replies" : "reply" }}</span
-          >
+          <span class="font-medium">
+            {{ comment.replies.length }}
+            {{ comment.replies.length > 1 ? "replies" : "reply" }}
+          </span>
         </button>
       </div>
 
       <!-- Reply Input -->
-      <div v-if="showReplyInput" class="mt-4 ml-10 sm:ml-13">
-        <div class="flex gap-2">
+      <div v-if="showReplyInput" class="mt-4 ml-10 sm:ml-13 bg-gray-50 rounded-lg p-3">
+        <div class="flex gap-3">
           <img
             :src="currentUser?.avatar"
             alt="current user"
-            class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0"
+            class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 object-cover"
           />
           <div class="flex-1">
-            <el-input
-              v-model="replyContent"
-              type="textarea"
-              :placeholder="`Trả lời ${comment.user.fullName}...`"
-              :rows="2"
-              class="mb-2"
-              size="small"
-            />
+            <div class="mb-3">
+              <textarea
+                v-model="replyContent"
+                :placeholder="`Trả lời ${comment.user.fullName}...`"
+                rows="2"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+              />
+            </div>
             <div class="flex justify-end gap-2">
-              <el-button size="small" @click="cancelReply"> Hủy </el-button>
-              <el-button
-                type="primary"
-                size="small"
+              <button
+                @click="cancelReply"
+                class="px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium"
+              >
+                Hủy
+              </button>
+              <button
                 @click="submitReply"
                 :disabled="!replyContent.trim()"
+                class="px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Gửi
-              </el-button>
+              </button>
             </div>
           </div>
         </div>
@@ -125,7 +143,7 @@
     <div
       v-if="comment.replies && comment.replies.length > 0"
       v-show="showReplies || !isMobile"
-      class="space-y-2 pb-2"
+      class="space-y-2 pb-2 border-t border-gray-100"
     >
       <CommentItem
         v-for="reply in comment.replies"
@@ -133,6 +151,7 @@
         :comment="reply"
         :level="level + 1"
         :max-level="maxLevel"
+        :post-user-id="props.postUserId"
         @reply="handleNestedReply"
         @like="handleNestedLike"
       />
@@ -144,13 +163,14 @@
 import { ref, computed } from "vue";
 import {
   Clock,
-  ThumbsUp,
+  Heart,
   MessageCircle,
   ChevronDown,
   Trash,
-  PencilLine
+  PencilLine,
 } from "lucide-vue-next";
 import { NuxtLink } from "#components";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 // Define component name for recursion
 defineOptions({
@@ -162,6 +182,7 @@ interface User {
   fullName: string;
   username: string;
   avatar: string;
+  online?: boolean;
 }
 
 interface Comment {
@@ -199,6 +220,7 @@ const isLiked = ref(false);
 const likesCount = ref(props.comment.feelings?.length || 0);
 const currentUser = await useCurrentUser();
 const token = useCookie("auth.token");
+
 // Check if device is mobile
 const isMobile = computed(() => {
   if (typeof window !== "undefined") {
@@ -239,37 +261,42 @@ const toggleLike = () => {
   isLiked.value = !isLiked.value;
   likesCount.value += isLiked.value ? 1 : -1;
 };
+
 const deleteComment = (id: number, comment: string) => {
-  ElMessageBox.confirm(`Bạn chắc chắn muốn xoá "${comment}"?`, "Warning", {
+  ElMessageBox.confirm(`Bạn chắc chắn muốn xoá "${comment}"?`, "Xác nhận", {
     confirmButtonText: "Xoá",
     cancelButtonText: "Huỷ",
     type: "warning",
   })
-    .then(() => {
-      const data = commentService.commentControllerDelete(
-        {
-          id: id,
-          userId: currentUser.value?.id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token.value}`,
+    .then(async () => {
+      try {
+        const data = await commentService.commentControllerDelete(
+          {
+            id: id,
+            userId: currentUser.value?.id,
           },
-        }
-      );
-      if (!data)
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token.value}`,
+            },
+          }
+        );
+        
+        ElMessage({
+          type: "success",
+          message: "Xoá bình luận thành công!",
+        });
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } catch (error) {
         ElMessage({
           type: "error",
           message: "Xoá bình luận không thành công!",
         });
-      ElMessage({
-        type: "success",
-        message: "Xoá bình luận thành công!",
-      });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      }
     })
     .catch(() => {
       ElMessage({
@@ -278,6 +305,7 @@ const deleteComment = (id: number, comment: string) => {
       });
     });
 };
+
 const toggleReply = () => {
   if (props.level >= props.maxLevel) return;
   showReplyInput.value = !showReplyInput.value;
@@ -317,26 +345,18 @@ const handleNestedLike = (commentId: number) => {
 </script>
 
 <style scoped>
-:deep(.el-textarea__inner) {
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-  resize: none;
-  font-size: 0.875rem;
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
-:deep(.el-textarea__inner:focus) {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-}
-
-:deep(.el-button--primary) {
-  background: linear-gradient(to right, #0072ff, #00c6ff);
-  border: none;
-}
-
-:deep(.el-button--small) {
-  padding: 5px 12px;
-  font-size: 0.75rem;
+/* Focus styles for accessibility */
+button:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
 /* Custom indentation for deeply nested comments */
@@ -354,5 +374,11 @@ const handleNestedLike = (commentId: number) => {
   .ml-13 {
     margin-left: 3.25rem;
   }
+}
+
+/* Ensure proper text wrapping */
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 </style>

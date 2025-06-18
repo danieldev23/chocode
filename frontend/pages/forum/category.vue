@@ -1,306 +1,361 @@
 <template>
-
   <!-- Main Content -->
   <div class="flex-1">
     <!-- Hero Section -->
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-      <div class="flex flex-col md:flex-row items-center justify-between">
-        <div class="mb-6 md:mb-0 md:w-2/3">
-          <h1 class="text-3xl font-bold mb-3">
-            Thảo luận về {{  category[0].toUpperCase() + category.slice(1, category.length)  }}
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-6">
+      <div class="flex flex-col lg:flex-row items-center justify-between">
+        <div class="mb-6 lg:mb-0 lg:w-2/3">
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+            Thảo luận về {{ category[0].toUpperCase() + category.slice(1) }}
           </h1>
-          <p class="text-gray-600 mb-4">
+          <p class="text-gray-600 mb-6">
             ChoCode là nơi kết nối, giao lưu, chia sẻ kiến thức IT
           </p>
-
-        <ForumAskQuestion />
+          <ForumAskQuestion />
         </div>
-        <div class="md:w-1/3">
+        <div class="lg:w-1/3">
           <img
-            src="~/assets/images/home/working.jpg"
+            src="/assets/images/home/working.jpg"
             alt="Q&A Platform"
-            class="w-full"
+            class="w-full rounded-lg"
+            loading="lazy"
           />
         </div>
       </div>
     </div>
 
     <!-- Filters Section -->
-    <div
-      class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4"
-    >
-      <div class="w-full sm:w-64">
-        <el-select
-          v-model="selectedClass"
-          placeholder="Chọn lớp:"
-          class="w-full"
-        >
-          <el-option label="Tất cả" value="all"></el-option>
-          <el-option label="Lớp 1" value="1"></el-option>
-          <el-option label="Lớp 2" value="2"></el-option>
-          <!-- Add more options as needed -->
-        </el-select>
-      </div>
-      <div class="flex flex-wrap gap-2">
-        <button class="bg-gray-800 text-white px-4 py-2 rounded-lg">
-          Tất cả
-        </button>
-        <button class="bg-white text-gray-700 px-4 py-2 rounded-lg border">
-          Đã trả lời
-        </button>
-        <button class="bg-white text-gray-700 px-4 py-2 rounded-lg border">
-          Chưa có câu trả lời
-        </button>
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-4 mb-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="w-full sm:w-64">
+          <select
+            v-model="selectedClass"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+          >
+            <option value="all">Tất cả cấp độ</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="filter in statusFilters"
+            :key="filter.value"
+            @click="selectedStatus = filter.value"
+            class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            :class="
+              selectedStatus === filter.value
+                ? 'bg-primary text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+            "
+          >
+            {{ filter.label }}
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="text-gray-500 mb-4">1,023,426 câu hỏi</div>
+    <!-- Stats -->
+    <div class="text-gray-600 mb-4 text-sm">
+      1,023,426 câu hỏi trong chủ đề này
+    </div>
 
     <!-- Questions List -->
     <div class="space-y-4">
-      <!-- Question 1 -->
-      <div class="bg-white rounded-lg shadow-sm p-4">
-        <div class="flex flex-col sm:flex-row sm:justify-between mb-2">
-          <div class="flex items-center mb-2 sm:mb-0">
-            <div class="relative">
+      <article
+        v-for="question in mockQuestions"
+        :key="question.id"
+        class="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6 hover:shadow-md transition-shadow"
+      >
+        <!-- Question Header -->
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4"
+        >
+          <div class="flex items-center mb-3 sm:mb-0">
+            <div class="relative mr-3">
               <img
-                src="https://scontent.fdad2-1.fna.fbcdn.net/v/t39.30808-1/347853572_181660051156413_803340202436754467_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=107&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeEzgwbrsE2X5xXrJ2ZnSyW78M6YPqnVZYPwzpg-qdVlg7sP5PDEkw84ztABOLANdjZ7efXdGA73UgMxstPWz7ow&_nc_ohc=tUNB1qnRqXgQ7kNvwET-G31&_nc_oc=AdnEPDaAovw-eS5SHEnG9K_tMd8h2H4_ZhkAFZbgFjWHY3aD6TqD4UokR8fstpLsLbNAxMsklTKA0Qd8zNXL0YBp&_nc_zt=24&_nc_ht=scontent.fdad2-1.fna&_nc_gid=GSMUW4sPGw6QDIsf1utUcA&oh=00_AfF-DOlFumPK0YM_-5IszutD-8mX-ZccMNnbpd22ABSwbQ&oe=680477A9"
-                alt="Avatar"
-                class="w-10 h-10 rounded-full"
+                :src="question.avatar"
+                :alt="question.author"
+                class="w-10 h-10 rounded-full object-cover"
               />
               <div
-                class="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full w-4 h-4 flex items-center justify-center text-xs text-white"
+                class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs text-white font-bold"
+                :class="
+                  question.level === 'Beginner'
+                    ? 'bg-green-500'
+                    : question.level === 'Intermediate'
+                    ? 'bg-yellow-500'
+                    : 'bg-red-500'
+                "
               >
-                1
+                {{
+                  question.level === "Beginner"
+                    ? "B"
+                    : question.level === "Intermediate"
+                    ? "I"
+                    : "A"
+                }}
               </div>
             </div>
-            <div class="ml-3">
-              <div class="font-medium">Phạm Quốc Việt</div>
-              <div class="text-gray-500 text-sm">vài giây trước</div>
-            </div>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="text-gray-700">NodeJS • 10d</span>
-            <button>
-              <Image class="h-5 w-5 text-gray-500" />
-            </button>
-            <button>
-              <Bookmark class="h-5 w-5 text-gray-500" />
-            </button>
-          </div>
-        </div>
 
-        <div class="mb-3">Cứu tuiiiiiiiii</div>
-
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-            <button class="flex items-center text-gray-500">
-              <ThumbsUp class="h-5 w-5 mr-1" />
-              <span>0</span>
-            </button>
-            <button class="flex items-center text-gray-500">
-              <ThumbsDown class="h-5 w-5" />
-            </button>
-          </div>
-          <button
-            class="border border-orange-500 text-orange-500 px-4 py-1 rounded-full w-full sm:w-auto"
-          >
-            Trả lời
-          </button>
-        </div>
-      </div>
-
-      <!-- Question 2 -->
-      <div class="bg-white rounded-lg shadow-sm p-4">
-        <div class="flex flex-col sm:flex-row sm:justify-between mb-2">
-          <div class="flex items-center mb-2 sm:mb-0">
-            <div class="relative">
-              <img
-                src="https://scontent.fdad1-3.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s480x480&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_eui2=AeELWX8buaslfwM-PmlFIGVSWt9TLzuBU1Ba31MvO4FTUGNb7XARBGmfzVS7u3jB3KiM9jnxkELzeZOtl9akDLX0&_nc_ohc=W7q9tlVoy3sQ7kNvwHrDd4j&_nc_oc=Adks1NWIKUk3F_imri5dPJTK6IfS5ReZpW3gzqC6mmb74vgrKfAY4LuoPxlqpjoLaPUA6w8XUAf6BX4zln0XQl8H&_nc_zt=24&_nc_ht=scontent.fdad1-3.fna&oh=00_AfEPPXfLeq8_uVYszfW8ZPgbMRNoui4eYbCGBm4-2i1fPg&oe=6825E3FA"
-                alt="Avatar"
-                class="w-10 h-10 rounded-full"
-              />
-              <div
-                class="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full w-4 h-4 flex items-center justify-center text-xs text-white"
-              >
-                1
+            <div>
+              <h3 class="font-semibold text-gray-900">{{ question.author }}</h3>
+              <div class="flex items-center text-sm text-gray-500">
+                <Clock class="w-3 h-3 mr-1" />
+                {{ question.timestamp }}
               </div>
             </div>
-            <div class="ml-3">
-              <div class="font-medium">Nguyễn Quang Kính</div>
-              <div class="text-gray-500 text-sm">1 phút trước</div>
-            </div>
           </div>
+
           <div class="flex items-center space-x-2">
-            <span class="text-gray-700">NestJS • 10d</span>
-            <button>
-              <Bookmark class="h-5 w-5 text-gray-500" />
-            </button>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          Cho mình hỏi JWT là gì ạ?
-        </div>
-
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-            <button class="flex items-center text-gray-500">
-              <ThumbsUp class="h-5 w-5 mr-1" />
-              <span>0</span>
-            </button>
-            <button class="flex items-center text-gray-500">
-              <ThumbsDown class="h-5 w-5" />
-            </button>
-          </div>
-          <button
-            class="border border-orange-500 text-orange-500 px-4 py-1 rounded-full w-full sm:w-auto"
-          >
-            Trả lời
-          </button>
-        </div>
-      </div>
-
-      <!-- Question 3 with answer -->
-      <div class="bg-white rounded-lg shadow-sm p-4">
-        <div class="flex flex-col sm:flex-row sm:justify-between mb-2">
-          <div class="flex items-center mb-2 sm:mb-0">
-            <div class="relative">
-              <img
-                src="https://scontent.fdad1-3.fna.fbcdn.net/v/t1.30497-1/453178253_471506465671661_2781666950760530985_n.png?stp=dst-png_s480x480&_nc_cat=1&ccb=1-7&_nc_sid=136b72&_nc_eui2=AeELWX8buaslfwM-PmlFIGVSWt9TLzuBU1Ba31MvO4FTUGNb7XARBGmfzVS7u3jB3KiM9jnxkELzeZOtl9akDLX0&_nc_ohc=W7q9tlVoy3sQ7kNvwHrDd4j&_nc_oc=Adks1NWIKUk3F_imri5dPJTK6IfS5ReZpW3gzqC6mmb74vgrKfAY4LuoPxlqpjoLaPUA6w8XUAf6BX4zln0XQl8H&_nc_zt=24&_nc_ht=scontent.fdad1-3.fna&oh=00_AfEPPXfLeq8_uVYszfW8ZPgbMRNoui4eYbCGBm4-2i1fPg&oe=6825E3FA"
-                alt="Avatar"
-                class="w-10 h-10 rounded-full"
-              />
-              <div
-                class="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full w-4 h-4 flex items-center justify-center text-xs text-white"
-              >
-                1
-              </div>
-            </div>
-            <div class="ml-3">
-              <div class="font-medium">Nguyễn Thanh Triều</div>
-              <div class="text-gray-500 text-sm">1 phút trước</div>
-            </div>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="text-gray-700">NextJS • 10d</span>
-            <button>
-              <Bookmark class="h-5 w-5 text-gray-500" />
-            </button>
-          </div>
-        </div>
-
-        <div class="mb-3">Zustand là gì vậy mn?</div>
-
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-            <button class="flex items-center text-gray-500">
-              <ThumbsUp class="h-5 w-5 mr-1" />
-              <span>0</span>
-            </button>
-            <button class="flex items-center text-gray-500">
-              <ThumbsDown class="h-5 w-5" />
-            </button>
-
-            <div class="flex items-center ml-3">
-              <img
-                src="https://randomuser.me/api/portraits/men/62.jpg"
-                alt="Answerer"
-                class="w-6 h-6 rounded-full"
-              />
-              <span class="text-gray-500 text-sm ml-1">1 trả lời</span>
-            </div>
-          </div>
-
-          <div
-            class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3"
-          >
-            <div
-              class="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-sm"
+            <span
+              class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-md"
             >
-              <span>Nhãn giống cây trồng</span>
+              {{ question.technology }}
+            </span>
+            <span
+              class="inline-flex items-center px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-md"
+            >
+              {{ question.level }}
+            </span>
+
+            <div class="flex items-center space-x-1">
+              <button
+                class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <Bookmark class="w-4 h-4" />
+              </button>
+              <button
+                class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <Share class="w-4 h-4" />
+              </button>
             </div>
+          </div>
+        </div>
+
+        <!-- Question Content -->
+        <div class="mb-4">
+          <h2
+            class="text-lg font-semibold text-gray-900 mb-2 hover:text-primary cursor-pointer"
+          >
+            {{ question.title }}
+          </h2>
+          <p
+            v-if="question.excerpt"
+            class="text-gray-600 text-sm leading-relaxed"
+          >
+            {{ question.excerpt }}
+          </p>
+        </div>
+
+        <!-- Question Actions -->
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-200"
+        >
+          <div class="flex items-center space-x-4 mb-3 sm:mb-0">
             <button
-              class="border border-orange-500 text-orange-500 px-4 py-1 rounded-full w-full sm:w-auto"
+              class="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors"
+            >
+              <ThumbsUp class="w-4 h-4" />
+              <span class="text-sm font-medium">{{ question.likes }}</span>
+            </button>
+
+            <button
+              class="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+            >
+              <MessageSquare class="w-4 h-4" />
+              <span class="text-sm font-medium"
+                >{{ question.answers }} trả lời</span
+              >
+            </button>
+
+            <div class="flex items-center space-x-2 text-gray-500">
+              <Eye class="w-4 h-4" />
+              <span class="text-sm">{{ question.views }} lượt xem</span>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <!-- Answer Preview -->
+            <div
+              v-if="question.latestAnswer"
+              class="flex items-center space-x-2"
+            >
+              <img
+                :src="question.latestAnswer.avatar"
+                :alt="question.latestAnswer.author"
+                class="w-6 h-6 rounded-full object-cover"
+              />
+              <span class="text-xs text-gray-500">
+                Trả lời bởi {{ question.latestAnswer.author }}
+              </span>
+            </div>
+
+            <!-- Best Answer Badge -->
+            <div
+              v-if="question.hasBestAnswer"
+              class="inline-flex items-center px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-md"
+            >
+              <CheckCircle class="w-3 h-3 mr-1" />
+              Đã giải quyết
+            </div>
+
+            <button
+              class="px-4 py-2 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50 transition-colors text-sm font-medium"
             >
               Trả lời
             </button>
           </div>
         </div>
-      </div>
+      </article>
+    </div>
 
-      <!-- Question 4 -->
-      <div class="bg-white rounded-lg shadow-sm p-4">
-        <div class="flex flex-col sm:flex-row sm:justify-between mb-2">
-          <div class="flex items-center mb-2 sm:mb-0">
-            <div class="relative">
-              <img
-                src="https://randomuser.me/api/portraits/men/62.jpg"
-                alt="Avatar"
-                class="w-10 h-10 rounded-full"
-              />
-              <div
-                class="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full w-4 h-4 flex items-center justify-center text-xs text-white"
-              >
-                2
-              </div>
-            </div>
-            <div class="ml-3">
-              <div class="font-medium">Mỹ Giang</div>
-              <div class="text-gray-500 text-sm">2 phút trước</div>
-            </div>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="text-gray-700">Tiếng Anh • Lớp 8 • 10d</span>
-            <button>
-              <Bookmark class="h-5 w-5 text-gray-500" />
-            </button>
-          </div>
-        </div>
-
-        <div class="mb-3">[Question content would go here]</div>
-
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-            <button class="flex items-center text-gray-500">
-              <ThumbsUp class="h-5 w-5 mr-1" />
-              <span>0</span>
-            </button>
-            <button class="flex items-center text-gray-500">
-              <ThumbsDown class="h-5 w-5" />
-            </button>
-          </div>
-          <button
-            class="border border-orange-500 text-orange-500 px-4 py-1 rounded-full w-full sm:w-auto"
-          >
-            Trả lời
-          </button>
-        </div>
-      </div>
+    <!-- Load More -->
+    <div class="mt-8 text-center">
+      <button
+        class="px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+      >
+        Tải thêm câu hỏi
+      </button>
     </div>
   </div>
-
 </template>
 
 <script setup>
 import { ref } from "vue";
 import {
-Grid,
-ChevronRight,
-Image,
-Bookmark,
-ThumbsUp,
-ThumbsDown,
+  Clock,
+  Bookmark,
+  Share,
+  ThumbsUp,
+  MessageSquare,
+  Eye,
+  CheckCircle,
 } from "lucide-vue-next";
+
 const route = useRoute();
 const category = route.params.category;
 const selectedClass = ref("all");
+const selectedStatus = ref("all");
+
+const statusFilters = [
+  { label: "Tất cả", value: "all" },
+  { label: "Đã trả lời", value: "answered" },
+  { label: "Chưa trả lời", value: "unanswered" },
+  { label: "Đã giải quyết", value: "solved" },
+];
+
+// Mock data for demonstration
+const mockQuestions = ref([
+  {
+    id: 1,
+    title: "Cứu tuiiiiiiiii - Lỗi không thể import React component",
+    excerpt:
+      "Mình đang gặp lỗi khi import React component, ai có thể giúp mình khắc phục được không?",
+    author: "Phạm Quốc Việt",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    timestamp: "vài giây trước",
+    technology: "NodeJS",
+    level: "Beginner",
+    likes: 0,
+    answers: 0,
+    views: 15,
+    hasBestAnswer: false,
+    latestAnswer: null,
+  },
+  {
+    id: 2,
+    title: "Cho mình hỏi JWT là gì ạ?",
+    excerpt:
+      "Mình mới học về authentication và không hiểu JWT hoạt động như thế nào. Ai có thể giải thích chi tiết được không?",
+    author: "Nguyễn Quang Kính",
+    avatar: "https://randomuser.me/api/portraits/men/45.jpg",
+    timestamp: "1 phút trước",
+    technology: "NestJS",
+    level: "Beginner",
+    likes: 2,
+    answers: 3,
+    views: 48,
+    hasBestAnswer: false,
+    latestAnswer: {
+      author: "Trần Văn A",
+      avatar: "https://randomuser.me/api/portraits/men/62.jpg",
+    },
+  },
+  {
+    id: 3,
+    title: "Zustand là gì vậy mn?",
+    excerpt:
+      "Mình nghe nhiều người nhắc đến Zustand cho state management trong React. So với Redux thì nó có ưu điểm gì?",
+    author: "Nguyễn Thanh Triều",
+    avatar: "https://randomuser.me/api/portraits/men/18.jpg",
+    timestamp: "5 phút trước",
+    technology: "NextJS",
+    level: "Intermediate",
+    likes: 5,
+    answers: 7,
+    views: 124,
+    hasBestAnswer: true,
+    latestAnswer: {
+      author: "Lê Thị B",
+      avatar: "https://randomuser.me/api/portraits/women/25.jpg",
+    },
+  },
+  {
+    id: 4,
+    title: "Cách tối ưu performance cho ứng dụng React lớn",
+    excerpt:
+      "Ứng dụng React của mình đang chạy chậm khi có nhiều component. Các bạn có kinh nghiệm tối ưu không?",
+    author: "Mỹ Giang",
+    avatar: "https://randomuser.me/api/portraits/women/32.jpg",
+    timestamp: "10 phút trước",
+    technology: "React",
+    level: "Advanced",
+    likes: 12,
+    answers: 5,
+    views: 256,
+    hasBestAnswer: true,
+    latestAnswer: {
+      author: "Hoàng Văn C",
+      avatar: "https://randomuser.me/api/portraits/men/55.jpg",
+    },
+  },
+]);
+
+// SEO Meta
+useSeoMeta({
+  title: `Thảo luận về ${category} - ChoCode`,
+  description: `Tham gia thảo luận và hỏi đáp về ${category} cùng cộng đồng developers Việt Nam`,
+});
 </script>
+
+<style scoped>
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform,
+    box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Focus styles */
+select:focus,
+button:focus-visible {
+  outline: none;
+}
+
+/* Hover effects */
+article:hover {
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+}
+</style>

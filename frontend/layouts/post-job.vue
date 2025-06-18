@@ -5,8 +5,8 @@
     <main class="pt-16 bg-gray-50 overflow-hidden">
       <!-- Ads Banner -->
 
-      <div class="mx-4 md:mx-16 lg:mx-32 xl:mx-[12rem] mt-4 md:mt-16 lg:mt-5 ">
-        <img src="~/assets/images/header/banner3.webp" class="rounded-md w-full" />
+      <div class="mx-[1rem] md:mx-16 lg:mx-32 xl:mx-[13rem] mt-4 md:mt-16 lg:mt-2">
+        <!-- <img src="~/assets/images/header/banner3.webp" class="rounded-md w-full" /> -->
         <slot />
       </div>
     </main>

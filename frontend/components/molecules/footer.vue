@@ -1,6 +1,6 @@
 <!-- pages/index.vue -->
 <template>
-  <div class="mx-4 md:mx-16 lg:mx-32 xl:mx-[12rem] mt-4 md:mt-8 flex flex-col">
+  <div class="mx-[1rem] md:mx-16 lg:mx-32 xl:mx-[13rem] mt-4 md:mt-8 flex flex-col">
     <main class="flex-grow">
       <div class="container mx-auto py-8">
         <!-- Main section with all categories -->
@@ -323,7 +323,7 @@
       </p>
       <button
         @click="confirmRoleUpdate"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition"
+        class="bg-primary hover:bg-blue-700 text-white px-6 py-2 rounded-full transition"
       >
         Tôi đã hiểu
       </button>
@@ -338,7 +338,7 @@
 
 // onMounted(() => {
 //   const role = nuxtStorage.localStorage.getData('updatedRole')
-  
+
 //   // Nếu chưa có hoặc giá trị không phải "done" => hiện popup
 //   if (!role || role !== 'done') {
 //     showPopup.value = true
@@ -352,3 +352,46 @@
 // }
 const mobileMenuOpen = ref(false);
 </script>
+
+<style scoped>
+/* Smooth transitions for all interactive elements */
+a,
+button {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Focus styles for accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Social icon hover effects */
+.social-icon:hover {
+  transform: translateY(-1px);
+}
+
+/* Mobile menu animation */
+@media (max-width: 768px) {
+  .mobile-menu-enter-active,
+  .mobile-menu-leave-active {
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu-enter-from,
+  .mobile-menu-leave-to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Grid responsive adjustments */
+@media (max-width: 640px) {
+  .grid-cols-1 {
+    gap: 2rem;
+  }
+}
+</style>
