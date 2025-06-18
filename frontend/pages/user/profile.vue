@@ -123,9 +123,40 @@
             </div>
             <div class="absolute -bottom-3 left-1/2 -translate-x-1/2">
               <div
-                class="px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-sm font-medium rounded-full shadow-md"
+                class="px-4 py-1 text-white text-sm font-semibold rounded-full shadow-lg backdrop-blur-sm border border-white/20 transition-all duration-300 hover:scale-105"
+                :class="{
+                  'bg-gradient-to-r from-emerald-400 to-green-500 shadow-emerald-500/30':
+                    userStatus?.isUserOnline,
+                  'bg-gradient-to-r from-amber-400 to-orange-500 shadow-amber-500/30':
+                    !userStatus?.isUserOnline && userStatus?.lastActive,
+                  'bg-gradient-to-r from-slate-400 to-gray-500 shadow-slate-500/30':
+                    !userStatus?.isUserOnline && !userStatus?.lastActive,
+                }"
               >
-                {{ userData?.active ? "Online" : "Offline" }}
+                <!-- Dot indicator -->
+                <div class="flex items-center gap-2">
+                  <div
+                    class="w-2 h-2 rounded-full animate-pulse"
+                    :class="{
+                      'bg-white shadow-sm': userStatus?.isUserOnline,
+                      'bg-white/80':
+                        !userStatus?.isUserOnline && userStatus?.lastActive,
+                      'bg-white/60':
+                        !userStatus?.isUserOnline && !userStatus?.lastActive,
+                    }"
+                  ></div>
+
+                  <!-- Status text -->
+                  <span>
+                    <template v-if="userStatus?.isUserOnline">
+                      Online
+                    </template>
+                    <!-- <template v-else-if="userStatus?.lastActive">
+                      {{ getMinutesAgo(userStatus.lastActive) }} phút trước
+                    </template> -->
+                    <template v-else> Offline </template>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -185,9 +216,13 @@
                   <span>Kết nối</span>
                 </el-button>
                 <el-button
+                  v-if="
+                    currentUser && userData.username !== currentUser.username
+                  "
                   class="flex items-center gap-1"
                   size="small"
                   :size="isMobile ? 'small' : 'default'"
+                  @click="openChat"
                 >
                   <MessageCircle class="w-4 h-4 mr-1" />
                   <span>Nhắn tin</span>
@@ -225,6 +260,7 @@
                 Thông tin
               </h3>
               <button
+                v-if="currentUser && userData.username === currentUser.username"
                 @click="dialogVisible = !dialogVisible"
                 class="flex items-center mb-4 text-xs text-secondary"
               >
@@ -537,6 +573,18 @@
       </div>
     </template>
   </div>
+
+  <!-- Chat Component -->
+  <Chat
+    v-if="showChat"
+    :username="currentUser?.username"
+    :avatar="currentUser?.avatar"
+    :name="currentUser?.fullName"
+    :recipient-id="userData?.id"
+    :recipient-name="userData?.fullName"
+    :recipient-avatar="userData?.avatar"
+    @close="closeChat"
+  />
 </template>
 
 <script setup>
@@ -565,17 +613,17 @@ import {
   Hash,
   SquarePen,
 } from "lucide-vue-next";
-import { ElNotification } from "element-plus";
 import DefaultAvatar from "@/assets/images/header/default-avatar.png";
-import { ref, onMounted, watch, computed } from "vue";
 import { useUserOnlineStore } from "~/store/userOnline";
-const uerOnlineStore = useUserOnlineStore();
+import Chat from "~/components/forum/Chat.vue";
+const userOnlineStore = useUserOnlineStore();
 const route = useRoute();
 const userData = ref(null);
 const activeTab = ref("posts");
 const loading = ref(true);
 const dialogVisible = ref(false);
 const token = useCookie("auth.token");
+const currentUser = await useCurrentUser();
 const userForm = ref({
   id: 5,
   username: "441884169",
@@ -595,7 +643,6 @@ const isMobile = computed(() => {
 
 // Add window resize listener for mobile detection
 onMounted(() => {
-  console.log("User online: ", uerOnlineStore.isUserOnline);
   if (process.client) {
     window.addEventListener("resize", handleResize);
   }
@@ -717,6 +764,30 @@ const truncateHTML = (html, length) => {
     if (html.length <= length) return html;
     return html.substring(0, length) + "...";
   }
+};
+
+const userStatus = computed(() => {
+  if (!userData.value) return null;
+  return userOnlineStore.users.find((u) => u.userId == userData.value.id);
+});
+
+function getMinutesAgo(lastActive) {
+  if (!lastActive) return "";
+  const diff = (Date.now() - new Date(lastActive).getTime()) / 60000;
+  return Math.floor(diff);
+}
+
+// Chat state
+const showChat = ref(false);
+
+// Chat methods
+const openChat = () => {
+  if (!currentUser.value || !userData.value) return;
+  showChat.value = true;
+};
+
+const closeChat = () => {
+  showChat.value = false;
 };
 </script>
 

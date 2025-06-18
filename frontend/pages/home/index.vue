@@ -1,6 +1,13 @@
 <template>
-  <HomeJobs :jobs="jobs" :is-loading="isLoading" :title="title" />
-  <!-- <HomeBanner /> -->
+  <div class="space-y-8">
+    <HomeJobs :jobs="jobs" :is-loading="isLoading" :title="title" />
+    <HomeTopDevelopers
+      :developers="topDevelopers"
+      :is-loading="isLoadingDevelopers"
+      :title="topDevelopersTitle"
+    />
+    <!-- <HomeBanner /> -->
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -10,8 +17,11 @@ setupSeoFromSettingObject({
   description:
     "ChoCode là nền tảng freelance dành riêng cho dân IT chính hiệu – nơi Dev giỏi không còn lo thiếu việc, khách hàng dễ dàng tìm được lập trình viên chất lượng. Dù bạn là freelancer đang săn job hay doanh nghiệp cần thuê Dev, ChoCode đều có giải pháp phù hợp!",
 });
-const title = `🔥
-        Việc làm HOT nhất!`;
+
+const title = `🔥 Việc làm HOT nhất!`;
+const topDevelopersTitle = `👑 Developer uy tín nhất!`;
+
+// Fetch jobs
 const {
   data: jobs,
   pending: isLoading,
@@ -24,4 +34,19 @@ const {
       .then((res) => (res as any).data.data || []),
   { server: true }
 );
+
+// Fetch top developers
+const {
+  data: topDevelopers,
+  pending: isLoadingDevelopers,
+  error: developersError,
+} = await useAsyncData(
+  "topDevelopers",
+  () =>
+    userService
+      .userControllerFindAll()
+      .then((res) => (res as any).data.data || []),
+  { server: true }
+);
+console.log('Top dev: ', topDevelopers)
 </script>

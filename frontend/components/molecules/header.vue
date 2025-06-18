@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- Header -->
+    <!-- Chat  -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-white shadow-sm z-50">
       <div
         class="relative h-full flex items-center justify-between mx-4 md:mx-16 lg:mx-32 xl:mx-[12rem]"
@@ -67,8 +68,15 @@
               <span
                 class="flex items-center cursor-pointer hover:text-primary outline-none transition-colors"
               >
-                <UserAvatar :avatar="currentUser.avatar" />
+                <div class="relative mr-2">
+                  <UserAvatar :avatar="currentUser.avatar" />
+                  <!-- Dấu tròn xanh online -->
+                  <div
+                    class="absolute -bottom-1 right-1 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-sm"
+                  ></div>
+                </div>
                 <span class="font-medium">{{ currentUser.fullName }}</span>
+                <
                 <el-icon class="ml-1 text-gray-400"><arrow-down /></el-icon>
               </span>
               <template #dropdown>
@@ -88,7 +96,7 @@
 
                   <el-dropdown-item
                     class="!flex !items-center"
-                    @click="showBankingModal"
+                    @click="dialogBanking = !dialogBanking"
                   >
                     <HandCoins class="w-5 h-5 mr-2" />
                     Nạp coin
@@ -412,7 +420,17 @@
         <!-- User Profile (Mobile) -->
         <div v-if="currentUser" class="px-4 py-3 border-b border-gray-200">
           <div class="flex items-center mb-3">
-            <UserAvatar :avatar="currentUser.avatar" />
+            <div class="relative">
+              <UserAvatar :avatar="currentUser.avatar" />
+              <!-- Dấu tròn xanh online -->
+              <div
+                class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full shadow-md"
+              >
+                <div
+                  class="w-full h-full bg-emerald-400 rounded-full animate-pulse"
+                ></div>
+              </div>
+            </div>
             <span class="ml-2 font-medium text-gray-800">{{
               currentUser.fullName
             }}</span>
@@ -436,17 +454,17 @@
               <HandCoins class="w-5 h-5 mr-2" />
               Nạp coin
             </button>
-      
-              <NuxtLink
-                class="flex items-center text-gray-600 hover:text-primary text-sm"
-                :to="{
-                  name: 'transaction-history',
-                }"
-              >
-                <History class="w-5 h-5 mr-2" />
-                Lịch sử giao dịch
-              </NuxtLink>
-            
+
+            <NuxtLink
+              class="flex items-center text-gray-600 hover:text-primary text-sm"
+              :to="{
+                name: 'transaction-history',
+              }"
+            >
+              <History class="w-5 h-5 mr-2" />
+              Lịch sử giao dịch
+            </NuxtLink>
+
             <button
               class="flex items-center text-gray-600 hover:text-primary text-sm"
               @click="logout"
@@ -519,14 +537,13 @@
 <script setup lang="ts">
 import {
   MessageSquare,
-  Store,
   User,
+  Laptop,
   HandCoins,
   Lock,
   Copy,
   Bell,
   Menu,
-  Laptop,
   Sparkles,
   CreditCard,
   X,
@@ -537,36 +554,27 @@ import {
   Lightbulb,
   History,
 } from "lucide-vue-next";
-useSocketNotification();
 import { ArrowDown } from "@element-plus/icons-vue";
 import { useUserOnlineStore } from "~/store/userOnline";
+import { onMounted, onUnmounted } from "vue";
+
+useSocketNotification();
+
 const menuOpen = ref(false);
 const dialogBanking = ref(false);
-const toLogin = () => {
-  navigateTo("/auth/login");
-};
 const qrAnimated = ref(false);
-
 const copied = ref(false);
-function handleCopy() {
-  const text = `CHOCODE_${currentUser.value?.username}`;
-  navigator.clipboard
-    .writeText(text)
-    .then(() => {
-      ElMessage.success("Đã copy nội dung chuyển khoản thành công!");
-    })
-    .catch(() => {
-      ElMessage.error("Copy thất bại!");
-    });
-}
+const visible = ref(false);
+const unreadCount = ref(3);
+
 const token = useCookie("auth.token");
 const serverToken = useCookie("access_token");
+
 const currentUser = await useCurrentUser();
 const userOnlineStore = useUserOnlineStore();
-const showBankingModal = () => {
-  dialogBanking.value = !dialogBanking.value;
-};
 const { $socket } = useNuxtApp();
+
+// User data for socket
 const user = {
   userId: currentUser.value?.id,
   name: currentUser.value?.fullName,
@@ -574,60 +582,108 @@ const user = {
   avatar: currentUser.value?.avatar,
 };
 
+// Copy mã chuyển khoản
+function handleCopy() {
+  const text = `CHOCODE_${currentUser.value?.username}`;
+  navigator.clipboard
+    .writeText(text)
+    .then(() => ElMessage.success("Đã copy nội dung chuyển khoản thành công!"))
+    .catch(() => ElMessage.error("Copy thất bại!"));
+}
+
+// Redirect to login
+const toLogin = () => navigateTo("/auth/login");
+
+// Toggle bank modal
+const toggleBankingModal = () => {
+  dialogBanking.value = !dialogBanking.value;
+};
+
+// Logout
+const logout = async () => {
+  const confirmed = await ElMessageBox.confirm(
+    "Chắc chắn muốn đăng xuất tài khoản ?",
+    "Xác nhận",
+    {
+      confirmButtonText: "Đăng xuất",
+      cancelButtonText: "Hủy",
+      type: "warning",
+    }
+  ).catch(() => false);
+
+  if (!confirmed) return;
+
+  token.value = null;
+  serverToken.value = null;
+
+  ElNotification({ type: "success", message: "Đăng xuất thành công" });
+
+  setTimeout(() => window.location.reload(), 1500);
+};
+
 onMounted(() => {
-  $socket.emit("online-user", {
-    user: user,
-  });
-  $socket.on("user-status-changed", (data) => {
-    if (data.online) {
-      userOnlineStore.setUserOnline({
-        isUserOnline: data.online,
+  if ($socket && currentUser.value?.id) {
+    // Emit online khi vào trang
+    $socket.emit("online-user", {
+      userId: currentUser.value.id,
+      username: currentUser.value.username,
+      avatar: currentUser.value.avatar,
+    });
+
+    // Lắng nghe trạng thái thay đổi
+    $socket.on("user-status-changed", (data) => {
+      // data: { userId, username, online, lastActive }
+      userOnlineStore.updateUserStatus({
         userId: data.userId,
         username: data.username,
+        isUserOnline: data.online,
+        lastActive: data.lastActive,
       });
-    }
-    console.log(JSON.stringify(data));
-  });
+    });
+
+    // Lấy danh sách online ban đầu
+    $socket.emit("get-online-users", {}, (users: any[]) => {
+      // users: [{ userId, username, online, lastActive }]
+      userOnlineStore.setOnlineUsers(
+        users.map((u) => ({
+          userId: u.userId,
+          username: u.username,
+          isUserOnline: u.online,
+          lastActive: u.lastActive,
+        }))
+      );
+    });
+  }
+
+  // Tự động đóng menu khi resize
   const handleResize = () => {
     if (window.innerWidth >= 1024 && menuOpen.value) {
       menuOpen.value = false;
     }
   };
-
   window.addEventListener("resize", handleResize);
-
-  onUnmounted(() => {
-    window.removeEventListener("resize", handleResize);
-  });
 });
 
-const logout = async () => {
-  ElMessageBox.confirm("Chắc chắn muốn đăng xuất tài khoản ?", "Xác nhận", {
-    confirmButtonText: "Đăng xuất",
-    cancelButtonText: "Hủy",
-    type: "warning",
-  }).then(async () => {
-    token.value = null;
-    serverToken.value = null;
-    ElNotification({
-      type: "success",
-      message: "Đăng xuất thành công",
-    });
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
-  });
-};
+onUnmounted(() => {
+  if ($socket) {
+    $socket.off("user-status-changed");
+  }
 
+  // Tự động đóng menu khi resize
+  const handleResize = () => {
+    if (window.innerWidth >= 1024 && menuOpen.value) {
+      menuOpen.value = false;
+    }
+  };
+  window.removeEventListener("resize", handleResize);
+});
+
+// Menu navigation
 const navItems = [
   { label: "Việc làm IT", icon: Laptop, to: "/viec-lam-it" },
   { label: "Thuê Freelancer", icon: User, to: "/dang-bai" },
-  // { label: "Mua bán", icon: Store, to: "/mua-ban" },
   { label: "Thảo luận", icon: MessageSquare, to: "/thao-luan" },
 ];
-
-const visible = ref(false);
-const unreadCount = ref(3);
 </script>
 
 <style>

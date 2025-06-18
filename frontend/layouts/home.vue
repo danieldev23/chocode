@@ -1,376 +1,271 @@
 <template>
   <MoleculesHeader />
-  <main>
-    <div class="w-full min-h-screen">
-      <main class="pt-16">
-        <div class="mx-4 md:mx-16 lg:mx-32 xl:mx-[12rem]">
-          <!-- Modern Hero Banner with Glassmorphism Effect -->
-          <div
-            class="relative overflow-hidden rounded-2xl mt-6 mb-8 shadow-2xl"
-          >
-            <img
-              src="~/assets/images/header/banner.avif"
-              srcset="
-                ~/assets/images/header/banner.avif  600w,
-                ~/assets/images/header/banner.avif  900w,
-                ~/assets/images/header/banner.avif 1200w
-              "
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-              class="w-full h-[32rem] object-cover transition-transform duration-[6000ms] hover:scale-105"
-              loading="lazy"
-              fetchpriority="high"
-              alt="IT Freelance Platform Vietnam"
-            />
-            <!-- Gradient Overlay -->
-            <div
-              class="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/60 to-transparent"
-            ></div>
-            <!-- Content Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="text-center px-6 max-w-4xl">
+  <main
+    class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50"
+  >
+    <div class="relative">
+      <!-- Animated Background Elements -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+          class="absolute top-0 left-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl animate-float"
+        ></div>
+        <div
+          class="absolute top-1/4 right-0 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-float-delayed"
+        ></div>
+        <div
+          class="absolute bottom-0 left-1/3 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl animate-float-slow"
+        ></div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="relative pt-16">
+        <!-- Hero Section -->
+        <section class="relative py-20 overflow-hidden">
+          <div class="container mx-auto px-4">
+            <div class="max-w-7xl mx-auto">
+              <!-- Hero Content -->
+              <div class="text-center mb-16">
                 <div
-                  class="inline-flex items-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-6"
+                  class="inline-flex items-center px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-white/20 mb-8 animate-fade-in-up"
                 >
-                  <span class="text-white text-sm font-medium"
-                    >🚀 #1 IT Freelance Platform</span
+                  <span class="text-blue-600 font-semibold text-lg"
+                    >🚀 Nền tảng Freelance IT #1 Việt Nam</span
                   >
                 </div>
                 <h1
-                  class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8 leading-tight tracking-wide"
+                  class="text-5xl md:text-7xl font-bold mb-8 leading-tight animate-fade-in-up-delayed"
                 >
-                  Kết nối với
                   <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500"
+                    class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600"
                   >
-                    các dự án IT
+                    Kết nối tài năng
                   </span>
                   <br />
-                  <span class="block mt-2"> hàng đầu tại Việt Nam </span>
+                  <span class="text-gray-900">với cơ hội</span>
                 </h1>
                 <p
-                  class="text-xl md:text-2xl text-blue-100 mb-6 font-light sm:text-nowrap text-wrap"
+                  class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-12 animate-fade-in-up-delayed"
                 >
-                  Tiếp cận
-                  <span class="font-bold text-cyan-300">40,000+</span> cơ hội
-                  freelance công nghệ từ các startup và doanh nghiệp
+                  Khám phá hơn
+                  <span class="font-bold text-blue-600">40,000+</span> cơ hội
+                  freelance từ các startup và doanh nghiệp hàng đầu
                 </p>
               </div>
-            </div>
 
-            <!-- Custom Pagination -->
-            <div
-              class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10"
-            >
-              <div class="flex space-x-2">
+              <!-- Search Section -->
+              <div class="relative max-w-5xl mx-auto">
                 <div
-                  v-for="n in slides.length"
-                  :key="n"
-                  class="w-3 h-3 rounded-full backdrop-blur-sm border border-white/30 transition-all duration-300 hover:bg-white/80"
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Ultra Modern Search Section -->
-          <section class="relative -mt-32 z-20 mb-16">
-            <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
-              <!-- Premium Search Card -->
-              <div class="relative overflow-hidden">
-                <!-- Background with mesh gradient -->
-                <div
-                  class="absolute inset-0 bg-gradient-to-br from-white via-blue-50/30 to-indigo-100/50 backdrop-blur-3xl rounded-3xl"
+                  class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-2xl"
                 ></div>
                 <div
-                  class="absolute inset-0 bg-white/70 backdrop-blur-2xl rounded-3xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
-                ></div>
-
-                <!-- Floating elements decoration -->
-                <div
-                  class="absolute top-4 right-4 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-indigo-500/20 rounded-full blur-xl"
-                ></div>
-                <div
-                  class="absolute bottom-4 left-4 w-16 h-16 bg-gradient-to-br from-purple-400/20 to-pink-500/20 rounded-full blur-xl"
-                ></div>
-
-                <div class="relative p-8 lg:p-12">
-                  <!-- Header Section -->
-                  <div class="text-center mb-12">
-                    <div
-                      class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-600/10 to-indigo-600/10 border border-blue-200/50 mb-6"
-                    >
-                      <div
-                        class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"
-                      ></div>
-                      <span class="text-sm font-medium text-blue-700"
-                        >🔥 Hot Jobs Available</span
-                      >
-                    </div>
-                    <h2
-                      class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent mb-4"
-                    >
-                      Khám phá cơ hội freelance IT và tìm Dev chất lượng cho dự
-                      án của bạn
-                    </h2>
-                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                      Kết nối với
-                      <span class="font-bold text-blue-600">40,000+</span> dự án
-                      freelance từ các startup & doanh nghiệp hàng đầu
-                    </p>
-                  </div>
-
-                  <!-- Revolutionary Search Form -->
-                  <form @submit.prevent="handleSearch" role="search">
-                    <!-- Main Search Row -->
-                    <div class="relative mb-8">
-                      <div
-                        class="flex flex-col lg:flex-row bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.08)] border border-gray-100/50 overflow-hidden"
-                      >
-                        <!-- Job Category -->
-                        <div class="flex-1 relative group">
-                          <div class="absolute top-3 left-4 z-10">
-                            <div class="flex items-center">
-                              <div
-                                class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors"
-                              >
-                                <List class="w-5 h-5 text-blue-600" />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="pl-16 pr-4 py-4">
-                            <label
-                              class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
-                              >Danh mục</label
-                            >
-                            <el-select
-                              v-model="state.jobCategory"
-                              placeholder="Chọn lĩnh vực IT"
-                              clearable
-                              class="w-full premium-select"
-                              popper-class="premium-popper"
-                              size="large"
-                            >
-                              <el-option
-                                v-for="item in jobCategories"
-                                :key="item"
-                                :label="item"
-                                :value="item"
-                              />
-                            </el-select>
-                          </div>
-                          <div
-                            class="absolute inset-y-0 right-0 w-px bg-gray-100"
-                          ></div>
-                        </div>
-
-                        <!-- Keywords Search -->
-                        <div class="flex-1 relative group">
-                          <div class="absolute top-3 left-4 z-10">
-                            <div
-                              class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center group-hover:bg-green-100 transition-colors"
-                            >
-                              <Search class="w-5 h-5 text-green-600" />
-                            </div>
-                          </div>
-                          <div class="pl-16 pr-4 py-4">
-                            <label
-                              class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
-                              >Kỹ năng</label
-                            >
-                            <el-input
-                              v-model="input"
-                              clearable
-                              placeholder="React, Vue.js, Laravel, Python..."
-                              class=""
-                              size="large"
-                            />
-                          </div>
-                          <div
-                            class="absolute inset-y-0 right-0 w-px bg-gray-100"
-                          ></div>
-                        </div>
-
-                        <!-- Location -->
-                        <div class="flex-1 relative group">
-                          <div class="absolute top-3 left-4 z-10">
-                            <div
-                              class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center group-hover:bg-purple-100 transition-colors"
-                            >
-                              <MapPin class="w-5 h-5 text-purple-600" />
-                            </div>
-                          </div>
-                          <div class="pl-16 pr-4 py-4">
-                            <label
-                              class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
-                              >Địa điểm</label
-                            >
-                            <el-select
-                              v-model="state.location"
-                              placeholder="Remote / Onsite"
-                              clearable
-                              class="w-full premium-select"
-                              popper-class="premium-popper"
-                              size="large"
-                            >
-                              <el-option
-                                v-for="location in locations"
-                                :value="location"
-                                :label="location"
-                              />
-                            </el-select>
-                          </div>
-                        </div>
-
-                        <!-- Premium Search Button -->
-                        <div class="lg:w-auto w-full p-3">
-                          <button
-                            type="submit"
-                            class="w-full lg:w-auto px-8 py-4 bg-secondary-gradient text-white font-bold rounded-xl transition-all duration-500 shadow-lg hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1 flex items-center justify-center group relative overflow-hidden"
+                  class="relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20"
+                >
+                  <form @submit.prevent="handleSearch" class="space-y-6">
+                    <!-- Search Inputs -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <!-- Category -->
+                      <div class="relative group">
+                        <div
+                          class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                        ></div>
+                        <div class="relative bg-white rounded-xl p-4">
+                          <label
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Lĩnh vực</label
                           >
-                            <div
-                              class="absolute inset-0 bg-secondary-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                            ></div>
-                            <Search
-                              class="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300"
+                          <el-select
+                            v-model="state.jobCategory"
+                            placeholder="Chọn lĩnh vực"
+                            class="w-full premium-select"
+                            popper-class="premium-popper"
+                          >
+                            <el-option
+                              v-for="item in jobCategories"
+                              :key="item"
+                              :label="item"
+                              :value="item"
                             />
-                            <span class="relative z-10">Tìm ngay</span>
-                          </button>
+                          </el-select>
+                        </div>
+                      </div>
+
+                      <!-- Skills -->
+                      <div class="relative group">
+                        <div
+                          class="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                        ></div>
+                        <div class="relative bg-white rounded-xl p-4">
+                          <label
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Kỹ năng</label
+                          >
+                          <el-input
+                            v-model="input"
+                            placeholder="React, Vue.js, Laravel..."
+                            class="premium-input border"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- Location -->
+                      <div class="relative group">
+                        <div
+                          class="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                        ></div>
+                        <div class="relative bg-white rounded-xl p-4">
+                          <label
+                            class="block text-sm font-medium text-gray-700 mb-2"
+                            >Địa điểm</label
+                          >
+                          <el-select
+                            v-model="state.location"
+                            placeholder="Remote / Onsite"
+                            class="w-full premium-select font-[16px]"
+                            popper-class="premium-popper"
+                          >
+                            <el-option
+                              v-for="location in locations"
+                              :value="location"
+                              :label="location"
+                            />
+                          </el-select>
                         </div>
                       </div>
                     </div>
 
-                    <!-- Trending Tags -->
-                    <div class="flex flex-wrap items-center gap-3 mb-8">
-                      <span
-                        class="text-sm font-medium text-gray-600 flex items-center"
+                    <!-- Search Button -->
+                    <div class="flex justify-center">
+                      <button
+                        type="submit"
+                        class="relative group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/30"
                       >
-                        <span
-                          class="w-2 h-2 bg-orange-400 rounded-full mr-2 animate-pulse"
-                        ></span>
-                        Trending:
-                      </span>
+                        <div
+                          class="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        ></div>
+                        <span class="relative flex items-center">
+                          <Search class="w-5 h-5 mr-2" />
+                          Tìm kiếm ngay
+                        </span>
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- Trending Tags -->
+                  <div class="mt-8">
+                    <div class="flex items-center gap-3 mb-4">
+                      <span class="text-sm font-medium text-gray-600"
+                        >Trending:</span
+                      >
                       <div class="flex flex-wrap gap-2">
                         <button
                           v-for="(tag, index) in quickTags"
                           :key="tag"
-                          type="button"
                           @click="selectQuickTag(tag)"
-                          class="px-4 py-2 text-sm font-medium bg-gradient-to-r from-gray-50 to-gray-100 hover:from-blue-50 hover:to-indigo-50 text-gray-700 hover:text-blue-700 rounded-xl border border-gray-200/50 hover:border-blue-200 transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
+                          class="px-4 py-2 text-sm font-medium bg-white hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl border border-gray-200 hover:border-blue-200 transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
                           :class="`animate-fade-in-up delay-${index * 100}`"
                         >
                           #{{ tag }}
                         </button>
                       </div>
                     </div>
-                  </form>
-                </div>
-              </div>
-
-              <!-- Premium Stats Grid -->
-              <div class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-6">
-                <div
-                  class="group relative overflow-hidden bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div
-                    class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"
-                  ></div>
-                  <div class="relative">
-                    <div
-                      class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-                    >
-                      <span class="text-2xl">💼</span>
-                    </div>
-                    <div class="text-3xl font-bold text-blue-600 mb-1">
-                      40K+
-                    </div>
-                    <div class="text-gray-600 font-medium">Dự án active</div>
-                  </div>
-                </div>
-
-                <div
-                  class="group relative overflow-hidden bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div
-                    class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"
-                  ></div>
-                  <div class="relative">
-                    <div
-                      class="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-                    >
-                      <span class="text-2xl">👨‍💻</span>
-                    </div>
-                    <div class="text-3xl font-bold text-green-500 mb-1">
-                      25K+
-                    </div>
-                    <div class="text-gray-600 font-medium">IT Freelancer</div>
-                  </div>
-                </div>
-
-                <div
-                  class="group relative overflow-hidden bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div
-                    class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity"
-                  ></div>
-                  <div class="relative">
-                    <div
-                      class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-                    >
-                      <span class="text-2xl">🏢</span>
-                    </div>
-                    <div class="text-3xl font-bold text-purple-600 mb-1">
-                      12K+
-                    </div>
-                    <div class="text-gray-600 font-medium">Công ty tin cậy</div>
-                  </div>
-                </div>
-
-                <div
-                  class="group relative overflow-hidden bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div
-                    class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity"
-                  ></div>
-                  <div class="relative">
-                    <div
-                      class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"
-                    >
-                      <span class="text-2xl">⭐</span>
-                    </div>
-                    <div class="text-3xl font-bold text-orange-400 mb-1">
-                      98%
-                    </div>
-                    <div class="text-gray-600 font-medium">Hài lòng</div>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Content Slot -->
+        <!-- Stats Section -->
+        <section class="py-20">
+          <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <!-- Projects -->
+              <div class="relative group">
+                <div
+                  class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                ></div>
+                <div class="relative bg-white rounded-2xl p-8">
+                  <div
+                    class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                  >
+                    <span class="text-2xl">💼</span>
+                  </div>
+                  <div class="text-4xl font-bold text-blue-600 mb-2">40K+</div>
+                  <div class="text-gray-600 font-medium">Dự án active</div>
+                </div>
+              </div>
+
+              <!-- Freelancers -->
+              <div class="relative group">
+                <div
+                  class="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                ></div>
+                <div class="relative bg-white rounded-2xl p-8">
+                  <div
+                    class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                  >
+                    <span class="text-2xl">👨‍💻</span>
+                  </div>
+                  <div class="text-4xl font-bold text-purple-600 mb-2">
+                    25K+
+                  </div>
+                  <div class="text-gray-600 font-medium">IT Freelancer</div>
+                </div>
+              </div>
+
+              <!-- Companies -->
+              <div class="relative group">
+                <div
+                  class="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-red-500 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                ></div>
+                <div class="relative bg-white rounded-2xl p-8">
+                  <div
+                    class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                  >
+                    <span class="text-2xl">🏢</span>
+                  </div>
+                  <div class="text-4xl font-bold text-pink-600 mb-2">12K+</div>
+                  <div class="text-gray-600 font-medium">Công ty tin cậy</div>
+                </div>
+              </div>
+
+              <!-- Satisfaction -->
+              <div class="relative group">
+                <div
+                  class="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                ></div>
+                <div class="relative bg-white rounded-2xl p-8">
+                  <div
+                    class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                  >
+                    <span class="text-2xl">⭐</span>
+                  </div>
+                  <div class="text-4xl font-bold text-red-600 mb-2">98%</div>
+                  <div class="text-gray-600 font-medium">Hài lòng</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Content Slot -->
+        <div class="container mx-auto px-4">
           <slot />
         </div>
-      </main>
+      </div>
     </div>
   </main>
 
-  <!-- Modern Footer -->
+  <!-- Footer -->
   <div class="bg-white">
     <MoleculesFooter />
   </div>
 </template>
 
 <script setup lang="ts">
-import { List, Search, MapPin } from "lucide-vue-next";
-import { Pagination, Navigation, EffectFade, Autoplay } from "swiper/modules";
+import { Search } from "lucide-vue-next";
 import { availableTags } from "~/types/tags";
 import { locations } from "@/types/locations";
-
-// Enhanced slides with better images
-const slides = [
-  "/images/header/banner2.avif",
-  "/images/header/banner3.avif",
-  "/images/header/banner2.avif",
-];
 
 const input = ref("");
 const jobCategories = availableTags;
@@ -413,126 +308,47 @@ const selectQuickTag = (tag: string) => {
 </script>
 
 <style scoped>
+
+/* Animations */
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate(0, 0) rotate(0deg);
   }
   25% {
-    transform: translateY(-20px) rotate(2deg);
+    transform: translate(10px, -10px) rotate(2deg);
   }
   50% {
-    transform: translateY(-10px) rotate(-1deg);
+    transform: translate(-5px, 5px) rotate(-1deg);
   }
   75% {
-    transform: translateY(-30px) rotate(1deg);
+    transform: translate(-10px, -5px) rotate(1deg);
   }
 }
 
 @keyframes float-delayed {
   0%,
   100% {
-    transform: translateY(0px) rotate(0deg) scale(1);
+    transform: translate(0, 0) rotate(0deg);
   }
-  33% {
-    transform: translateY(-25px) rotate(-2deg) scale(1.1);
+  25% {
+    transform: translate(-10px, 10px) rotate(-2deg);
   }
-  66% {
-    transform: translateY(-15px) rotate(1deg) scale(0.9);
+  50% {
+    transform: translate(5px, -5px) rotate(1deg);
+  }
+  75% {
+    transform: translate(10px, 5px) rotate(-1deg);
   }
 }
 
 @keyframes float-slow {
   0%,
   100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate(0, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(-40px) rotate(3deg);
-  }
-}
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scale(0.5);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.5);
-  }
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes gradient-pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes gradient-text {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-up-delayed {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes progress {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 25%;
+    transform: translate(0, -20px) rotate(3deg);
   }
 }
 
@@ -550,82 +366,24 @@ const selectQuickTag = (tag: string) => {
   animation-delay: -4s;
 }
 
-.animate-twinkle {
-  animation: twinkle 4s ease-in-out infinite;
-}
-
-.animate-spin-very-slow {
-  animation: spin 30s linear infinite;
-}
-
-.animate-gradient-shift {
-  animation: gradient-shift 8s ease-in-out infinite;
-  background-size: 200% 200%;
-}
-
-.animate-gradient-pulse {
-  animation: gradient-pulse 4s ease-in-out infinite;
-}
-
-.animate-gradient-text {
-  animation: gradient-text 3s ease-in-out infinite;
-  background-size: 200% 200%;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 1s ease-out 0.2s both;
-}
-
-.animate-fade-in-up-delayed {
-  animation: fade-in-up-delayed 1s ease-out 0.6s both;
-}
-
-.animate-slide-up {
-  animation: slide-up 1s ease-out 0.8s both;
-}
-
-.animate-progress {
-  animation: progress 3s ease-out infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-/* Modern glassmorphism styles */
-.hero-swiper {
-  border-radius: 1rem;
-  overflow: hidden;
-}
-
 /* Premium Element UI styles */
 :deep(.premium-select .el-input__wrapper) {
   box-shadow: none !important;
   border: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
   background: transparent !important;
-  transition: all 0.3s ease;
 }
 
 :deep(.premium-input .el-input__wrapper) {
   box-shadow: none !important;
   border: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
   background: transparent !important;
-  transition: all 0.3s ease;
 }
 
 :deep(.premium-select .el-input__inner),
 :deep(.premium-input .el-input__inner) {
   color: #111827 !important;
-  font-size: 1rem !important;
-  font-weight: 600 !important;
+  font-size: 15px !important;
+  font-weight: 200 !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
@@ -633,13 +391,6 @@ const selectQuickTag = (tag: string) => {
   line-height: 1.5 !important;
 }
 
-:deep(.premium-select .el-input__inner::placeholder),
-:deep(.premium-input .el-input__inner::placeholder) {
-  color: #9ca3af !important;
-  font-weight: 500 !important;
-}
-
-/* Premium dropdown styles */
 :deep(.premium-popper) {
   border-radius: 1rem !important;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
@@ -675,29 +426,6 @@ const selectQuickTag = (tag: string) => {
   display: none;
 }
 
-/* Swiper enhancements */
-:deep(.swiper-pagination-bullet) {
-  width: 12px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  opacity: 1;
-  transition: all 0.3s ease;
-}
-
-:deep(.swiper-pagination-bullet-active) {
-  background: white;
-  transform: scale(1.2);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  :deep(.modern-select .el-input__wrapper),
-  :deep(.modern-input .el-input__wrapper) {
-    padding: 0.625rem 0.875rem 0.625rem 2.5rem;
-  }
-}
-
 /* Animations */
 @keyframes fadeInUp {
   from {
@@ -711,12 +439,11 @@ const selectQuickTag = (tag: string) => {
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
-/* Hover effects for stats */
-.stats-item:hover {
-  transform: translateY(-2px);
-  transition: transform 0.3s ease;
+.animate-fade-in-up-delayed {
+  animation: fadeInUp 0.6s ease-out 0.3s forwards;
+  opacity: 0;
 }
 </style>
