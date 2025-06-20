@@ -2,9 +2,8 @@ export default defineNuxtConfig({
   ssr: true,
   nitro: {
     prerender: {
-      crawlLinks: true,
+      crawlLinks: false,
       routes: ["/"],
-      ignore: ["/code"],
     },
   },
   vite: {
@@ -42,6 +41,7 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: false },
   runtimeConfig: {
+    geminiApiKey: process.env.GEMINI_API_KEY,
     AUTH_ORIGIN: process.env.AUTH_ORIGIN,
     public: {
       BASE_API_URL: process.env.API_BASE,

@@ -11,6 +11,117 @@
         </p>
       </div>
 
+      <!-- AI Assistant Card -->
+      <div
+        class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 shadow-sm mb-6"
+      >
+        <div class="p-6">
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center"
+              >
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                🤖 AI Gợi ý thông minh
+              </h3>
+              <p class="text-gray-600 mb-4">
+                Mô tả ý tưởng dự án của bạn, AI sẽ giúp tạo mô tả chi tiết và
+                gợi ý công nghệ phù hợp
+              </p>
+
+              <!-- AI Input -->
+              <div class="space-y-3">
+                <el-input
+                  v-model="aiPrompt"
+                  type="textarea"
+                  :rows="3"
+                  placeholder="Ví dụ: Tôi muốn tạo một website bán hàng online cho shop thời trang..."
+                  class="ai-input"
+                  :disabled="aiLoading"
+                />
+                <div class="flex gap-3">
+                  <button
+                    @click="getAISuggestion"
+                    :disabled="!aiPrompt.trim() || aiLoading"
+                    class="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                  >
+                    <div
+                      v-if="aiLoading"
+                      class="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"
+                    ></div>
+                    <svg
+                      v-else
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      ></path>
+                    </svg>
+                    {{ aiLoading ? "Đang tạo..." : "Tạo gợi ý" }}
+                  </button>
+                  <button
+                    v-if="aiSuggestion"
+                    @click="applyAISuggestion"
+                    class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center"
+                  >
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      ></path>
+                    </svg>
+                    Áp dụng gợi ý
+                  </button>
+                </div>
+              </div>
+
+              <!-- AI Response -->
+              <div
+                v-if="aiSuggestion"
+                class="mt-4 p-4 bg-white rounded-lg border border-gray-200"
+              >
+                <h4 class="font-semibold text-gray-900 mb-2">
+                  🎯 Gợi ý từ AI:
+                </h4>
+                <div
+                  class="prose prose-sm max-w-none"
+                  v-html="aiSuggestion"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Form Card -->
       <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div class="p-6 sm:p-8">
@@ -233,7 +344,7 @@
                     class="evergreen-upload w-full"
                     drag
                     name="file"
-                    action="http://localhost:3001/api/upload/image"
+                    action="https://api-chodev.dangquochuy/api/upload/image"
                     :headers="uploadHeaders"
                     :on-success="handleUploadSuccess"
                     :before-upload="beforeUpload"
@@ -341,6 +452,11 @@ interface JobForm {
   requirements?: string;
   image?: string;
 }
+
+// AI State
+const aiPrompt = ref("");
+const aiSuggestion = ref("");
+const aiLoading = ref(false);
 
 // Form data
 const form = reactive<JobForm>({
@@ -734,6 +850,113 @@ const formatSalary = (value: string | number) => {
   return value;
 };
 
+// AI Methods
+const getAISuggestion = async () => {
+  if (!aiPrompt.value.trim()) return;
+
+  aiLoading.value = true;
+
+  try {
+    const response = await $fetch("/api/ai/suggestion", {
+      method: "POST",
+      body: {
+        prompt: aiPrompt.value,
+      },
+    });
+
+    // Format the suggestion for display
+    aiSuggestion.value = `
+      <div class="space-y-4">
+        <div>
+          <h5 class="font-semibold text-gray-900">📝 Tiêu đề:</h5>
+          <p class="text-gray-700">${response.title}</p>
+        </div>
+        
+        <div>
+          <h5 class="font-semibold text-gray-900">💰 Ngân sách đề xuất:</h5>
+          <p class="text-gray-700">${formatCurrency(
+            response.estimatedBudget.min
+          )} - ${formatCurrency(response.estimatedBudget.max)} VNĐ</p>
+        </div>
+        
+        <div>
+          <h5 class="font-semibold text-gray-900">🏷️ Lĩnh vực:</h5>
+          <div class="flex flex-wrap gap-1 mt-1">
+            ${response.suggestedTags
+              .map(
+                (tag) =>
+                  `<span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">${tag}</span>`
+              )
+              .join("")}
+          </div>
+        </div>
+        
+        <div>
+          <h5 class="font-semibold text-gray-900">⚙️ Công nghệ đề xuất:</h5>
+          <div class="flex flex-wrap gap-1 mt-1">
+            ${response.suggestedTechnologies
+              .map(
+                (tech) =>
+                  `<span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">${tech}</span>`
+              )
+              .join("")}
+          </div>
+        </div>
+        
+        <div>
+          <h5 class="font-semibold text-gray-900">📋 Mô tả chi tiết:</h5>
+          <div class="text-gray-700 prose prose-sm max-w-none">${
+            response.description
+          }</div>
+        </div>
+      </div>
+    `;
+
+    // Store suggestion for applying
+    window.currentAISuggestion = response;
+  } catch (error) {
+    console.error("Error getting AI suggestion:", error);
+    ElMessage.error("Lỗi khi gọi AI. Vui lòng thử lại!");
+  } finally {
+    aiLoading.value = false;
+  }
+};
+
+const applyAISuggestion = () => {
+  const suggestion = window.currentAISuggestion;
+  if (!suggestion) return;
+
+  // Apply AI suggestions to form
+  form.title = suggestion.title;
+  form.jobDescription = suggestion.description;
+  form.salary.min = formatCurrency(suggestion.estimatedBudget.min);
+  form.salary.max = formatCurrency(suggestion.estimatedBudget.max);
+
+  // Add suggested tags (only if they exist in availableTags)
+  suggestion.suggestedTags.forEach((tag) => {
+    if (availableTags.includes(tag) && !form.tags.includes(tag)) {
+      form.tags.push(tag);
+    }
+  });
+
+  // Add suggested technologies (only if they exist in availableTechs)
+  suggestion.suggestedTechnologies.forEach((tech) => {
+    if (availableTechs.includes(tech) && !form.technologies.includes(tech)) {
+      form.technologies.push(tech);
+    }
+  });
+
+  ElMessage.success("Đã áp dụng gợi ý từ AI thành công!");
+
+  // Clear AI data
+  aiPrompt.value = "";
+  aiSuggestion.value = "";
+};
+
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat("vi-VN").format(amount);
+};
+
 // Initialize form
 onMounted(() => {
   if (!form.deadline) {
@@ -877,5 +1100,31 @@ onMounted(() => {
 button:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
+}
+
+/* AI Input Styles */
+:deep(.ai-input .el-textarea__inner) {
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  background: white !important;
+  transition: border-color 0.2s ease !important;
+  font-size: 14px !important;
+  resize: none !important;
+}
+
+:deep(.ai-input .el-textarea__inner:focus) {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Custom prose styles for AI suggestions */
+.prose h5 {
+  margin-top: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.prose p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 </style>

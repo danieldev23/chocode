@@ -6,7 +6,7 @@
         <div class="flex flex-col lg:flex-row gap-6">
           <!-- Sidebar -->
           <ForumSideBar :categories="categories" />
-          <ForumChat/>
+
           <!-- Main Content -->
           <div class="flex-1 min-w-0">
             <slot />

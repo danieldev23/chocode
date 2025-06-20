@@ -21,7 +21,9 @@
               <div
                 class="w-8 h-8 sm:w-9 sm:h-9 md:w-11 md:h-11 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg overflow-hidden"
               >
-                <MessageCircle class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
+                <MessageCircle
+                  class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white"
+                />
               </div>
               <!-- Online status indicator -->
               <div
@@ -29,7 +31,9 @@
               ></div>
             </div>
             <div class="min-w-0 flex-1">
-              <div class="font-bold text-sm sm:text-base md:text-lg tracking-wide truncate">
+              <div
+                class="font-bold text-sm sm:text-base md:text-lg tracking-wide truncate"
+              >
                 ChoCode Chat
               </div>
               <!-- <div class="text-white/80 text-xs font-medium">
@@ -57,7 +61,6 @@
         </div>
 
         <!-- Online Users Bar -->
-      
 
         <!-- Chat Messages -->
         <div
@@ -69,7 +72,9 @@
             v-if="messages.length === 0"
             class="flex flex-col items-center justify-center h-full text-gray-400 px-2"
           >
-            <MessageCircle class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mb-2 sm:mb-3 md:mb-4 opacity-50" />
+            <MessageCircle
+              class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mb-2 sm:mb-3 md:mb-4 opacity-50"
+            />
             <p class="text-center text-xs sm:text-sm leading-relaxed">
               Chào mừng đến với chat tổng ChoCode!<br />
               Hãy bắt đầu cuộc trò chuyện với cộng đồng
@@ -82,7 +87,9 @@
             :key="message.id"
             class="flex justify-center animate-fade-in"
           >
-            <div class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium max-w-[80%] text-center">
+            <div
+              class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium max-w-[80%] text-center"
+            >
               {{ message.text }}
             </div>
           </div>
@@ -94,11 +101,20 @@
             class="animate-fade-in"
           >
             <!-- Other user message -->
-            <div v-if="!message.isOwn" class="flex items-start space-x-1.5 sm:space-x-2 md:space-x-3 group">
+            <div
+              v-if="!message.isOwn"
+              class="flex items-start space-x-1.5 sm:space-x-2 md:space-x-3 group"
+            >
               <div class="relative flex-shrink-0">
-                <NuxtLink :to="`/trang-ca-nhan/${message.username}`" class="block">
+                <NuxtLink
+                  :to="`/trang-ca-nhan/${message.username}`"
+                  class="block"
+                >
                   <img
-                    :src="message.avatar || '/assets/images/header/default-avatar.png'"
+                    :src="
+                      message.avatar ||
+                      '/assets/images/header/default-avatar.png'
+                    "
                     :alt="message.fullName || message.username"
                     class="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full border-2 border-white shadow-md object-cover hover:scale-110 transition-transform duration-200"
                   />
@@ -123,9 +139,42 @@
                 <div
                   class="bg-gray-100 rounded-xl rounded-tl-md px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 shadow-sm border border-gray-200/80 text-gray-800 relative group-hover:shadow-md transition-all duration-200"
                 >
-                  <div class="break-words leading-relaxed text-gray-900 text-xs sm:text-sm md:text-base whitespace-pre-wrap">
-                    {{ message.text }}
+                  <!-- Message Content with Reply Support -->
+                  <div
+                    class="break-words leading-relaxed text-gray-900 text-xs sm:text-sm md:text-base whitespace-pre-wrap"
+                  >
+                    <!-- Render reply message with highlighting -->
+                    <div v-if="isReplyMessage(message.text)">
+                      <template v-if="extractReplyInfo(message.text)">
+                        <span
+                          class="font-bold text-blue-600 bg-blue-50 px-1 py-0.5 rounded"
+                        >
+                          @{{ extractReplyInfo(message.text).replyToUser }}
+                        </span>
+                        <span class="ml-1 text-gray-800">
+                          {{ extractReplyInfo(message.text).actualMessage }}
+                        </span>
+                      </template>
+                      <template v-else>
+                        {{ message.text }}
+                      </template>
+                    </div>
+                    <!-- Regular message -->
+                    <div v-else>
+                      {{ message.text }}
+                    </div>
                   </div>
+
+                  <!-- Reply Button -->
+                  <button
+                    v-if="currentUser"
+                    @click="startReply(message)"
+                    class="absolute top-2 -right-8 opacity-100 group-hover:opacity-100 p-1.5 bg-white shadow-md hover:bg-gray-50 rounded-full transition-all duration-200 border border-gray-200 hover:border-blue-300 hover:shadow-lg transform hover:scale-105"
+                    title="Trả lời tin nhắn"
+                  >
+                    <Reply class="w-3 h-3 text-gray-600 hover:text-blue-600" />
+                  </button>
+
                   <!-- Message tail -->
                   <div
                     class="absolute -left-1.5 sm:-left-2 top-2 sm:top-3 md:top-4 w-0 h-0 border-t-[5px] sm:border-t-[6px] md:border-t-[8px] border-t-transparent border-r-[5px] sm:border-r-[6px] md:border-r-[8px] border-r-gray-100 border-b-[5px] sm:border-b-[6px] md:border-b-[8px] border-b-transparent"
@@ -139,16 +188,41 @@
               <div class="max-w-[75%] sm:max-w-[70%] md:max-w-xs lg:max-w-sm">
                 <div class="flex items-center justify-end gap-1 mb-1">
                   <span class="text-xs text-gray-400">{{ message.time }}</span>
-                  <span class="text-xs font-semibold text-gray-700 truncate max-w-[120px] sm:max-w-[150px]">
+                  <span
+                    class="text-xs font-semibold text-gray-700 truncate max-w-[120px] sm:max-w-[150px]"
+                  >
                     {{ message.fullName || message.username }}
                   </span>
                 </div>
                 <div
                   class="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white rounded-xl rounded-tr-md px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 shadow-lg relative group-hover:shadow-xl transition-all duration-200"
                 >
-                  <div class="break-words leading-relaxed text-xs sm:text-sm md:text-base whitespace-pre-wrap">
-                    {{ message.text }}
+                  <!-- Message Content with Reply Support -->
+                  <div
+                    class="break-words leading-relaxed text-xs sm:text-sm md:text-base whitespace-pre-wrap"
+                  >
+                    <!-- Render reply message with highlighting -->
+                    <div v-if="isReplyMessage(message.text)">
+                      <template v-if="extractReplyInfo(message.text)">
+                        <span
+                          class="font-bold text-blue-200 bg-blue-700/30 px-1 py-0.5 rounded"
+                        >
+                          @{{ extractReplyInfo(message.text).replyToUser }}
+                        </span>
+                        <span class="ml-1 text-white">
+                          {{ extractReplyInfo(message.text).actualMessage }}
+                        </span>
+                      </template>
+                      <template v-else>
+                        {{ message.text }}
+                      </template>
+                    </div>
+                    <!-- Regular message -->
+                    <div v-else>
+                      {{ message.text }}
+                    </div>
                   </div>
+
                   <!-- Message tail -->
                   <div
                     class="absolute -right-1.5 sm:-right-2 top-2 sm:top-3 md:top-4 w-0 h-0 border-t-[5px] sm:border-t-[6px] md:border-t-[8px] border-t-transparent border-l-[5px] sm:border-l-[6px] md:border-l-[8px] border-l-blue-600 border-b-[5px] sm:border-b-[6px] md:border-b-[8px] border-b-transparent"
@@ -169,6 +243,11 @@
                       v-else-if="message.status === 'delivered'"
                       class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-blue-500"
                     />
+                    <AlertCircle
+                      v-else-if="message.status === 'error'"
+                      class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-red-500"
+                      title="Lỗi lưu tin nhắn"
+                    />
                   </div>
                 </div>
               </div>
@@ -186,20 +265,54 @@
                 class="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center shadow-sm"
               >
                 <div class="flex space-x-0.5 sm:space-x-1">
-                  <div class="w-1 h-1 bg-gray-500 rounded-full animate-bounce"></div>
-                  <div class="w-1 h-1 bg-gray-500 rounded-full animate-bounce delay-100"></div>
-                  <div class="w-1 h-1 bg-gray-500 rounded-full animate-bounce delay-200"></div>
+                  <div
+                    class="w-1 h-1 bg-gray-500 rounded-full animate-bounce"
+                  ></div>
+                  <div
+                    class="w-1 h-1 bg-gray-500 rounded-full animate-bounce delay-100"
+                  ></div>
+                  <div
+                    class="w-1 h-1 bg-gray-500 rounded-full animate-bounce delay-200"
+                  ></div>
                 </div>
               </div>
-              <span class="text-xs sm:text-sm text-gray-500 italic font-medium truncate">
+              <span
+                class="text-xs sm:text-sm text-gray-500 italic font-medium truncate"
+              >
                 {{ typingUser.fullName || typingUser.username }} đang nhập...
               </span>
             </div>
           </div>
         </div>
 
+        <!-- Reply Preview Bar -->
+        <div
+          v-if="replyingTo"
+          class="px-4 py-2 bg-blue-50 border-t border-blue-200 flex items-center justify-between"
+        >
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center space-x-2 text-sm">
+              <Reply class="w-4 h-4 text-blue-600" />
+              <span class="font-medium text-blue-700">
+                Đang trả lời {{ replyingTo.fullName || replyingTo.username }}
+              </span>
+            </div>
+            <div class="text-xs text-gray-600 truncate mt-1">
+              {{ replyingTo.text }}
+            </div>
+          </div>
+          <button
+            @click="cancelReply"
+            class="p-1 hover:bg-blue-100 rounded-full transition-colors ml-2"
+          >
+            <X class="w-4 h-4 text-gray-500" />
+          </button>
+        </div>
+
         <!-- Chat Input -->
-        <div class="p-2 sm:p-3 md:p-4 border-t border-gray-200 bg-white/90 backdrop-blur-sm">
+        <div
+          class="p-2 sm:p-3 md:p-4 border-t border-gray-200 bg-white/90 backdrop-blur-sm"
+        >
           <div class="flex items-end space-x-1.5 sm:space-x-2 md:space-x-3">
             <!-- Message input with emoji picker -->
             <div class="flex-1 relative">
@@ -208,9 +321,15 @@
                   v-model="newMessage"
                   @keydown="handleKeyDown"
                   @input="handleTyping"
-                  placeholder="Nhập tin nhắn..."
+                  :placeholder="
+                    replyingTo
+                      ? `Trả lời ${
+                          replyingTo.fullName || replyingTo.username
+                        }...`
+                      : 'Nhập tin nhắn...'
+                  "
                   rows="1"
-                  class="w-full pl-2.5 sm:pl-3 md:pl-4 pr-10 sm:pr-12 md:pr-14 py-2 sm:py-2.5 md:py-3 border border-gray-300 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 resize-none text-sm bg-white transition-all duration-200 placeholder-gray-400 max-h-20 sm:max-h-24 md:max-h-32"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-300 transition-all duration-200 text-sm bg-white"
                   ref="messageInput"
                   :disabled="!isConnected || !currentUser"
                 ></textarea>
@@ -244,7 +363,9 @@
               <div
                 v-if="newMessage.length > 150"
                 class="absolute bottom-0.5 sm:bottom-1 md:bottom-2 right-8 sm:right-10 md:right-12 text-xs"
-                :class="newMessage.length > 300 ? 'text-red-500' : 'text-orange-500'"
+                :class="
+                  newMessage.length > 300 ? 'text-red-500' : 'text-orange-500'
+                "
               >
                 {{ newMessage.length }}/300
               </div>
@@ -287,7 +408,9 @@
           class="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white rounded-full shadow-2xl p-2.5 sm:p-3 md:p-4 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center transition-all duration-300 transform hover:scale-110 relative overflow-hidden group"
           title="Mở chat tổng"
         >
-          <MessageCircle class="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 relative z-10" />
+          <MessageCircle
+            class="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 relative z-10"
+          />
 
           <!-- Ripple effect -->
           <div
@@ -324,6 +447,7 @@ import {
   Users,
   AlertCircle,
   Smile,
+  Reply,
 } from "lucide-vue-next";
 import { onClickOutside } from "@vueuse/core";
 
@@ -335,7 +459,7 @@ interface ChatMessage {
   time: string;
   isOwn: boolean;
   avatar?: string;
-  status?: "sending" | "sent" | "delivered";
+  status?: "sending" | "sent" | "delivered" | "error";
   userId: string;
   timestamp: string;
 }
@@ -372,6 +496,9 @@ const typingUsers = ref<TypingUser[]>([]);
 const onlineUsers = ref<OnlineUser[]>([]);
 const onlineUsersCount = ref(0);
 
+// Reply states
+const replyingTo = ref<ChatMessage | null>(null);
+
 // Emoji picker states
 const showEmojiPicker = ref(false);
 const emojiPickerRef = ref<HTMLElement | null>(null);
@@ -388,17 +515,17 @@ const isMobile = computed(() => {
 const emojiPickerStyle = computed(() => {
   if (isMobile.value) {
     return {
-      '--category-emoji-size': '16px',
-      '--emoji-size': '18px',
-      width: '280px',
-      height: '300px'
+      "--category-emoji-size": "16px",
+      "--emoji-size": "18px",
+      width: "280px",
+      height: "300px",
     };
   }
   return {
-    '--category-emoji-size': '18px',
-    '--emoji-size': '20px',
-    width: '300px',
-    height: '350px'
+    "--category-emoji-size": "18px",
+    "--emoji-size": "20px",
+    width: "300px",
+    height: "350px",
   };
 });
 
@@ -424,6 +551,99 @@ const canSendMessage = computed(() => {
 
 let typingTimeout: NodeJS.Timeout;
 let reconnectInterval: NodeJS.Timeout;
+
+// Database functions using existing API
+const saveMessageToDatabase = async (messageData: any) => {
+  try {
+    const response = await $fetch("/api/chat", {
+      method: "POST",
+      body: {
+        messageId: messageData.messageId,
+        message: messageData.message,
+        timestamp: messageData.timestamp,
+        fullName: messageData.fullName,
+        username: messageData.username,
+        avatar: messageData.avatar,
+        userId: messageData.userId,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error saving message to database:", error);
+    throw error;
+  }
+};
+
+const loadRecentMessages = async () => {
+  try {
+    const response = await $fetch("/api/chat", {
+      method: "GET",
+    });
+
+    // Handle different response formats
+    let messagesArray = [];
+
+    if (Array.isArray(response)) {
+      // Direct array response
+      messagesArray = response;
+    } else if (response && response.data && Array.isArray(response.data)) {
+      // Response wrapped in data property
+      messagesArray = response.data;
+    } else if (response && Array.isArray(response.messages)) {
+      // Response with messages property
+      messagesArray = response.messages;
+    } else {
+      console.warn("Unexpected response format:", response);
+      return;
+    }
+
+    if (messagesArray.length > 0) {
+      const loadedMessages = messagesArray.map((msg: any) => {
+        return {
+          id:
+            msg.messageId ||
+            msg.id ||
+            msg._id ||
+            `msg_${Date.now()}_${Math.random()}`,
+          username: msg.username || "Unknown",
+          fullName: msg.fullName || msg.username || "Unknown User",
+          text: msg.message || msg.text || msg.content || "",
+          time: formatTime(
+            new Date(
+              msg.timestamp || msg.createdAt || msg.created_at || Date.now()
+            )
+          ),
+          isOwn: String(msg.userId) === String(currentUser.value?.id),
+          avatar: msg.avatar || "/assets/images/header/default-avatar.png",
+          status: "delivered",
+          userId: String(msg.userId),
+          timestamp:
+            msg.timestamp ||
+            msg.createdAt ||
+            msg.created_at ||
+            new Date().toISOString(),
+        };
+      });
+
+      // Sort messages by timestamp (oldest first)
+      loadedMessages.sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      );
+
+      messages.value = loadedMessages;
+      nextTick(() => {
+        scrollToBottom();
+      });
+    } else {
+      messages.value = [];
+    }
+  } catch (error) {
+    console.error("Error loading recent messages:", error);
+    addSystemMessage("Không thể tải tin nhắn gần đây");
+    messages.value = []; // Set empty array on error
+  }
+};
 
 // Emoji picker handlers
 const toggleEmojiPicker = () => {
@@ -454,7 +674,6 @@ const initializeSocket = () => {
 
   // Connection events
   $socket.on("connect", () => {
-    console.log("Socket connected to global chat");
     isConnected.value = true;
 
     // Join global chat room
@@ -473,10 +692,12 @@ const initializeSocket = () => {
 
     // Add system message
     addSystemMessage(`Đã kết nối thành công`);
+
+    // Load recent messages when connected - add delay to ensure everything is ready
+    setTimeout(() => {}, 1000);
   });
 
   $socket.on("disconnect", () => {
-    console.log("Socket disconnected from global chat");
     isConnected.value = false;
     addSystemMessage(`Mất kết nối. Đang thử kết nối lại...`);
 
@@ -486,12 +707,12 @@ const initializeSocket = () => {
 
   // Global chat events
   $socket.on("global-message", (data) => {
-    console.log("Received global message:", data);
-
     // Check if this is our own message that we already added
     if (sentMessageIds.has(data.messageId)) {
       // Update the status of our existing message
-      const existingMessage = messages.value.find(m => m.id === data.messageId);
+      const existingMessage = messages.value.find(
+        (m) => m.id === data.messageId
+      );
       if (existingMessage && existingMessage.isOwn) {
         existingMessage.status = "delivered";
       }
@@ -513,7 +734,7 @@ const initializeSocket = () => {
 
     messages.value.push(newMsg);
 
-    // Limit message history
+    // Limit message history in memory
     if (messages.value.length > 100) {
       messages.value.shift();
     }
@@ -530,10 +751,10 @@ const initializeSocket = () => {
 
   // Typing events
   $socket.on("global-typing", (data) => {
-    console.log("Received global typing event:", data);
-
     if (data.userId !== currentUser.value?.id) {
-      const existingUser = typingUsers.value.find(u => u.userId === data.userId);
+      const existingUser = typingUsers.value.find(
+        (u) => u.userId === data.userId
+      );
       if (!existingUser && data.typing) {
         typingUsers.value.push({
           userId: data.userId,
@@ -541,14 +762,15 @@ const initializeSocket = () => {
           username: data.username,
         });
       } else if (!data.typing) {
-        typingUsers.value = typingUsers.value.filter(u => u.userId !== data.userId);
+        typingUsers.value = typingUsers.value.filter(
+          (u) => u.userId !== data.userId
+        );
       }
     }
   });
 
   // Online users events
   $socket.on("online-users-update", (data) => {
-    console.log("Online users updated:", data);
     onlineUsers.value = data.users || [];
     onlineUsersCount.value = data.count || 0;
   });
@@ -561,7 +783,9 @@ const initializeSocket = () => {
   $socket.on("user-left-global", (data) => {
     addSystemMessage(`${data.fullName || data.username} đã rời khỏi chat`);
     // Remove from typing users
-    typingUsers.value = typingUsers.value.filter(u => u.userId !== data.userId);
+    typingUsers.value = typingUsers.value.filter(
+      (u) => u.userId !== data.userId
+    );
   });
 };
 
@@ -612,13 +836,12 @@ const addSystemMessage = (text: string) => {
 };
 
 const isUserOnline = (userId: string) => {
-  return onlineUsers.value.some(user => user.userId === userId);
+  return onlineUsers.value.some((user) => user.userId === userId);
 };
 
 const startReconnectInterval = () => {
   reconnectInterval = setInterval(() => {
     if (!$socket.connected) {
-      console.log("Trying to reconnect...");
       $socket.connect();
     }
   }, 3000);
@@ -647,7 +870,7 @@ const minimizeChat = () => {
   stopTyping();
 };
 
-const sendMessage = () => {
+const sendMessage = async () => {
   if (!canSendMessage.value || !$socket) return;
 
   const messageId = generateMessageId();
@@ -673,8 +896,8 @@ const sendMessage = () => {
 
   messages.value.push(message);
 
-  // Send to server
-  $socket.emit("global-message", {
+  // Prepare message data for database and socket
+  const messageData = {
     message: messageText,
     messageId,
     timestamp,
@@ -682,7 +905,45 @@ const sendMessage = () => {
     username: currentUser.value?.username,
     avatar: currentUser.value?.avatar,
     userId: currentUser.value?.id,
-  });
+  };
+
+  try {
+    const dbResponse = await saveMessageToDatabase(messageData);
+    message.status = "sent";
+
+    // Send to other users via socket
+    $socket.emit("global-message", messageData);
+
+    // Update status to delivered after socket emission
+    setTimeout(() => {
+      if (message.status === "sent") {
+        message.status = "delivered";
+      }
+    }, 500);
+  } catch (error) {
+    console.error("Failed to save message to database:", error);
+
+    // Update message status to show error
+    message.status = "error";
+
+    // Still emit to socket for real-time communication
+    $socket.emit("global-message", messageData);
+
+    // Show error notification
+    ElNotification({
+      title: "Lưu tin nhắn thất bại",
+      message: "Tin nhắn đã được gửi nhưng không thể lưu vào database",
+      type: "warning",
+      duration: 3000,
+    });
+
+    // Try to change status back after a delay
+    setTimeout(() => {
+      if (message.status === "error") {
+        message.status = "sent";
+      }
+    }, 2000);
+  }
 
   // Stop typing indicator
   stopTyping();
@@ -690,13 +951,6 @@ const sendMessage = () => {
   // Clear input and close emoji picker
   newMessage.value = "";
   showEmojiPicker.value = false;
-
-  // Update message status after a delay
-  setTimeout(() => {
-    if (message.status === "sending") {
-      message.status = "sent";
-    }
-  }, 500);
 
   nextTick(() => {
     scrollToBottom();
@@ -753,7 +1007,8 @@ const adjustTextareaHeight = () => {
       messageInput.value.style.height = "auto";
       const scrollHeight = messageInput.value.scrollHeight;
       const maxHeight = isMobile.value ? 80 : 120;
-      messageInput.value.style.height = Math.min(scrollHeight, maxHeight) + "px";
+      messageInput.value.style.height =
+        Math.min(scrollHeight, maxHeight) + "px";
     }
   });
 };
@@ -780,14 +1035,12 @@ watch(isChatOpen, (isOpen) => {
 
 // Lifecycle hooks
 onMounted(async () => {
-  console.log("Global chat component mounted");
+  loadRecentMessages();
   await nextTick();
   initializeSocket();
 });
 
 onUnmounted(() => {
-  console.log("Global chat component unmounted");
-
   if ($socket) {
     stopTyping();
     $socket.emit("leave-global-chat", {
@@ -815,6 +1068,50 @@ onUnmounted(() => {
 
   sentMessageIds.clear();
 });
+
+// Thêm vào phần script setup (sau các existing functions)
+
+// Reply functions
+const startReply = (message: ChatMessage) => {
+  if (message.isOwn) return; // Don't allow replying to own messages
+
+  replyingTo.value = message;
+
+  // Auto-fill the input with reply format
+  const replyText = `@${message.fullName || message.username} `;
+  newMessage.value = replyText;
+
+  // Focus on input and set cursor at end
+  nextTick(() => {
+    messageInput.value?.focus();
+    const length = newMessage.value.length;
+    messageInput.value?.setSelectionRange(length, length);
+    adjustTextareaHeight();
+  });
+};
+
+const cancelReply = () => {
+  replyingTo.value = null;
+  newMessage.value = "";
+  adjustTextareaHeight();
+};
+
+// Check if message is a reply (starts with @username)
+const isReplyMessage = (text: string) => {
+  return text.startsWith("@");
+};
+
+// Extract reply info from message text
+const extractReplyInfo = (text: string) => {
+  const match = text.match(/^@([^\s]+(?:\s+[^\s]+)*?)\s+(.*)$/);
+  if (match) {
+    return {
+      replyToUser: match[1].trim(),
+      actualMessage: match[2],
+    };
+  }
+  return null;
+};
 </script>
 
 <style scoped>
@@ -932,7 +1229,7 @@ textarea {
   .truncate {
     max-width: 100px;
   }
-  
+
   /* Ensure chat doesn't cover entire screen on very small devices */
   @media (max-height: 600px) {
     .h-\[calc\(100vh-80px\)\] {
@@ -968,5 +1265,22 @@ textarea {
     --border-color: #e5e7eb;
     --indicator-color: #3b82f6;
   }
+}
+
+/* Custom hover animations */
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+/* Reply button positioning */
+.group .absolute {
+  z-index: 10;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
 }
 </style>

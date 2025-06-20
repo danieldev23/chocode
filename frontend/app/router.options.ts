@@ -34,7 +34,7 @@ export default <RouterConfig>{
         component: () =>
           import("~/pages/home/job-search.vue").then((r) => r.default || r),
         meta: {
-          layout: "home",
+          layout: "search-job",
         },
       },
       {

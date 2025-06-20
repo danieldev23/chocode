@@ -19,7 +19,7 @@ interface OnlineUser {
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://chodev.dangquochuy.id.vn',
     methods: ['GET', 'POST'],
     credentials: true,
   },

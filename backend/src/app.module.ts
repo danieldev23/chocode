@@ -16,6 +16,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { UserService } from './modules/user/user.service';
 import { AdminModule } from './modules/admin/admin.module';
 import { NotificationGateway } from './gateways/notification.gateway';
+import { MongodbModule } from './mongodb/mongodb.module';
+import { ChatModule } from './modules/chat/chat.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +36,8 @@ import { NotificationGateway } from './gateways/notification.gateway';
     JobPostModule,
     MailModule,
     AdminModule,
+    MongodbModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [AppService, CategoryService, UserService, NotificationGateway],

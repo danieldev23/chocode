@@ -31,7 +31,8 @@
             <component :is="item.icon" class="w-4 h-4 mr-2" />
             {{ item.label }}
           </NuxtLink>
-
+          <!-- Chat global  -->
+          <ForumChat />
           <!-- Notification -->
           <div class="relative" v-if="currentUser">
             <button

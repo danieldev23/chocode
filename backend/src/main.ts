@@ -10,19 +10,19 @@ async function bootstrap() {
   app.use(cookieParser());
   const config = new DocumentBuilder()
     .setTitle('API For My Production')
-    .setDescription('My Production API: http://localhost:3000/swagger/json')
+    .setDescription('My Production API: https://chodev.dangquochuy.id.vn/swagger/json')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   app.enableCors({
-    origin: [process.env.FRONTEND_REDIRECT_URL],
+    origin: [process.env.FRONTEND_REDIRECT_URL, "https://chodev.dangquochuy.id.vn"],
     credentials: true,
   });
-  SwaggerModule.setup('api', app, document, {
-    jsonDocumentUrl: 'swagger/json',
-  });
+  // SwaggerModule.setup('api', app, document, {
+  //   jsonDocumentUrl: 'swagger/json',
+  // });
   app.useWebSocketAdapter(new IoAdapter(app));
   await app.listen(process.env.PORT ?? 3001);
 }

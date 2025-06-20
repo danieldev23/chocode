@@ -21,32 +21,41 @@ setupSeoFromSettingObject({
 const title = `🔥 Việc làm HOT nhất!`;
 const topDevelopersTitle = `👑 Developer uy tín nhất!`;
 
-// Fetch jobs
-const {
-  data: jobs,
-  pending: isLoading,
-  error,
-} = await useAsyncData(
-  "jobs",
-  () =>
-    jobPostingService
-      .jobPostControllerFindAll()
-      .then((res) => (res as any).data.data || []),
-  { server: true }
-);
+const jobs = ref([])
+const isLoading = ref(false)
+const error = ref(null)
 
-// Fetch top developers
-const {
-  data: topDevelopers,
-  pending: isLoadingDevelopers,
-  error: developersError,
-} = await useAsyncData(
-  "topDevelopers",
-  () =>
-    userService
-      .userControllerFindAll()
-      .then((res) => (res as any).data.data || []),
-  { server: true }
-);
-console.log('Top dev: ', topDevelopers)
+const topDevelopers = ref([])
+const isLoadingDevelopers = ref(false)
+const developersError = ref(null)
+
+// Gọi API khi component mounted
+onMounted(() => {
+  // Fetch jobs
+  isLoading.value = true
+  jobPostingService.jobPostControllerFindAll()
+    .then((res) => {
+      jobs.value = (res as any).data.data || []
+    })
+    .catch((err) => {
+      error.value = err
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
+
+  // Fetch top developers
+  isLoadingDevelopers.value = true
+  userService.userControllerFindAll()
+    .then((res) => {
+      topDevelopers.value = res.data;
+      console.log(topDevelopers.value);
+    })
+    .catch((err) => {
+      developersError.value = err
+    })
+    .finally(() => {
+      isLoadingDevelopers.value = false
+    })
+})
 </script>
